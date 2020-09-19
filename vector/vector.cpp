@@ -78,36 +78,4 @@ void vector<T>::assign(int n,const T& v)
 	_v[i]=v;
 }
 
-template<class T,class U>
-vector<T> operator*(const U& s,const vector<T>& v)
-{
-    vector<T> local;
-    local._v=new T[v._n];
-    local._n=v._n;
-    for(int i=0;i<local._n;i++)
-    {
-        local._v[i]=v._v[i]*(T)s;
-    }
-    return local;
-}
-
-template<class T>
-T dot(const vector<T>& u,const vector<T>& v)
-{
-    if(u._n==v._n)
-    {
-	vector<T> local;
-        local._v=new T[v._n];
-	T product=(T)0;
-	for(int i=0;i<v._n;i++)
-	{
-	    product+=v._v[i]*u._v[i];
-	}
-    return product;
-    }
-    //I know I should eventually retrun something but this is physics not volleyball
-}
-
 #endif
-
-

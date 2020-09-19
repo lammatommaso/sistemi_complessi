@@ -21,11 +21,8 @@ public:
     void resize(int n);
     void assign(int n,const T& v);  
     typedef T value_type;
-
-    template<class U,class V> friend vector<U> operator*(const V& s,const vector<U>& v);
-    template<class U> friend U dot(const vector<U>& u,const vector<U>& v);
-
 };
 
 #include"vector.cpp"
 #endif
+
