@@ -1,0 +1,24 @@
+Il primo che entra è il primo che esce
+Oggetto strada
+Le auto occupano spazio
+Se la coda la ingorga la strada di chiude
+Considerare la larghezza della strada per il flusso
+Oggetto incrocio
+  tempi di semaforo
+  informazione sulla direzione(classe macchina?)
+  Generazione di auto con punti di origine e destinazione
+  Algoritmo che trova il percorso migliore
+  Considerare il cambio di percorso ottimale in funzione del traffico
+  Come si possono mettere i sensi unici per migliorare la circolazione
+  Rete a blocchi quadrati come base
+  Considerare il cambiamento del traffico nel corso della giornata
+  Come conviene temporizzare i semafori
+  Agevolare l'uscita dalla città per evitare il troppo traffico
+  Dimostrare che in una strada a senso unico passano più auto che in una strada a doppio senso
+  sommando i due sensi
+  Semafori indipendenti per ogni direzione sono migliori che dritto e destra sincronizzati
+A matrice poi si pesano i link/rimuovono
+  Programmare le rotonde è più intenso(una, due o tre corsie)
+Modellizzare un incrocio senza semaforo con una rotonda molto piccola(forse no per la precedenza)
+Consideri di avere un navigatore ed una stima dei tempi di percorrenza
+Il traffico tende a rendere equivalenti tutti i tempi di percorrenza
