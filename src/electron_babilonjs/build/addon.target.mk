@@ -22,7 +22,6 @@ CFLAGS_Debug := \
 	-Wextra \
 	-Wno-unused-parameter \
 	-m64 \
-	-fPIC \
 	-g \
 	-O0
 
@@ -33,15 +32,12 @@ CFLAGS_C_Debug :=
 CFLAGS_CC_Debug := \
 	-fno-rtti \
 	-fno-exceptions \
-	-std=gnu++1y
+	-std=gnu++0x
 
 INCS_Debug := \
 	-I/usr/include/nodejs/include/node \
 	-I/usr/include/nodejs/src \
-	-I/usr/include/nodejs/deps/openssl/config \
-	-I/usr/include/nodejs/deps/openssl/openssl/include \
 	-I/usr/include/nodejs/deps/uv/include \
-	-I/usr/include/nodejs/deps/zlib \
 	-I/usr/include/nodejs/deps/v8/include
 
 DEFS_Release := \
@@ -61,7 +57,6 @@ CFLAGS_Release := \
 	-Wextra \
 	-Wno-unused-parameter \
 	-m64 \
-	-fPIC \
 	-O3 \
 	-fno-omit-frame-pointer
 
@@ -72,15 +67,12 @@ CFLAGS_C_Release :=
 CFLAGS_CC_Release := \
 	-fno-rtti \
 	-fno-exceptions \
-	-std=gnu++1y
+	-std=gnu++0x
 
 INCS_Release := \
 	-I/usr/include/nodejs/include/node \
 	-I/usr/include/nodejs/src \
-	-I/usr/include/nodejs/deps/openssl/config \
-	-I/usr/include/nodejs/deps/openssl/openssl/include \
 	-I/usr/include/nodejs/deps/uv/include \
-	-I/usr/include/nodejs/deps/zlib \
 	-I/usr/include/nodejs/deps/v8/include
 
 OBJS := \
@@ -120,8 +112,7 @@ LDFLAGS_Release := \
 	-rdynamic \
 	-m64
 
-LIBS := \
-	-lnode
+LIBS :=
 
 $(obj).target/addon.node: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
 $(obj).target/addon.node: LIBS := $(LIBS)
