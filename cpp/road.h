@@ -3,8 +3,17 @@
 
 class road
 {
-    std::vector<double> b; //Inizio della strada
-    std::vector<double> e; //Fine della strada
+        node A;
+	//Inizio della strada
+        node B;
+	//Fine della strada
+	short N;
+	//Numero di corsie
+	double time; 
+	//Tempo medio di percorrenza in quel momento
+        //Magari mediato con una distribuzione che non riesco a disegnare
+    public:
+ 
 };
 
 
