@@ -6,13 +6,11 @@
 // escludendo sensi unici con diagonale di zeri
 
 class matrice_adiacenza {
-    private:
-        static const int n = 38, m = 38; //limite massimo! non superare!
-        /*il prodotto non deve superare 1444 (quindi per es. 14*100 va bene) */
+    //private:
         
-        int matrice[n*m][n*m];
+        //bool matrice[100][100]; //modificami per prestazioni
     public:
-        matrice_adiacenza(float parametro_magico);
+        matrice_adiacenza(); //funzione che inzializza la matrice
 
 };
 
