@@ -5,11 +5,11 @@
 // è a[i][j]=1(j>i) se j-i=m e se j-i=1, 0 altrimenti, poi è simmetrica
 // escludendo sensi unici con diagonale di zeri
 
-class city{
-        static const int n = 38, m = 38; //limite massimo! non superare!
+class city
+{
+        static const int n = 50, m = 50; //limite massimo! non superare!
         /*il prodotto non deve superare 1444 (quindi per es. 14*100 va bene) */
-        
-        int adj[n*m][n*m];
+        bool adj[n*m][n*m];
     public:
         city(float p);
 

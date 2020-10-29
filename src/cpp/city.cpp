@@ -34,6 +34,6 @@ city::city(float p){
 }
 
 int main(){
-    city c(0.2);
+    city c(0.3);
 }
 
