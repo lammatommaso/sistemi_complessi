@@ -20,6 +20,9 @@
                 touch-action: none;
             }
         </style>
+        <script>            
+            const { ipcRenderer } = require('electron')
+        </script>
         <script src="../node_modules/babylonjs/babylon.js"></script>
     </head>
 
@@ -28,5 +31,6 @@
     </body>
 
     <script src="../javascript/renderer.js"></script>
+    <script src="../javascript/GeoJSONparser.js"></script>
 
 </html>
