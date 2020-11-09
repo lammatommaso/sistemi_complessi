@@ -29,11 +29,20 @@ city::city(float p){
             }
         }
     }
-
+    
+    for (int i = 0; i < n*m; i++ ){
+        for(int j = 0; j <= n*m; j++){
+            if(adj[i][j] == 1) adj_s[i][j] = s;
+            else adj_s[i][j] = s_null;
+        }
+    }
+    
     std::cout << "uni_sotto/uni_sopra " << (uni_sotto/uni_sopra) << "\n";
 }
 
+
 int main(){
     city c(0.3);
+    //Strada ccc = s;
 }
 
