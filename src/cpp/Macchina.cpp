@@ -15,4 +15,4 @@ void Macchina::vai_avanti()
     else
         passi_locali++;
 }
-/*
+*/
