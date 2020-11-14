@@ -7,10 +7,6 @@
 
 namespace Dio{
 
-
-
-
-
 }
 
 #endif

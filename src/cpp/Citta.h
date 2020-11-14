@@ -4,14 +4,14 @@
 #include"Strada.h"
 #include"Nodo.h"
 
-const short n_colonne = 2;
-const short n_righe = 0;
+const short n_colonne = 3;
+const short n_righe = 3;
 
-struct Città {
+struct Citta {
     Strada matrice_adiacenza[n_righe][n_colonne];
     Nodo insieme_nodi[n_righe*n_colonne];
     //public:
-    Città(float probabilità_senso_unico);
+    Citta(float probabilita_senso_unico);
 };
 
 #endif
