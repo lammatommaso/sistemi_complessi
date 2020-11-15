@@ -7,7 +7,7 @@
 #include <list>
 #include <time.h>
 #include <iostream>
-#define N_MACCHINE 10
+#define N_MACCHINE 6
 
 namespace Dio{
 
@@ -21,18 +21,16 @@ namespace Dio{
         c = Citta(p);
     }
 
-    void muovi_macchina( Macchina m, int indice_macchina ){
+    void muovi_macchina( Macchina *m, int indice_macchina ){
         std::list<Nodo> percorso = percorsi[indice_macchina];
         Nodo posizione_attuale = posizione_macchine[indice_macchina];
 
         bool fine = false;
-        int passi_lista;
+        Nodo next;
         for (Nodo n : percorso){
-            passi_lista++;
-
+            next = n;
+            
             if (fine){
-                posizione_macchine[indice_macchina] = n;
-                m.passo_avanti();
                 break;
             }
 
@@ -40,10 +38,13 @@ namespace Dio{
                 fine = true;
             } 
         }
+
+        posizione_macchine[indice_macchina] = next;
+        m->passo_avanti();
     
-        if (passi_lista == percorso.size()-1 ){
+        if (m->passi() == percorso.size() ){
             _macchine_a_destinazione++;
-            m.destinazione_raggiunta = true;
+            m->destinazione_raggiunta = true;
             std::cout << "La macchina " << indice_macchina << " ha raggiunto la destinazione! \n";
         }
     }
@@ -55,10 +56,15 @@ namespace Dio{
             
             percorsi[i] = std::list<Nodo>();
             for (int j = 0; j < (int)(rand()% 21); j++){
-                Nodo a = c.insieme_nodi[rand()%n_righe*n_colonne];
-                Nodo b = c.insieme_nodi[rand()%n_righe*n_colonne];
-                posizione_macchine[i] = a;
-                percorsi[i] = c.print_path(a, b);
+                percorsi[i] = std::list<Nodo>();
+                while (percorsi[i].size() < 3){ //TODO c'è il rischio di loop infiniti? non credo ma è da controllare
+                //TODO: la condizione < 2 significa trovami percorsi lunghi almeno 2, per debug
+                    Nodo a = c.insieme_nodi[rand()%(n_righe*n_colonne)];
+                    Nodo b = c.insieme_nodi[rand()%(n_righe*n_colonne)];
+                    posizione_macchine[i] = a;
+                    percorsi[i] = c.print_path(a, b); //nel path mancail nodo sorgente!
+                    percorsi[i].push_front(a);
+                }
             }
         }
         

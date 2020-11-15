@@ -6,6 +6,7 @@ class Strada {
 
   public:
   short contatore() const { return _contatore; }
+
   Strada() : _contatore(0) {}
   Strada(int contatore) : _contatore(contatore){}
   Strada(Strada const& strada) : _contatore(strada._contatore){}

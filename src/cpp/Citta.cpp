@@ -10,13 +10,13 @@ void Citta::floyd_warshall(){
             for (int j = 0; j < n_righe*n_colonne; j++){
                 if (i == j){
                     distance[i][j] = 0;
-                    path[i][j] = Strada(n_righe*n_colonne);
+                    path[i][j] = Nodo(NULL);
                 } else if (matrice_adiacenza[i][j].contatore() == -1){ //strada inesistente
-                    distance[i][j] = NULL;
-                    path[i][j] = Strada(n_righe*n_colonne);
+                    distance[i][j] = n_righe*n_colonne + 1; //distanza infinita
+                    path[i][j] = Nodo(NULL);
                 } else {
                     distance[i][j] = 1; //tutte le strade ora hanno peso 1
-                    path[i][j] = Strada(i);
+                    path[i][j] = Nodo(i);
                 }
             }
         }
@@ -24,12 +24,11 @@ void Citta::floyd_warshall(){
         for (int k = 0; k < n_righe*n_colonne; k++){
             for (int i = 0; i < n_righe*n_colonne; i++){
                 for (int j = 0; j < n_righe*n_colonne; j++){
-                    if (distance[i][j] != NULL && distance[i][k] != NULL && distance[k][j] != NULL ){
-                        if (distance[i][j] > distance[i][k] + distance[k][j]){
-                            distance[i][j] = distance[i][k] + distance[k][j];
-                            path[i][j] = path[k][j];
-                        }
+                    if (distance[i][j] > distance[i][k] + distance[k][j]){
+                        distance[i][j] = distance[i][k] + distance[k][j];
+                        path[i][j] = path[k][j];
                     }
+                
                 }
             }
         }
@@ -37,22 +36,22 @@ void Citta::floyd_warshall(){
 
 std::list<Nodo> Citta::print_path(Nodo source, Nodo destination){
 
+    std::list<Nodo> optimal_path = std::list<Nodo>();
+    
+
     if (source.nome() >= n_righe*n_colonne || destination.nome() >= n_righe*n_colonne){
-        std::list<Nodo> optimal_path;
-        return optimal_path;
+        return optimal_path;    
     }
 
-    if (path[source.nome()][destination.nome()].contatore() == n_righe*n_colonne){
-        std::list<Nodo> optimal_path;
+    if (path[source.nome()][destination.nome()].nome() == NULL){
         return optimal_path;
     }
-
-    std::list<Nodo> optimal_path= std::list<Nodo>();
 
     optimal_path.push_front(destination);
 
-    while(path[source.nome()][destination.nome()].contatore() != source.nome()){
-        optimal_path.push_back(path[source.nome()][destination.nome()].contatore());
+    while(path[source.nome()][destination.nome()].nome() != source.nome()){
+        optimal_path.push_back(path[source.nome()][destination.nome()]);        
+        destination = path[source.nome()][destination.nome()];
     }
     return optimal_path;
 }

@@ -5,12 +5,12 @@
 #include"Nodo.h"
 #include <list>
 
-const short n_colonne = 3; //righe e colonne del reticolo, non della matrice di adiacenza
-const short n_righe = 3;
+const short n_colonne = 6; //righe e colonne del reticolo, non della matrice di adiacenza
+const short n_righe = 6;
 
 struct Citta {
     Strada matrice_adiacenza[n_righe*n_colonne][n_righe*n_colonne];
-    Strada path[n_righe*n_colonne][n_righe*n_colonne];
+    Nodo path[n_righe*n_colonne][n_righe*n_colonne];
     int distance[n_righe*n_colonne][n_righe*n_colonne];
     std::list<Nodo> print_path(Nodo source, Nodo destination);
 
