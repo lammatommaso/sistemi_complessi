@@ -1,8 +1,10 @@
-//#include "Nodo.h"
+
 #include<iostream>
 #include "Citta.h"
 #include "Macchina.h"
 #include "Dio.h"
+
+//using namespace Dio;
 
 int main(){
     std::cout<<"Inizio"<<"\n";
@@ -10,8 +12,8 @@ int main(){
 
    Macchina* macchine[N_MACCHINE];
 
-   Dio::crea_citta(0);
-   Dio::crea_percorso();
+   crea_citta(0);
+   crea_percorso();
    
 
    for (int i = 0; i < N_MACCHINE; i++){
@@ -19,11 +21,11 @@ int main(){
    }
 
    
-   while (Dio::_macchine_a_destinazione < N_MACCHINE){
+   while (_macchine_a_destinazione < N_MACCHINE){
       for (int i = 0; i < N_MACCHINE; i++){
          std::cout << "Muovo la macchina " << i << "\n"; 
          if (!(macchine[i]->destinazione_raggiunta)){
-            Dio::muovi_macchina(macchine[i], i);
+            muovi_macchina(macchine[i], i);
          }
       }  
    }

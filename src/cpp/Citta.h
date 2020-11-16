@@ -1,8 +1,8 @@
 #ifndef CITTA_H
 #define CITTA_H
 
-#include"Strada.h"
-#include"Nodo.h"
+#include "Strada.h"
+#include "Nodo.h"
 #include <list>
 
 const short n_colonne = 6; //righe e colonne del reticolo, non della matrice di adiacenza

@@ -31,6 +31,19 @@
     </body>
 
     <script src="../javascript/renderer.js"></script>
+
+    <script>   
+        ipcRenderer.send("init") 
+        ipcRenderer.on("grafo", (grafo) => {
+            ;;
+        })
+
+        ipcRenderer.on("disegnami", (roba_da_disegnare) => {
+            ;;
+        })
+
+    </script>
+
     <script src="../javascript/GeoJSONparser.js"></script>
 
 </html>
