@@ -1,6 +1,9 @@
 //const { BABYLON } = require('babylonjs')
 //import { BABYLON } from 'babylonjs':
 
+const lato1 = 40; //dimensioni della superficie del terreno di base
+const lato2 = 40;
+
 class Renderer {
     
 
@@ -14,7 +17,7 @@ class Renderer {
         this._scene = scene;
 
         // This creates and positions a free camera (non-mesh)
-        const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5000, 0), scene);
+        const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 50, 0), scene);
 
         // This targets the camera to scene origin
         camera.setTarget(BABYLON.Vector3.Zero());
@@ -35,7 +38,7 @@ class Renderer {
         //sphere.position.y = 1;
 
         // Our built-in 'ground' shape. Params: name, width, depth, subdivs, scene
-        const ground = BABYLON.Mesh.CreateGround("ground1", 4000, 4000, 2, scene);
+        const ground = BABYLON.Mesh.CreateGround("ground1", lato1, lato2, 0, scene);
         ground.position = BABYLON.Vector3.Zero();
 
 
