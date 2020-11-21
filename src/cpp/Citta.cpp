@@ -1,8 +1,5 @@
 #include "Citta.h"
-#include <cmath>
-#include<iostream>
-#include <nlohmann/json.hpp>
-#include <string>
+
 
 const Strada strada_inesistente(-1);
 const Strada strada_esistente(0);
@@ -61,12 +58,10 @@ std::list<Nodo> Citta::print_path(Nodo source, Nodo destination){
 Citta::Citta() {
     ;;
 };
-
 using namespace std;
-
 Citta::Citta(float probabilita_senso_unico){ 
     srand(time(NULL));
-    string elenco = "";
+    elenco = "{'lista':[";
 
     for (int i = 0; i < n_righe*n_colonne; i++ ){
         matrice_adiacenza[i][i] = strada_inesistente;
@@ -77,8 +72,14 @@ Citta::Citta(float probabilita_senso_unico){
                 if (r/RAND_MAX > probabilita_senso_unico){
                     matrice_adiacenza[j][i] = strada_esistente;
                 } else {
-                    matrice_adiacenza[j][i] = strada_inesistente; 
-                    elenco = strncat(char elenco, const char , size_t n)                  
+                    matrice_adiacenza[j][i] = strada_inesistente;
+                    elenco.append("[");
+                    elenco.append(to_string(i));
+                    elenco.append(",");
+                    elenco.append(to_string(j));
+                    elenco.append("],"); 
+                    //lista = {"lista": [  [1,2], [2,3], [3,4]  ]}           
+
                 }
             } else {
                 matrice_adiacenza[i][j] = strada_inesistente;
@@ -86,6 +87,8 @@ Citta::Citta(float probabilita_senso_unico){
             }
         }
     }
+    elenco.pop_back();
+    elenco.append("]}"); 
   
     for(int i=0;i<n_righe*n_colonne;i++)
     {
