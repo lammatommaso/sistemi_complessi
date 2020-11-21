@@ -102,6 +102,17 @@ napi_value grafo(napi_env env, napi_callback_info args){
     json valore_da_restituire = {{"chiave", "valore"}, {"chiave2","valore2"}};
     napi_value grf;
     napi_status status;
+    json lista = {"lista": {}};
+
+    j = {"lista": [1,2,3,4,5,6]}
+
+    lista.push_back({{1, 2}})
+
+    string s = "ciao";
+
+    
+
+    c.archi_cancellati
 
     status = napi_create_string_utf8(env, valore_da_restituire.dump().c_str(), NAPI_AUTO_LENGTH, &grf);
     if (status != napi_ok) return nullptr;
