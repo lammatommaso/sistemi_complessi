@@ -1,5 +1,5 @@
 
-#include<iostream>
+#include <iostream>
 #include "Citta.h"
 #include "Macchina.h"
 #include "Dio.h"
@@ -29,7 +29,6 @@ int main(){
          }
       }  
    }
-
 
 }
 

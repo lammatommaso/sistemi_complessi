@@ -9,7 +9,7 @@
 #include <list>
 #include <time.h>
 #include <iostream>
-#define N_MACCHINE 6
+#define N_MACCHINE 100
 
 //namespace Dio{
 

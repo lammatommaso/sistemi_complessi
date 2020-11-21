@@ -50,7 +50,7 @@
             percorsi[i] = std::list<Nodo>();
             for (int j = 0; j < (int)(rand()% 21); j++){
                 percorsi[i] = std::list<Nodo>();
-                while (percorsi[i].size() < 3){ //TODO c'è il rischio di loop infiniti? non credo ma è da controllare
+                while (percorsi[i].size() < 20){ //TODO c'è il rischio di loop infiniti? non credo ma è da controllare
                 //TODO: la condizione < 2 significa trovami percorsi lunghi almeno 2, per debug
                     Nodo a = c.insieme_nodi[rand()%(n_righe*n_colonne)];
                     Nodo b = c.insieme_nodi[rand()%(n_righe*n_colonne)];
