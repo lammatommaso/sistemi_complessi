@@ -55,13 +55,11 @@ std::list<Nodo> Citta::print_path(Nodo source, Nodo destination){
     return optimal_path;
 }
 
-Citta::Citta() {
-    ;;
-};
-using namespace std;
+Citta::Citta() {}
+
 Citta::Citta(float probabilita_senso_unico){ 
     srand(time(NULL));
-    elenco = "{'lista':[";
+    std::string elenco = "{'lista':[";
 
     for (int i = 0; i < n_righe*n_colonne; i++ ){
         matrice_adiacenza[i][i] = strada_inesistente;
@@ -74,9 +72,9 @@ Citta::Citta(float probabilita_senso_unico){
                 } else {
                     matrice_adiacenza[j][i] = strada_inesistente;
                     elenco.append("[");
-                    elenco.append(to_string(i));
+                    elenco.append(std::to_string(i));
                     elenco.append(",");
-                    elenco.append(to_string(j));
+                    elenco.append(std::to_string(j));
                     elenco.append("],"); 
                     //lista = {"lista": [  [1,2], [2,3], [3,4]  ]}           
 

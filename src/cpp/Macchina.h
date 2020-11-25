@@ -13,7 +13,8 @@ class Macchina {
   Macchina(Macchina const& macchina) : _passi(macchina._passi), _passi_locali(macchina._passi_locali), destinazione_raggiunta(macchina.destinazione_raggiunta) {}
   void passo_avanti() { _passi++; _passi_locali++; }
   void reset_passi_locali(){ _passi_locali = 0; }
-  short passi() {return _passi; }
+  short passi()const{return _passi; }
+  short passi_locali()const{return _passi_locali;}
 };
 
 #endif
