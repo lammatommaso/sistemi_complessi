@@ -6,10 +6,6 @@
     Citta c;
     Nodo posizione_macchine[N_MACCHINE];
 
-    Nodo * get_macchine(){
-        return posizione_macchine;
-    }
-
     void crea_citta(float p){
         c = Citta(p);
     }
@@ -55,14 +51,14 @@
             } 
         }
 
-        bool non_ho_nessuno_davanti;
+        /*bool non_ho_nessuno_davanti;
         for(int i=0;i < N_MACCHINE;i++)
         {
             if(posizione_macchine[i]=posizione_attuale)
             {
                 if()//Non riesco ad accedere ai passi locali delle altre auto
             }
-        }
+        }*/
 
 
         if(1)//Se non ho auto davanti

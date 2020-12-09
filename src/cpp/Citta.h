@@ -9,7 +9,7 @@
 #include <cmath>
 #include<iostream>
 
-const short n_colonne = 20; //righe e colonne del reticolo, non della matrice di adiacenza
+const short n_colonne = 30; //righe e colonne del reticolo, non della matrice di adiacenza
 const short n_righe = 20;
 
 struct Citta {

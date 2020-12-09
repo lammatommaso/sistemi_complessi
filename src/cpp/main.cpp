@@ -23,7 +23,7 @@ int main(){
    
    while (_macchine_a_destinazione < N_MACCHINE){
       for (int i = 0; i < N_MACCHINE; i++){
-         std::cout << "Muovo la macchina " << i << "\n"; 
+         //std::cout << "Muovo la macchina " << i << "\n"; 
          if (!(macchine[i]->destinazione_raggiunta)){
             muovi_macchina(macchine[i], i);
          }
