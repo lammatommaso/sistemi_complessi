@@ -9,10 +9,10 @@ void Citta::floyd_warshall(){
             for (int j = 0; j < n_righe*n_colonne; j++){
                 if (i == j){
                     distance[i][j] = 0;
-                    path[i][j] = Nodo(NULL);
+                    path[i][j] = Nodo();
                 } else if (matrice_adiacenza[i][j].contatore() == -1){ //strada inesistente
                     distance[i][j] = n_righe*n_colonne + 1; //distanza infinita
-                    path[i][j] = Nodo(NULL);
+                    path[i][j] = Nodo();
                 } else {
                     distance[i][j] = 1; //tutte le strade ora hanno peso 1
                     path[i][j] = Nodo(i);
@@ -42,7 +42,7 @@ std::list<Nodo> Citta::print_path(Nodo source, Nodo destination){
         return optimal_path;    
     }
 
-    if (path[source.nome()][destination.nome()].nome() == NULL){
+    if (path[source.nome()][destination.nome()].nome() == -1){
         return optimal_path;
     }
 
