@@ -27,7 +27,7 @@ app.whenReady().then( () => {
     /*********************** TEST addon c++ *****************************************************/
     const addon = require('./build/Release/addon');
     addon.mymain( () => {
-        console.log(addon.grafo()) 
+        console.log(addon.pulisci_archi()) 
         
 
         addon.avvisami_quando_disegnare( (stringa) => {
@@ -41,7 +41,7 @@ app.whenReady().then( () => {
 ipcMain.on("init", (event) => {
     const addon = require('./build/Release/addon');
     addon.mymain( () => {
-        grafo = addon.grafo()
+        grafo = addon.pulisci_archi()
         
         event.reply("grafo", grafo)
 

@@ -9,7 +9,7 @@
 #include <list>
 #include <time.h>
 #include <iostream>
-#define N_MACCHINE 6
+#define N_MACCHINE 500
 
 //namespace Dio{
 
@@ -19,8 +19,6 @@
     extern Nodo posizione_macchine[N_MACCHINE];
 
     //TODO crea array di offset per sapere in che punto della strada è la macchina
-
-    Nodo * get_macchine();
 
     void crea_citta(float p);
 

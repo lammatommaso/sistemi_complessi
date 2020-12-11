@@ -23,7 +23,7 @@ void _main(){
 
    Macchina* macchine[N_MACCHINE];
 
-   crea_citta(0);
+   crea_citta(0.5);
    crea_percorso();
    
 
@@ -32,14 +32,14 @@ void _main(){
    }
 
    
-   while (_macchine_a_destinazione < N_MACCHINE){
+   /*while (_macchine_a_destinazione < N_MACCHINE){
       for (int i = 0; i < N_MACCHINE; i++){
          std::cout << "Muovo la macchina " << i << "\n"; 
          if (!(macchine[i]->destinazione_raggiunta)){
             muovi_macchina(macchine[i], i);
          }
       }  
-   }
+   }*/
 }
 
 napi_value myMain(napi_env env, napi_callback_info info){
@@ -96,28 +96,34 @@ napi_value avvisami_quando_disegnare(napi_env env, napi_callback_info info) {
 
     return nullptr;
 }
-
-napi_value grafo(napi_env env, napi_callback_info args){
-
+//restituisce la martice di adiacenza come lista degli archi inesistenti, sotto forma di json o array di interi
+napi_value pulisci_archi(napi_env env, napi_callback_info args){
+   
+    
     json valore_da_restituire = {{"chiave", "valore"}, {"chiave2","valore2"}};
     napi_value grf;
     napi_status status;
 
-    status = napi_create_string_utf8(env, valore_da_restituire.dump().c_str(), NAPI_AUTO_LENGTH, &grf);
+    status = napi_create_string_utf8(env,c.elenco.c_str(), NAPI_AUTO_LENGTH, &grf);
     if (status != napi_ok) return nullptr;
     return grf;
 
 }
+//disegna roba deve restituirci la posizione delle machhine
+//per ogni macchina mi dice dov'è la macchina in quel momento
+//chiamo la callback restituendo l'array
+//lo faccio ogni volta che si sono mosse tutte le macchine
+
 
 napi_value init(napi_env env, napi_value exports) {
     napi_status status;
 
     napi_value fn1;
 
-    status = napi_create_function(env, nullptr, 0, grafo, nullptr, &fn1);
+    status = napi_create_function(env, nullptr, 0, pulisci_archi, nullptr, &fn1);
     if (status != napi_ok) return nullptr;
 
-    status = napi_set_named_property(env, exports, "grafo", fn1);
+    status = napi_set_named_property(env, exports, "pulisci_archi", fn1);
     if (status != napi_ok) return nullptr;
 
     napi_value fn2;

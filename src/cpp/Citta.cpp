@@ -1,6 +1,5 @@
 #include "Citta.h"
-#include <cmath>
-#include<iostream>
+
 
 const Strada strada_inesistente(-1);
 const Strada strada_esistente(0);
@@ -10,10 +9,10 @@ void Citta::floyd_warshall(){
             for (int j = 0; j < n_righe*n_colonne; j++){
                 if (i == j){
                     distance[i][j] = 0;
-                    path[i][j] = Nodo(NULL);
+                    path[i][j] = Nodo();
                 } else if (matrice_adiacenza[i][j].contatore() == -1){ //strada inesistente
                     distance[i][j] = n_righe*n_colonne + 1; //distanza infinita
-                    path[i][j] = Nodo(NULL);
+                    path[i][j] = Nodo();
                 } else {
                     distance[i][j] = 1; //tutte le strade ora hanno peso 1
                     path[i][j] = Nodo(i);
@@ -43,7 +42,7 @@ std::list<Nodo> Citta::print_path(Nodo source, Nodo destination){
         return optimal_path;    
     }
 
-    if (path[source.nome()][destination.nome()].nome() == NULL){
+    if (path[source.nome()][destination.nome()].nome() == -1){
         return optimal_path;
     }
 
@@ -56,12 +55,11 @@ std::list<Nodo> Citta::print_path(Nodo source, Nodo destination){
     return optimal_path;
 }
 
-Citta::Citta() {
-    ;;
-};
+Citta::Citta() {}
 
 Citta::Citta(float probabilita_senso_unico){ 
     srand(time(NULL));
+    std::string elenco = "{'lista':[";
 
     for (int i = 0; i < n_righe*n_colonne; i++ ){
         matrice_adiacenza[i][i] = strada_inesistente;
@@ -72,7 +70,14 @@ Citta::Citta(float probabilita_senso_unico){
                 if (r/RAND_MAX > probabilita_senso_unico){
                     matrice_adiacenza[j][i] = strada_esistente;
                 } else {
-                    matrice_adiacenza[j][i] = strada_inesistente;                   
+                    matrice_adiacenza[j][i] = strada_inesistente;
+                    elenco.append("[");
+                    elenco.append(std::to_string(i));
+                    elenco.append(",");
+                    elenco.append(std::to_string(j));
+                    elenco.append("],"); 
+                    //lista = {"lista": [  [1,2], [2,3], [3,4]  ]}           
+
                 }
             } else {
                 matrice_adiacenza[i][j] = strada_inesistente;
@@ -80,6 +85,8 @@ Citta::Citta(float probabilita_senso_unico){
             }
         }
     }
+    elenco.pop_back();
+    elenco.append("]}"); 
   
     for(int i=0;i<n_righe*n_colonne;i++)
     {
