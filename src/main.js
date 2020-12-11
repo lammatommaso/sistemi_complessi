@@ -52,7 +52,7 @@ ipcMain.on("init", (event) => {
     });    
 })
 
-ipcMain.on("load_map", (event) => {
+/*ipcMain.on("load_map", (event) => {
     fs.readFile('/home/simone/Scrivania/fisica/test.geojson', 'utf8', function (err,data) {
         if (err) {
           return console.log(err);
@@ -64,4 +64,4 @@ ipcMain.on("load_map", (event) => {
             console.error(exc)
         }
       });
-})
+})*/
