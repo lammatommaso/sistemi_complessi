@@ -1,86 +1,86 @@
 #include "Dio.h"
 //using namespace Dio;
 
-    short _macchine_a_destinazione = 0;
-    std::list<Nodo> percorsi[N_MACCHINE]; 
-    Citta c;
-    Nodo posizione_macchine[N_MACCHINE];
-
-    void crea_citta(float p){
-        c = Citta(p);
+    Dio::Dio()
+    {
+        for (int i = 0; i < N_MACCHINE; i++)
+        {
+            macchine[i] = new Macchina();
+        }
     }
 
-    /*Strada associa_strada(int indice_macchina)
+    void Dio::crea_citta(float p){
+        c = Citta(p);
+
+        for (int i = 0; i < N_MACCHINE; i++){
+            macchine[i] = new Macchina();
+        }
+    }
+
+    Strada Dio::associa_strada(int indice_macchina)const
+    {     
+        return c.matrice_adiacenza[posizione_macchine[indice_macchina].nome()][trova_next(indice_macchina).nome()];
+    }
+
+    Nodo Dio::trova_next(int indice_macchina)const
     {
-        std::list<Nodo> percorso = percorsi[indice_macchina];
-        Nodo posizione_attuale = posizione_macchine[indice_macchina];
-        
         bool fine_ricerca = false;
         Nodo next;
-        for (Nodo n : percorso){
+        for (Nodo n : percorsi[indice_macchina])
+        {
             next = n;
             
             if (fine_ricerca){
                 break;
             }
 
-            if (n.nome() == posizione_attuale.nome()){
+            if (n.nome() == posizione_macchine[indice_macchina].nome()){
                 fine_ricerca = true;
             } 
         }
 
-        return c.matrice_adiacenza[posizione_attuale.nome()][next.nome()];
+        return next;
+    }
 
-    }*/
-
-    void muovi_macchina( Macchina *m, int indice_macchina ){
+    void Dio::muovi_macchina( int indice_macchina ){
         std::list<Nodo> percorso = percorsi[indice_macchina];
-        Nodo posizione_attuale = posizione_macchine[indice_macchina];
-
-        bool fine_ricerca = false;
-        Nodo next;
-        for (Nodo n : percorso){
-            next = n;
-            
-            if (fine_ricerca){
-                break;
-            }
-
-            if (n.nome() == posizione_attuale.nome()){
-                fine_ricerca = true;
-            } 
-        }
-
-        /*bool non_ho_nessuno_davanti;
-        for(int i=0;i < N_MACCHINE;i++)
-        {
-            if(posizione_macchine[i]=posizione_attuale)
-            {
-                if()//Non riesco ad accedere ai passi locali delle altre auto
-            }
-        }*/
-
-
-        if(1)//Se non ho auto davanti
-        {
+  
+        Nodo next=trova_next(indice_macchina);
 
             //if(m->passi_locali() < associa_strada(indice_macchina).lunghezza())
-            if(m->passi_locali()<c.matrice_adiacenza[posizione_attuale.nome()][next.nome()].lunghezza())
+        if(macchine[indice_macchina]->passi_locali()<associa_strada(indice_macchina).lunghezza())
+        {                
+            
+            bool puo_andare_avanti = 1;
+            for(int i=0;i<N_MACCHINE;i++)
             {
-                m->passo_avanti();
+                if(posizione_macchine[indice_macchina].nome()==posizione_macchine[i].nome()
+                       &&  trova_next(indice_macchina).nome()==trova_next(i).nome())
+                {
+                    puo_andare_avanti*=(macchine[indice_macchina]->passi_locali()!=macchine[i]->passi_locali()+1);
+                }
+            }
+            if(puo_andare_avanti)
+            {
+                macchine[indice_macchina]->passo_avanti();
+                //std::cout<<"Passo avanti"<<"\n";
             }
             else
             {
-            posizione_macchine[indice_macchina] = next;
-            m->reset_passi_locali();
+                std::cout<<"Non mi muovo"<<"\n";
             }
-
+        }
+        else
+        {            
+            posizione_macchine[indice_macchina] = next;
+            macchine[indice_macchina]->reset_passi_locali();
         }
 
-        if (posizione_attuale.nome() == percorso.back().nome()){
+
+        if (posizione_macchine[indice_macchina].nome() == percorso.back().nome()){
             _macchine_a_destinazione++;
-            m->destinazione_raggiunta = true;
-            std::cout << "La macchina " << indice_macchina << " ha raggiunto la destinazione! \n";
+            macchine[indice_macchina]->destinazione_raggiunta = true;
+            //std::cout << "La macchina " << indice_macchina << " ha raggiunto la destinazione! \n";
         }
         /* if (m->passi()/Strada::lunghezza() == percorso.size()){
             _macchine_a_destinazione++;
@@ -89,7 +89,7 @@
         }*/
     }
 
-    void crea_percorso(){
+    void Dio::crea_percorso(){
         srand(time(NULL));
         
         for (int i = 0; i < N_MACCHINE; i++){
@@ -103,6 +103,31 @@
         }
         // C'è qualcosa che non va nell'inizializzazione di percorsi o posizione_macchine
         
+    }
+
+    void Dio::avvia_macchine()
+    {
+        while (_macchine_a_destinazione < N_MACCHINE)
+        {
+            for (int i = 0; i < N_MACCHINE; i++)
+            {
+            //std::cout << "Muovo la macchina " << i << "\n"; 
+                if (!(macchine[i]->destinazione_raggiunta) && macchine[i]->ritardo == 0)
+                {
+                    muovi_macchina(i);
+                }
+                else
+                {
+                    macchine[i]->ritardo--;
+                }
+            }  
+        }
+        int mean{0};
+        for (int i = 0; i < N_MACCHINE; i++){
+        mean+=macchine[i]->passi();
+        }
+
+        std::cout<<" La media dei passi è "<<mean/(int)N_MACCHINE<<std::endl;
     }
 
 

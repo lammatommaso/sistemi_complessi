@@ -11,20 +11,24 @@
 #include <iostream>
 #define N_MACCHINE 500
 
-//namespace Dio{
+class Dio{
 
-    extern short _macchine_a_destinazione;
-    extern std::list<Nodo> percorsi[N_MACCHINE]; 
-    extern Citta c;
-    extern Nodo posizione_macchine[N_MACCHINE];
+    short _macchine_a_destinazione = 0;
+    std::list<Nodo> percorsi[N_MACCHINE]; 
+    Citta c;
+    Nodo posizione_macchine[N_MACCHINE];
+    Macchina* macchine[N_MACCHINE];
+    void muovi_macchina(int indice_macchina );
+    inline Nodo trova_next(int indice_macchina)const;
+    inline Strada associa_strada(int indice_macchina)const;
 
-    //TODO crea array di offset per sapere in che punto della strada è la macchina
+public:
 
+    Dio();    
+    
     void crea_citta(float p);
-
-    void muovi_macchina( Macchina *m, int indice_macchina );
-
     void crea_percorso();
-//}
+    void avvia_macchine();
+};
 
 #endif

@@ -3,7 +3,7 @@
 
 class Strada {
   short _contatore; //Una strada non esiste se ha contatore -1
-  static const short _lunghezza = 20; 
+  static const short _lunghezza = 50; 
 
   public:
   short contatore() const { return _contatore; }
