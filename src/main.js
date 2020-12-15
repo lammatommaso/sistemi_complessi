@@ -47,7 +47,7 @@ ipcMain.on("init", (event) => {
 
         addon.avvisami_quando_disegnare( (stringa) => {
             console.log(stringa);
-            event.reply("disegnami", questo)
+            event.reply("disegnami", stringa)
         });
     });    
 })

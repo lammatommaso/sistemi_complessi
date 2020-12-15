@@ -7,8 +7,13 @@ DEFS_Debug := \
 	'-DUSING_UV_SHARED=1' \
 	'-DUSING_V8_SHARED=1' \
 	'-DV8_DEPRECATION_WARNINGS=1' \
+	'-DV8_DEPRECATION_WARNINGS' \
+	'-DV8_IMMINENT_DEPRECATION_WARNINGS' \
 	'-D_LARGEFILE_SOURCE' \
 	'-D_FILE_OFFSET_BITS=64' \
+	'-D__STDC_FORMAT_MACROS' \
+	'-DOPENSSL_NO_PINSHARED' \
+	'-DOPENSSL_THREADS' \
 	'-DBUILDING_NODE_EXTENSION' \
 	'-DDEBUG' \
 	'-D_DEBUG' \
@@ -22,7 +27,6 @@ CFLAGS_Debug := \
 	-Wextra \
 	-Wno-unused-parameter \
 	-m64 \
-	-fPIC \
 	-g \
 	-O0
 
@@ -32,17 +36,16 @@ CFLAGS_C_Debug :=
 # Flags passed to only C++ files.
 CFLAGS_CC_Debug := \
 	-fno-rtti \
-	-fno-exceptions \
 	-std=gnu++1y
 
 INCS_Debug := \
-	-I/usr/include/nodejs/include/node \
-	-I/usr/include/nodejs/src \
-	-I/usr/include/nodejs/deps/openssl/config \
-	-I/usr/include/nodejs/deps/openssl/openssl/include \
-	-I/usr/include/nodejs/deps/uv/include \
-	-I/usr/include/nodejs/deps/zlib \
-	-I/usr/include/nodejs/deps/v8/include \
+	-I/home/simone/.cache/node-gyp/12.16.2/include/node \
+	-I/home/simone/.cache/node-gyp/12.16.2/src \
+	-I/home/simone/.cache/node-gyp/12.16.2/deps/openssl/config \
+	-I/home/simone/.cache/node-gyp/12.16.2/deps/openssl/openssl/include \
+	-I/home/simone/.cache/node-gyp/12.16.2/deps/uv/include \
+	-I/home/simone/.cache/node-gyp/12.16.2/deps/zlib \
+	-I/home/simone/.cache/node-gyp/12.16.2/deps/v8/include \
 	-I$(srcdir)/cpp
 
 DEFS_Release := \
@@ -50,8 +53,13 @@ DEFS_Release := \
 	'-DUSING_UV_SHARED=1' \
 	'-DUSING_V8_SHARED=1' \
 	'-DV8_DEPRECATION_WARNINGS=1' \
+	'-DV8_DEPRECATION_WARNINGS' \
+	'-DV8_IMMINENT_DEPRECATION_WARNINGS' \
 	'-D_LARGEFILE_SOURCE' \
 	'-D_FILE_OFFSET_BITS=64' \
+	'-D__STDC_FORMAT_MACROS' \
+	'-DOPENSSL_NO_PINSHARED' \
+	'-DOPENSSL_THREADS' \
 	'-DBUILDING_NODE_EXTENSION'
 
 # Flags passed to all source files.
@@ -62,7 +70,6 @@ CFLAGS_Release := \
 	-Wextra \
 	-Wno-unused-parameter \
 	-m64 \
-	-fPIC \
 	-O3 \
 	-fno-omit-frame-pointer
 
@@ -72,17 +79,16 @@ CFLAGS_C_Release :=
 # Flags passed to only C++ files.
 CFLAGS_CC_Release := \
 	-fno-rtti \
-	-fno-exceptions \
 	-std=gnu++1y
 
 INCS_Release := \
-	-I/usr/include/nodejs/include/node \
-	-I/usr/include/nodejs/src \
-	-I/usr/include/nodejs/deps/openssl/config \
-	-I/usr/include/nodejs/deps/openssl/openssl/include \
-	-I/usr/include/nodejs/deps/uv/include \
-	-I/usr/include/nodejs/deps/zlib \
-	-I/usr/include/nodejs/deps/v8/include \
+	-I/home/simone/.cache/node-gyp/12.16.2/include/node \
+	-I/home/simone/.cache/node-gyp/12.16.2/src \
+	-I/home/simone/.cache/node-gyp/12.16.2/deps/openssl/config \
+	-I/home/simone/.cache/node-gyp/12.16.2/deps/openssl/openssl/include \
+	-I/home/simone/.cache/node-gyp/12.16.2/deps/uv/include \
+	-I/home/simone/.cache/node-gyp/12.16.2/deps/zlib \
+	-I/home/simone/.cache/node-gyp/12.16.2/deps/v8/include \
 	-I$(srcdir)/cpp
 
 OBJS := \
@@ -126,8 +132,7 @@ LDFLAGS_Release := \
 	-rdynamic \
 	-m64
 
-LIBS := \
-	-lnode
+LIBS :=
 
 $(obj).target/addon.node: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
 $(obj).target/addon.node: LIBS := $(LIBS)

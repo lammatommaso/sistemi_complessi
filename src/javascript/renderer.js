@@ -51,6 +51,7 @@ class Renderer {
         // This creates a basic Babylon Scene object (non-mesh)
         const scene = new BABYLON.Scene(engine);
         this._scene = scene;
+        window._scene = scene;
 
         // This creates and positions a free camera (non-mesh)
         //const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, 7, 0), scene);
