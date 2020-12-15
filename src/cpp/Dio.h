@@ -9,7 +9,7 @@
 #include <list>
 #include <time.h>
 #include <iostream>
-#define N_MACCHINE 500
+#define N_MACCHINE 30
 
 class Dio{
 

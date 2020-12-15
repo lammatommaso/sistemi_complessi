@@ -52,12 +52,14 @@
         {                
             
             bool puo_andare_avanti = 1;
+
             for(int i=0;i<N_MACCHINE;i++)
             {
                 if(posizione_macchine[indice_macchina].nome()==posizione_macchine[i].nome()
                        &&  trova_next(indice_macchina).nome()==trova_next(i).nome())
                 {
-                    puo_andare_avanti*=(macchine[indice_macchina]->passi_locali()!=macchine[i]->passi_locali()+1);
+                    puo_andare_avanti = macchine[indice_macchina]->passi_locali() != macchine[i]->passi_locali() - 1;
+                    if(puo_andare_avanti == 0) break;
                 }
             }
             if(puo_andare_avanti)
