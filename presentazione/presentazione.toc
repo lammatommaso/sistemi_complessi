@@ -1,3 +1,0 @@
-\beamer@sectionintoc {1}{Parametri interessanti della simulazione}{3}{0}{1}
-\beamer@sectionintoc {2}{Capacit\'a attrattiva di un insieme di nodi}{4}{0}{2}
-\beamer@sectionintoc {3}{Componenti connesse degli insiemi di livello della congestione}{5}{0}{3}
