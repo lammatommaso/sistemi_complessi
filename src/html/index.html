@@ -52,9 +52,18 @@
         g.draw();
 
         var m = new Macchine(1);
-        const coordinate = g.street2coordinates(0, 1)
+        //const coordinate = g.street2coordinates(0, 1)
         const id = 0
-        m.draw(id, coordinate[0], 2, coordinate[1], 0.7,-0.9,-0.8)
+        //m.draw(id, coordinate[0], 2, coordinate[1], coordinate[2], coordinate[3], coordinate[4])
+
+        for (i= 0; i < 36; i++){
+            for (j = 0; j < 36; j++){
+                const coordinate = g.street2coordinates(i, j)
+                if (coordinate[0]!=0 && coordinate[0] < lato1/2 && coordinate[0] > -lato1/2)
+                    m.draw(id, coordinate[0], 0, coordinate[1], coordinate[2], coordinate[3], coordinate[4])
+
+            }
+        }
 
     </script>
 
