@@ -62,6 +62,13 @@ class Renderer {
 
         // This attaches the camera to the canvas
         camera.attachControl(canvas, true);
+        camera.keysUpward.push(87); // "w"    
+        camera.keysDownward.push(83); // "s"
+        camera.keysRight.push(68); // "d"
+        camera.keysLeft.push(65) // "a"
+        
+        camera.keysUp.push(81) // "q"
+        camera.keysDown.push(90) // "z"
 
         // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
         const light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 1), scene);

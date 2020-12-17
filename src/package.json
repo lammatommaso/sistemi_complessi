@@ -10,9 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "babylonjs": "^4.1.0"
+    "babylonjs": "^4.2.0"
   },
   "devDependencies": {
-    "electron": "^10.1.5"
+    "electron": "^10.2.0"
   }
 }
