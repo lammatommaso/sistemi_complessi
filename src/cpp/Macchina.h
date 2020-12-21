@@ -21,6 +21,7 @@ class Macchina {
   void reset_passi_locali(){ _passi_locali = 0; }
   short passi()const{return _passi; }
   short passi_locali()const{return _passi_locali;}
+  
 };
 
 #endif

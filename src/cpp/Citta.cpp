@@ -1,9 +1,5 @@
 #include "Citta.h"
 
-
-const Strada strada_inesistente(-1);
-const Strada strada_esistente(0);
-
 void Citta::floyd_warshall(){
         for (int i = 0; i < n_righe*n_colonne; i++){
             for (int j = 0; j < n_righe*n_colonne; j++){
@@ -57,20 +53,33 @@ std::list<Nodo> Citta::print_path(Nodo source, Nodo destination){
 
 Citta::Citta() {}
 
-Citta::Citta(float probabilita_senso_unico){ 
+Citta::Citta(short righe, short colonne, float probabilita_senso_unico):n_righe(righe), n_colonne(colonne)
+{ 
+
+    matrice_adiacenza = new Strada*[n_righe*n_colonne];
+    path = new Nodo*[n_righe*n_colonne];
+    distance = new int*[n_righe*n_colonne];
+    insieme_nodi = new Nodo[n_righe*n_colonne];
+    for( int i = 0; i < n_righe*n_colonne; i++)
+    {
+        matrice_adiacenza[i] = new Strada[n_righe*n_colonne];
+        path[i] = new Nodo[n_righe*n_colonne];
+        distance[i] = new int[n_righe*n_colonne];
+    }
+
     srand(time(NULL));
     std::string elenco = "{'lista':[";
 
     for (int i = 0; i < n_righe*n_colonne; i++ ){
-        matrice_adiacenza[i][i] = strada_inesistente;
+        matrice_adiacenza[i][i] = Strada(-1);
         for (int j = i+1; j < n_righe*n_colonne; j++){              
             float r = rand();
             if ((j == i+1 && j%n_colonne != 0) || j == i+n_colonne ){
-                matrice_adiacenza[i][j] = strada_esistente;
+                matrice_adiacenza[i][j] = Strada(0);
                 if (r/RAND_MAX > probabilita_senso_unico){
-                    matrice_adiacenza[j][i] = strada_esistente;
+                    matrice_adiacenza[j][i] = Strada(0);
                 } else {
-                    matrice_adiacenza[j][i] = strada_inesistente;
+                    matrice_adiacenza[j][i] = Strada(-1);
                     elenco.append("[");
                     elenco.append(std::to_string(i));
                     elenco.append(",");
@@ -80,9 +89,10 @@ Citta::Citta(float probabilita_senso_unico){
 
                 }
             } else {
-                matrice_adiacenza[i][j] = strada_inesistente;
-                matrice_adiacenza[j][i] = strada_inesistente;
+                matrice_adiacenza[i][j] = Strada(-1);
+                matrice_adiacenza[j][i] = Strada(-1);
             }
+            std::cout << matrice_adiacenza[i][j].lunghezza() << std::endl;
         }
     }
     elenco.pop_back();

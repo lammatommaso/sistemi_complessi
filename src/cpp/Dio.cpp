@@ -1,20 +1,22 @@
 #include "Dio.h"
 //using namespace Dio;
 
+    bool ordine(Macchina* i, Macchina* j)
+    {
+        return (i->passi_locali() > j->passi_locali());
+    }
+
+    
     Dio::Dio()
     {
         for (int i = 0; i < N_MACCHINE; i++)
         {
-            macchine[i] = new Macchina();
+            macchine.push_back(new Macchina());
         }
     }
 
-    void Dio::crea_citta(float p){
-        c = Citta(p);
-
-        for (int i = 0; i < N_MACCHINE; i++){
-            macchine[i] = new Macchina();
-        }
+    void Dio::crea_citta(short n_righe, short n_colonne, float p){
+        c = Citta(n_righe, n_colonne, p);
     }
 
     Strada Dio::associa_strada(int indice_macchina)const
@@ -50,7 +52,6 @@
             //if(m->passi_locali() < associa_strada(indice_macchina).lunghezza())
         if(macchine[indice_macchina]->passi_locali()<associa_strada(indice_macchina).lunghezza())
         {                
-            
             bool puo_andare_avanti = 1;
 
             for(int i=0;i<N_MACCHINE;i++)
@@ -95,10 +96,11 @@
         srand(time(NULL));
         
         for (int i = 0; i < N_MACCHINE; i++){
-            
-                
-            Nodo a = c.insieme_nodi[rand()%(n_righe*n_colonne)];
-            Nodo b = c.insieme_nodi[rand()%(n_righe*n_colonne)];
+            Nodo a, b;
+            do{
+            a = c.insieme_nodi[rand()%(c.n_righe*c.n_colonne)];
+            b = c.insieme_nodi[rand()%(c.n_righe*c.n_colonne)];
+            }while(a.nome() == b.nome());
             posizione_macchine[i] = a;
             percorsi[i] = c.print_path(a, b); //nel path manca il nodo sorgente!
             percorsi[i].push_front(a);
@@ -123,6 +125,7 @@
                     macchine[i]->ritardo--;
                 }
             }  
+            std::sort(macchine.begin(), macchine.end(), ordine);
         }
         int mean{0};
         for (int i = 0; i < N_MACCHINE; i++){
@@ -132,4 +135,5 @@
         std::cout<<" La media dei passi è "<<mean/(int)N_MACCHINE<<std::endl;
     }
 
+    
 
