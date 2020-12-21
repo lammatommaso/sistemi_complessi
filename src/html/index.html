@@ -13,13 +13,8 @@
                 margin: 0;
                 padding: 0;
             }
-
-            #render-canvas {
-                width: 100%;
-                height: 100%;
-                touch-action: none;
-            }
         </style>
+        <link rel="stylesheet" href="../css/index.css">
         <script>            
             const { ipcRenderer } = require('electron')
         </script>
@@ -27,7 +22,21 @@
     </head>
 
     <body>
-        <canvas id="render-canvas"></canvas>
+        <div id="menu" >
+            <h1>Comandi:</h1> <br/>
+            <h2>
+                <span class="keyboard-key">A</span>: sinistra <br/>
+                <span class="keyboard-key">D</span>: destra <br/>
+                <span class="keyboard-key">W</span>: avanti <br/>
+                <span class="keyboard-key">S</span>: indietro <br/>
+                <span class="keyboard-key">Q</span>: zoom avanti <br/>
+                <span class="keyboard-key">Z</span>: zoom indietro <br/>
+            </h2>
+        </div>
+        <div id="main">
+            <canvas id="render-canvas"></canvas>
+        </div>
+        
     </body>
 
     <script src="../javascript/renderer.js"></script>
@@ -52,9 +61,18 @@
         g.draw();
 
         var m = new Macchine(1);
-        const coordinate = g.street2coordinates(0, 1)
+        //const coordinate = g.street2coordinates(0, 1)
         const id = 0
-        m.draw(id, coordinate[0], 2, coordinate[1], 0.7,-0.9,-0.8)
+        //m.draw(id, coordinate[0], 2, coordinate[1], coordinate[2], coordinate[3], coordinate[4])
+
+        for (i= 0; i < 36; i++){
+            for (j = 0; j < 36; j++){
+                const coordinate = g.street2coordinates(i, j)
+                if (coordinate[0]!=0 && coordinate[0] < lato1/2 && coordinate[0] > -lato1/2)
+                    m.draw(id, coordinate[0], 0, coordinate[1], coordinate[2], coordinate[3], coordinate[4])
+
+            }
+        }
 
     </script>
 

@@ -15,7 +15,7 @@ class Macchine {
         const red = [new BABYLON.Color3(1, 0.7, 0), new BABYLON.Color3(1, 0.7, 0), new BABYLON.Color3(1, 0.7, 0) , new BABYLON.Color3(1, 0.7, 0), new BABYLON.Color3(1, 0.7, 0)]
 
         if (!this.macchine[id_macchina]){
-            const shape = BABYLON.Mesh.CreatePolyhedron("shape" + 5, {type: 5, size: 0.4, faceColors: red}, window._scene);
+            const shape = BABYLON.Mesh.CreatePolyhedron("shape" + 5, {type: 5,  size: lato1/120, sizeY: lato1/55, faceColors: red}, window._scene);
             this.macchine.push(shape)
             shape.position = new BABYLON.Vector3(x, y, z); 
             shape.rotation = new BABYLON.Vector3(rot1, rot2, rot3);

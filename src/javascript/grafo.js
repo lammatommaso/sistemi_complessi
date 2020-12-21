@@ -29,6 +29,9 @@ class Grafo {
 
     street2coordinates(i, j){
         var x1 = 0, x2 = 0;
+        var rotazione = new Array(3);
+        rotazione[0] = 2.45
+        rotazione[2] = 2.3
 
         const fattore_bordo = this.fattore_bordo
 
@@ -46,42 +49,32 @@ class Grafo {
             if (i == j-1) { //questo va perfettamente (0,1; 1,2; ... 7,8; etc.)
                 x1 =  (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2)   ) - larghezza/4
                 x2 = (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  ) + larghezza/4
+                rotazione[1] = 3.65
             }
             
             
-            if (i == j + 1){ // non va (1,0; 2,1; ... 8,7; etc.) 
-                //FIXME funziona con 0,-1 ; 1,0; 2,1; ...
-                //FIXME 8,5 lo disegna nella riga sopra
-                 x1 = (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2)   )
+            if (i == j + 1){ 
+                 x1 = (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) ))) + nuovo_l1/((lato-1)*2)   )
                  x2 = (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  ) - larghezza/4
-                
+                 rotazione[1] = 0.5 
             }
             
 
             if (j == i+lato){ //questo funziona perfettamente
-                if ((i+lato)%lato == lato-1){
                      x1 = (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2)   ) + distanza_tra_punti/2 - larghezza/4 
                      x2 = (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  ) - distanza_tra_punti/2 
-
-                } else {
-                    x1 = (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  )  - larghezza/4 
-                    x2 = (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2) )
-                }
+                    rotazione[1] = 5.25 
             }
 
-            if (i == j-lato ){ //questo non va
-                if ((i+lato)%lato == lato-1){
-                    x1 = (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2)   ) + distanza_tra_punti/2 + larghezza/4 
-                    x2 = (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  ) - distanza_tra_punti/2
-                } else {
-                    x1 = (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  )  + larghezza/4 
-                    x2 = (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2) )
-                }
+            if (i == j+lato ){ 
+                x1 = (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2)   ) + distanza_tra_punti/2 + larghezza/4 
+                x2 = (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2))) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  ) - distanza_tra_punti/2
+                rotazione[1] = 2.1 
             }
 
         }
 
-        return [x1, x2];
+        return [x1, x2].concat(rotazione);
     
     }
 
@@ -114,7 +107,7 @@ class Grafo {
             for (let j = 0; j < lato; j++){
                 var roundabout = BABYLON.MeshBuilder.CreateCylinder("cone", {height: 0.1, diameter: larghezza, faceColors: color4});
 
-                roundabout.position = new BABYLON.Vector3((i*distanza_tra_punti - nuovo_l1/2) , 2.1, (j*distanza_tra_punti - nuovo_l2/2));
+                roundabout.position = new BABYLON.Vector3((i*distanza_tra_punti - nuovo_l1/2) , 0.1, (j*distanza_tra_punti - nuovo_l2/2));
             }
         }
     
@@ -133,17 +126,17 @@ class Grafo {
                         
                         var box = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: distanza_tra_punti, depth: (larghezza/2), faceColors: asphalt_color /*right_street_color*/});
                         //equazioni di dora l'esploratrice
-                        box.position = new BABYLON.Vector3( (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2)   ) - larghezza/4, 2, (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  ) + larghezza/4); 
+                        box.position = new BABYLON.Vector3( (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2)   ) - larghezza/4, 0, (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  ) + larghezza/4); 
                         //traccio linea bianca al centro
                         var whiteline = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: distanza_tra_punti, depth: (larghezza/10), faceColors: white /*right_street_color*/});
                         //equazioni di dora l'esploratrice
-                        whiteline.position = new BABYLON.Vector3( (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2)   ) , 2, (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  ) ); 
+                        whiteline.position = new BABYLON.Vector3( (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2)   ) , 0, (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  ) ); 
                     }
                     
                     if (i == j-1 && j%lato != 0) { //strade nell'altro senso, bisogna colorarle/disegnarci qualcosa per distinguerle?
                         var box = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: distanza_tra_punti, depth: (larghezza/2), faceColors: asphalt_color /*left_street_color*/});
                         //equazioni di dora l'esploratrice
-                        box.position = new BABYLON.Vector3( (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2)   ), 2, (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  ) - larghezza/4); 
+                        box.position = new BABYLON.Vector3( (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2)   ), 0, (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  ) - larghezza/4); 
                         
                     }
                     /*strade verticali*/ 
@@ -151,27 +144,27 @@ class Grafo {
                     if (j == i+lato){ 
                         if ((i+lato)%lato == lato-1){
                             var box = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: (larghezza/2), depth: distanza_tra_punti, faceColors: asphalt_color /*right_street_color*/});
-                            box.position = new BABYLON.Vector3( (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2)   ) + distanza_tra_punti/2 - larghezza/4 , 2, (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  ) - distanza_tra_punti/2 );                             
+                            box.position = new BABYLON.Vector3( (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2)   ) + distanza_tra_punti/2 - larghezza/4 , 0, (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  ) - distanza_tra_punti/2 );                             
 
                             var whiteline = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: (larghezza/10), depth: distanza_tra_punti, faceColors: white });
-                            whiteline.position = new BABYLON.Vector3( (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2)   ) + distanza_tra_punti/2  , 2, (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  ) - distanza_tra_punti/2 );                             
+                            whiteline.position = new BABYLON.Vector3( (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2)   ) + distanza_tra_punti/2  , 0, (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  ) - distanza_tra_punti/2 );                             
 
                         } else {
                             var box = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: (larghezza/2), depth: distanza_tra_punti, faceColors: asphalt_color /*right_street_color*/});
-                            box.position = new BABYLON.Vector3( (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  )  - larghezza/4 , 2, (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2) ));     
+                            box.position = new BABYLON.Vector3( (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  )  - larghezza/4 , 0, (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2) ));     
 
                             var whiteline = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: (larghezza/10), depth: distanza_tra_punti, faceColors: white /*right_street_color*/});
-                            whiteline.position = new BABYLON.Vector3( (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  ) , 2, (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2) ));     
+                            whiteline.position = new BABYLON.Vector3( (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  ) , 0, (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2) ));     
                         }
                     }
 
                     if (j == i+lato ){ //strade nell'altro senso //TODO perché questa condizione è uguale a quella sopra?
                         if ((i+lato)%lato == lato-1){
                             var box = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: (larghezza/2), depth: distanza_tra_punti, faceColors: asphalt_color /*left_street_color*/});
-                            box.position = new BABYLON.Vector3( (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2)   ) + distanza_tra_punti/2 + larghezza/4 , 2, (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  ) - distanza_tra_punti/2 );                             
+                            box.position = new BABYLON.Vector3( (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2)   ) + distanza_tra_punti/2 + larghezza/4 , 0, (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  ) - distanza_tra_punti/2 );                             
                         } else {
                             var box = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: (larghezza/2), depth: distanza_tra_punti, faceColors: asphalt_color /*left_street_color*/});
-                            box.position = new BABYLON.Vector3( (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  )  + larghezza/4 , 2, (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2) ));     
+                            box.position = new BABYLON.Vector3( (  (   ((parseInt(j/lato) + 1)*(nuovo_l1/(lato-1) )) - (nuovo_l1/(lato-1)*(parseInt(lato/2)+1)) ) + (nuovo_l1/(lato-1))/(2-(lato%2))*(1-lato%2)  )  + larghezza/4 , 0, (   (nuovo_l1/2 - ((nuovo_l1/(lato-1))*((i%lato) +1))) + nuovo_l1/((lato-1)*2) ));     
                         }
                     }
 
