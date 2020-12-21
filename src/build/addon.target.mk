@@ -93,7 +93,6 @@ INCS_Release := \
 
 OBJS := \
 	$(obj).target/$(TARGET)/cpp/js_interface.o \
-	$(obj).target/$(TARGET)/cpp/main.o \
 	$(obj).target/$(TARGET)/cpp/Macchina.o \
 	$(obj).target/$(TARGET)/cpp/Citta.o \
 	$(obj).target/$(TARGET)/cpp/Dio.o \

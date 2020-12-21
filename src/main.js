@@ -27,7 +27,9 @@ app.whenReady().then( () => {
     /*********************** TEST addon c++ *****************************************************/
     const addon = require('./build/Release/addon');
     addon.mymain( () => {
+        console.log("ARCHI DA CANCELLARE:")
         console.log(addon.pulisci_archi()) 
+        console.log("HO STAMPATO GLI ARCHI")
         
 
         addon.avvisami_quando_disegnare( (stringa) => {

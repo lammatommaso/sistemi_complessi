@@ -19,13 +19,13 @@ using namespace std;
 
 using json = nlohmann::json;
 
+Dio dio;
 void _main(){
     std::cout<<"Inizio"<<"\n";
     //std::cout<<c.insieme_nodi[2].nome();
 
-    Dio dio;
    //Macchina* macchine[N_MACCHINE];
-   dio.crea_citta(3,3,0);
+   dio.crea_citta(3,3,0.5);
    cout << "Ho creato Città \n";
    dio.crea_percorso();
    cout << "Ho creato Percorso \n";
@@ -108,8 +108,8 @@ napi_value pulisci_archi(napi_env env, napi_callback_info args){
     napi_value grf;
     napi_status status;
 
-    status = napi_create_string_utf8(env, valore_da_restituire.dump().c_str(), NAPI_AUTO_LENGTH, &grf);
-    //status = napi_create_string_utf8(env, dio.get_citta().elenco.c_str(), NAPI_AUTO_LENGTH, &grf);
+    //status = napi_create_string_utf8(env, valore_da_restituire.dump().c_str(), NAPI_AUTO_LENGTH, &grf);
+    status = napi_create_string_utf8(env, dio.get_citta().elenco.c_str(), NAPI_AUTO_LENGTH, &grf);
     if (status != napi_ok) return nullptr;
     return grf;
 
