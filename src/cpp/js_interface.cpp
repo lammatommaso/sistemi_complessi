@@ -11,26 +11,29 @@
 #include <filesystem>
 
 #include "Dio.h"
+#include "Citta.h"
+#include "Macchina.h"
 
 using namespace std;
 //using namespace Dio;
 
 using json = nlohmann::json;
 
-Dio dio;
-
 void _main(){
     std::cout<<"Inizio"<<"\n";
     //std::cout<<c.insieme_nodi[2].nome();
 
-   Macchina* macchine[N_MACCHINE];
+    Dio dio;
+   //Macchina* macchine[N_MACCHINE];
    dio.crea_citta(3,3,0);
+   cout << "Ho creato Città \n";
    dio.crea_percorso();
+   cout << "Ho creato Percorso \n";
    //dio.avvia_macchine();
 
-   for (int i = 0; i < N_MACCHINE; i++){
-      macchine[i] = new Macchina();
-   }
+   //for (int i = 0; i < N_MACCHINE; i++){
+   //   macchine[i] = new Macchina();
+   //}
 
    
    /*while (_macchine_a_destinazione < N_MACCHINE){
@@ -105,7 +108,8 @@ napi_value pulisci_archi(napi_env env, napi_callback_info args){
     napi_value grf;
     napi_status status;
 
-    status = napi_create_string_utf8(env, dio.get_citta().elenco.c_str(), NAPI_AUTO_LENGTH, &grf);
+    status = napi_create_string_utf8(env, valore_da_restituire.dump().c_str(), NAPI_AUTO_LENGTH, &grf);
+    //status = napi_create_string_utf8(env, dio.get_citta().elenco.c_str(), NAPI_AUTO_LENGTH, &grf);
     if (status != napi_ok) return nullptr;
     return grf;
 
