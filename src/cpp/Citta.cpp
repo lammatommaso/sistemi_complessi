@@ -7,10 +7,10 @@ void Citta::floyd_warshall(){
                     distance[i][j] = 0;
                     path[i][j] = Nodo();
                 } else if (matrice_adiacenza[i][j].contatore() == -1){ //strada inesistente
-                    distance[i][j] = n_righe*n_colonne + 1; //distanza infinita
+                    distance[i][j] = n_righe*n_colonne*lunghezza_massima + 1; //distanza infinita
                     path[i][j] = Nodo();
                 } else {
-                    distance[i][j] = 1; //tutte le strade ora hanno peso 1
+                    distance[i][j] = matrice_adiacenza[i][j].lunghezza();
                     path[i][j] = Nodo(i);
                 }
             }
@@ -92,7 +92,7 @@ Citta::Citta(short righe, short colonne, float probabilita_senso_unico):n_righe(
                 matrice_adiacenza[i][j] = Strada(-1);
                 matrice_adiacenza[j][i] = Strada(-1);
             }
-            std::cout << matrice_adiacenza[i][j].lunghezza() << std::endl;
+            //std::cout << matrice_adiacenza[i][j].lunghezza() << std::endl;
         }
     }
     elenco.pop_back();
@@ -113,4 +113,15 @@ Citta::Citta(short righe, short colonne, float probabilita_senso_unico):n_righe(
 
     floyd_warshall();
 
+}
+
+short Citta::lunghezze_vere(Nodo a, Nodo b){
+    std::list<Nodo> lista = print_path(a,b);
+    short sum = 0;
+    auto n = lista.begin();
+    for(int i = 0; i < lista.size(); i++)
+    {
+        sum += matrice_adiacenza[std::next(n,i)->nome()][std::next(n,i+1)->nome()].lunghezza();
+    }
+    return sum;
 }

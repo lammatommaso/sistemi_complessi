@@ -4,24 +4,25 @@
 #include<time.h>
 #include<iostream>
 
-class Macchina {
-  short _passi;
-  short _passi_locali;
+const short ritardo_massimo = 0;
 
-  public:
-  bool destinazione_raggiunta;
-  int ritardo;
-  Macchina() : _passi(0), _passi_locali(0), destinazione_raggiunta(false){
-    srand(time(NULL));
-    ritardo = rand()%11;
-  }
-  //Macchina(short passi) : _passi(passi){}
-  Macchina(Macchina const& macchina) : _passi(macchina._passi), _passi_locali(macchina._passi_locali), destinazione_raggiunta(macchina.destinazione_raggiunta),ritardo(macchina.ritardo) {}
-  void passo_avanti() { _passi++; _passi_locali++; }
-  void reset_passi_locali(){ _passi_locali = 0; }
-  short passi()const{return _passi; }
-  short passi_locali()const{return _passi_locali;}
-  
+class Macchina {
+    short _passi;
+    short _passi_locali;
+    bool _destinazione_raggiunta;
+    short _ritardo;
+public:
+    Macchina();
+    Macchina(short passi);
+    Macchina(Macchina const& macchina);
+    void passo_avanti();
+    void reset_passi_locali();
+    void riduci_ritardo();
+    void set_destinazione_raggiunta(bool raggiunta);
+    bool destinazione_raggiunta()const;
+    short ritardo()const;
+    short passi()const;
+    short passi_locali()const;
 };
 
 #endif

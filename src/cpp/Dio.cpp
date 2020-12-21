@@ -76,18 +76,20 @@
         else
         {            
             posizione_macchine[indice_macchina] = next;
+            macchine[indice_macchina]->passo_avanti();
             macchine[indice_macchina]->reset_passi_locali();
+
         }
 
 
         if (posizione_macchine[indice_macchina].nome() == percorso.back().nome()){
             _macchine_a_destinazione++;
-            macchine[indice_macchina]->destinazione_raggiunta = true;
+            macchine[indice_macchina]->set_destinazione_raggiunta(true);
             //std::cout << "La macchina " << indice_macchina << " ha raggiunto la destinazione! \n";
         }
         /* if (m->passi()/Strada::lunghezza() == percorso.size()){
             _macchine_a_destinazione++;
-            m->destinazione_raggiunta = true;
+            m->destinazione_raggiunta() = true;
             std::cout << "La macchina " << indice_macchina << " ha raggiunto la destinazione! \n";
         }*/
     }
@@ -100,7 +102,9 @@
             do{
             a = c.insieme_nodi[rand()%(c.n_righe*c.n_colonne)];
             b = c.insieme_nodi[rand()%(c.n_righe*c.n_colonne)];
+            std::cout << c.distance[a.nome()][b.nome()] << ' ' << c.lunghezze_vere(a,b) << std::endl;
             }while(a.nome() == b.nome());
+            // In teoria non dovrebbe funzionare a meno che distance** non sappia già i percorsi migliori
             posizione_macchine[i] = a;
             percorsi[i] = c.print_path(a, b); //nel path manca il nodo sorgente!
             percorsi[i].push_front(a);
@@ -116,20 +120,21 @@
             for (int i = 0; i < N_MACCHINE; i++)
             {
             //std::cout << "Muovo la macchina " << i << "\n"; 
-                if (!(macchine[i]->destinazione_raggiunta) && macchine[i]->ritardo == 0)
+                if (!(macchine[i]->destinazione_raggiunta()) && macchine[i]->ritardo() == 0)
                 {
                     muovi_macchina(i);
                 }
                 else
                 {
-                    macchine[i]->ritardo--;
+                    macchine[i]->riduci_ritardo();
                 }
             }  
-            std::sort(macchine.begin(), macchine.end(), ordine);
+            //std::sort(macchine.begin(), macchine.end(), ordine); PROBLEMA IMMENSO
         }
         int mean{0};
         for (int i = 0; i < N_MACCHINE; i++){
         mean+=macchine[i]->passi();
+        std::cout << macchine[i]->passi() << std::endl;
         }
 
         std::cout<<" La media dei passi è "<<mean/(int)N_MACCHINE<<std::endl;

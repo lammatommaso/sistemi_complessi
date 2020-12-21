@@ -9,6 +9,9 @@
 #include <cmath>
 #include<iostream>
 #include<fstream>
+#include<iterator>
+
+const short percorso_minimo = 2*lunghezza_massima;
 
 struct Citta {
     Strada** matrice_adiacenza;
@@ -24,6 +27,7 @@ struct Citta {
     Citta();
     Citta(short n_righe, short n_colonne, float probabilita_senso_unico);
     void floyd_warshall();
+    short lunghezze_vere(Nodo a, Nodo b);
 };
 
 #endif
