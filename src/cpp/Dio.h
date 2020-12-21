@@ -32,7 +32,7 @@ public:
     void crea_citta(short n_righe, short n_colonne, float p);
     void crea_percorso();
     void avvia_macchine();
-     Citta b()const{return c;}
+    Citta get_citta()const{return c;}
 };
 
 #endif

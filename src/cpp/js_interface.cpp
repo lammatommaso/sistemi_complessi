@@ -17,15 +17,16 @@ using namespace std;
 
 using json = nlohmann::json;
 
+Dio dio;
+
 void _main(){
     std::cout<<"Inizio"<<"\n";
     //std::cout<<c.insieme_nodi[2].nome();
 
    Macchina* macchine[N_MACCHINE];
-
-   crea_citta(0.5);
-   crea_percorso();
-   
+   dio.crea_citta(3,3,0);
+   dio.crea_percorso();
+   //dio.avvia_macchine();
 
    for (int i = 0; i < N_MACCHINE; i++){
       macchine[i] = new Macchina();
@@ -60,7 +61,7 @@ napi_value myMain(napi_env env, napi_callback_info info){
     assert(status == napi_ok);
 
     //chiama la callback
-     napi_value argv[1];
+    napi_value argv[1];
     json j = {}; //FIXME
     status = napi_create_string_latin1(env, j.dump().c_str(), NAPI_AUTO_LENGTH, argv);
     napi_value result;
@@ -104,7 +105,7 @@ napi_value pulisci_archi(napi_env env, napi_callback_info args){
     napi_value grf;
     napi_status status;
 
-    status = napi_create_string_utf8(env,c.elenco.c_str(), NAPI_AUTO_LENGTH, &grf);
+    status = napi_create_string_utf8(env, dio.get_citta().elenco.c_str(), NAPI_AUTO_LENGTH, &grf);
     if (status != napi_ok) return nullptr;
     return grf;
 
