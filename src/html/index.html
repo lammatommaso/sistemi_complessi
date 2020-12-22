@@ -45,6 +45,7 @@
         ipcRenderer.send("init") 
         ipcRenderer.on("grafo", (grafo) => {
             console.log("ecco il grafo da disegnare")
+            console.log(grafo)
         })
 
         ipcRenderer.on("disegnami", (roba_da_disegnare) => {

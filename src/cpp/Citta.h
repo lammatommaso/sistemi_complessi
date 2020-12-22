@@ -14,20 +14,29 @@
 const short percorso_minimo = 2*lunghezza_massima;
 
 struct Citta {
-    Strada** matrice_adiacenza;
-    Nodo** path;
-    int** distance;
-    std::list<Nodo> print_path(Nodo source, Nodo destination);
-    std::string elenco;
-    short n_righe;
-    short n_colonne;
+    public: 
+        Strada** matrice_adiacenza;
+        Nodo** path;
+        int** distance;
+        std::list<Nodo> print_path(Nodo source, Nodo destination);
+        std::string elenco;
+        short n_righe;
+        short n_colonne;
 
+<<<<<<< HEAD
     Nodo* insieme_nodi;
     //public:
     Citta();
     Citta(short n_righe, short n_colonne, float probabilita_senso_unico);
     void floyd_warshall();
     short lunghezze_vere(Nodo a, Nodo b);
+=======
+        Nodo* insieme_nodi;
+        //public:
+        Citta();
+        Citta(short n_righe, short n_colonne, float probabilita_senso_unico);
+        void floyd_warshall();
+>>>>>>> b1581fd967889a5e08eac76828c65ed111325cb1
 };
 
 #endif
