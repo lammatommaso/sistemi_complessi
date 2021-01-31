@@ -4,8 +4,8 @@ Macchina::Macchina() : _passi(0), _passi_locali(0), _destinazione_raggiunta(fals
 {
     if(ritardo_massimo != 0)
     {
-    srand(time(NULL));
-    _ritardo = rand()%ritardo_massimo;
+        srand(time(NULL));
+        _ritardo = rand()%ritardo_massimo;
     }
     else
     {

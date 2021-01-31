@@ -1,0 +1,14 @@
+Release/obj.target/addon/cpp/js_interface.o: ../cpp/js_interface.cpp \
+  /Users/gianlucaspiller/Library/Caches/node-gyp/12.16.2/include/node/node_api.h \
+  /Users/gianlucaspiller/Library/Caches/node-gyp/12.16.2/include/node/js_native_api.h \
+  /Users/gianlucaspiller/Library/Caches/node-gyp/12.16.2/include/node/js_native_api_types.h \
+  /Users/gianlucaspiller/Library/Caches/node-gyp/12.16.2/include/node/node_api_types.h \
+  /Users/gianlucaspiller/Library/Caches/node-gyp/12.16.2/include/node/node.h \
+  /Users/gianlucaspiller/Library/Caches/node-gyp/12.16.2/include/node/v8.h \
+  /Users/gianlucaspiller/Library/Caches/node-gyp/12.16.2/include/node/v8-internal.h \
+  /Users/gianlucaspiller/Library/Caches/node-gyp/12.16.2/include/node/v8-version.h \
+  /Users/gianlucaspiller/Library/Caches/node-gyp/12.16.2/include/node/v8config.h \
+  /Users/gianlucaspiller/Library/Caches/node-gyp/12.16.2/include/node/v8-platform.h \
+  /Users/gianlucaspiller/Library/Caches/node-gyp/12.16.2/include/node/node_version.h \
+  /usr/local/include/nlohmann/json.hpp ../cpp/Dio.h ../cpp/Macchina.h \
+  ../cpp/Citta.h ../cpp/Strada.h ../cpp/Nodo.h

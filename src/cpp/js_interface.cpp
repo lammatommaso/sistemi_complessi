@@ -75,8 +75,20 @@ napi_value myMain(napi_env env, napi_callback_info info){
 }
 
 napi_value avvisami_quando_disegnare(napi_env env, napi_callback_info info) {
+
+    Dio god;
+    std::string elenco = "{'lista':[";
+    /*[posattuale,posnext]*/
+    for(int i = 0; i<N_MACCHINE; i++){
+        elenco.append("[");
+                elenco.append(std::to_string(god.pos_corrente(i).nome);
+                elenco.append(",");
+                elenco.append(std::to_string(god.trova_next(i).nome));
+                elenco.append("],");
+
+    }
         
-    napi_status status;
+    /*napi_status status;
 
     //prendi parametri (callback, variabili...)
     size_t argc = 1;
@@ -98,20 +110,38 @@ napi_value avvisami_quando_disegnare(napi_env env, napi_callback_info info) {
     napi_call_function(env, global, cb, 1, argv, &result);
     assert(status == napi_ok);
 
-    return nullptr;
+    return nullptr;*/
+
 }
 //restituisce la martice di adiacenza come lista degli archi inesistenti, sotto forma di json o array di interi
 napi_value pulisci_archi(napi_env env, napi_callback_info args){
-   
-    
-    json valore_da_restituire = {{"chiave", "valore"}, {"chiave2","valore2"}};
+
+    Citta city;
+    int righe = city.n_righe;
+    int colonne = city.n_colonne;
+    std::string elenco = "{'lista':[";
+    for(int i = 0; i < righe; i++){
+        for(int j = 0; j< colonne; j++){
+            if(city.matrice_adiacenza[i][j]== /*vuota*/){
+                elenco.append("[");
+                elenco.append(std::to_string(i));
+                elenco.append(",");
+                elenco.append(std::to_string(j));
+                elenco.append("],"); 
+            }
+        }
+    }
+    elenco.pop_back();
+    elenco.append("]}"); 
+
+    /*json valore_da_restituire = {{"chiave", "valore"}, {"chiave2","valore2"}};
     napi_value grf;
     napi_status status;
 
     //status = napi_create_string_utf8(env, valore_da_restituire.dump().c_str(), NAPI_AUTO_LENGTH, &grf);
     status = napi_create_string_utf8(env, dio.get_citta().elenco.c_str(), NAPI_AUTO_LENGTH, &grf);
     if (status != napi_ok) return nullptr;
-    return grf;
+    return grf;*/
 
 }
 //disegna roba deve restituirci la posizione delle machhine

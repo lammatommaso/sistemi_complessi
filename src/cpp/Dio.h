@@ -21,6 +21,7 @@ class Dio{
     Nodo posizione_macchine[N_MACCHINE];
     void muovi_macchina(int indice_macchina );
     inline Nodo trova_next(int indice_macchina)const;
+    inline Nodo pos_corrente(int indice_macchina)const;
     inline Strada associa_strada(int indice_macchina)const;
 
 public:

@@ -43,6 +43,9 @@
 
         return next;
     }
+    Nodo Dio::pos_corrente(int indice_macchina)const{
+        return posizione_macchine[indice_macchina];
+    }
 
     void Dio::muovi_macchina( int indice_macchina ){
         std::list<Nodo> percorso = percorsi[indice_macchina];

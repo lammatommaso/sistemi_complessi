@@ -57,6 +57,8 @@ Citta::Citta(short righe, short colonne, float probabilita_senso_unico):n_righe(
 { 
 
     matrice_adiacenza = new Strada*[n_righe*n_colonne];
+    int righe = n_righe;
+    int colonne = n_colonne;
     path = new Nodo*[n_righe*n_colonne];
     distance = new int*[n_righe*n_colonne];
     insieme_nodi = new Nodo[n_righe*n_colonne];
