@@ -20,12 +20,12 @@ class Dio{
     Citta c;
     Nodo posizione_macchine[N_MACCHINE];
     void muovi_macchina(int indice_macchina );
-    inline Nodo trova_next(int indice_macchina)const;
-    inline Nodo pos_corrente(int indice_macchina)const;
     inline Strada associa_strada(int indice_macchina)const;
 
 public:
     std::vector<Macchina*> macchine;
+    inline Nodo pos_corrente(int indice_macchina)const; //queste funzioni dovrebbero essere private, ma servono anche alla grafica
+    inline Nodo trova_next(int indice_macchina)const;   //quindi le ho rese pubbliche ¯\_(ツ)_/¯
 
     Dio();    
     

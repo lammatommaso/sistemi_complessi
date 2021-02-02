@@ -24,7 +24,7 @@ function createWindow() {
 app.whenReady().then( () => {
     createWindow()
 
-    /*********************** TEST addon c++ *****************************************************/
+    /*********************** TEST addon c++ *****************************************************
     const addon = require('./build/Release/addon');
     addon.mymain( () => {
         console.log("ARCHI DA CANCELLARE:")
@@ -47,10 +47,10 @@ ipcMain.on("init", (event) => {
         
         event.reply("grafo", grafo)
 
-        addon.avvisami_quando_disegnare( (stringa) => {
+        /*addon.avvisami_quando_disegnare( (stringa) => {
             console.log(stringa);
             event.reply("disegnami", stringa)
-        });
+        });*/
     });    
 })
 
