@@ -1,16 +1,23 @@
 
 #include <iostream>
-#include "Citta.h"
-#include "Macchina.h"
-#include "Dio.h"
+#include <thread>
+#include "simulator.h"
 
-//using namespace Dio;
+void foo(){
+   Simulator dio;
+   dio.create_city(30,30,0.3);
+   dio.create_path();
+   float mean_steps = dio.traffic();
+   std::cout<<mean_steps<<std::endl;
+}
 
-int main(){
-
-   Dio dio;
-   dio.crea_citta(10,10,0.5);
-   dio.crea_percorso();
-   dio.avvia_macchine();
+int main()
+{
+  std::thread first(foo);     
+  std::thread second(foo); 
+  std::thread third(foo);
+  first.join();               
+  second.join();  
+  third.join();
 }
 

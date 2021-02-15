@@ -1,24 +1,22 @@
-#opzione -g: per il debug
-#opzione -c: non fare il link, compila e basta
-# nella riga di dio ho tolto a caso citta.o e macchina.o
-# solo per togliere i warning che magari servivano
-
-all: macchina strada citta dio main
+all: car road node city simulator main
 
 main:
-	g++ -g -o main main.cpp macchina.o strada.o citta.o dio.o 
+	g++ -std=c++11 -pthread -g -o main main.cpp car.o road.o node.o city.o simulator.o 
 
-macchina:
-	g++ -c -g -o macchina.o Macchina.cpp
+car:
+	g++ -c -g -o car.o car.cpp
 
-strada:
-	g++ -c -g -o strada.o Strada.cpp
+road:
+	g++ -c -g -o road.o road.cpp
 
-citta:
-	g++ -c -g -o citta.o Citta.cpp
+node:
+	g++ -c -g -o node.o node.cpp
 
-dio:
-	g++ -c -g -o dio.o Dio.cpp 
+city:
+	g++ -c -g -o city.o city.cpp
+
+simulator:
+	g++ -c -g -o simulator.o simulator.cpp 
 
 clean:
 	rm *.o main

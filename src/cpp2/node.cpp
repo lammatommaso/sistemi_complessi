@@ -1,4 +1,4 @@
-#include"Node.h"
+#include"node.h"
 
 Node::Node() : _index(-1) {}
 Node::Node(short index) : _index(index) {}

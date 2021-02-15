@@ -1,4 +1,4 @@
-#include "City.h"
+#include "city.h"
 #include<cassert>
 
 void City::_floyd_warshall()
@@ -10,12 +10,12 @@ void City::_floyd_warshall()
             if (i == j)
             {
                 _distance[i][j] = 0;
-                _path[i][j] = Node();
+                _path[i][j] = Node(-2);
             } 
             else if (_adj_matrix[i][j].get_car_number() == -1)
             { 
                 _distance[i][j] = _n_rows*_n_coloumns*MAX_ROAD_LENGTH + 1; //infty
-                _path[i][j] = Node();
+                _path[i][j] = Node(-1);
             } 
             else 
             {
@@ -40,10 +40,10 @@ void City::_floyd_warshall()
     }
 }
 
-std::list<Node> City::_print_path(Node source, Node destination)
+std::list<Node> City::print_path(Node source, Node destination)
 {
-    assert(source.get_index() >= _n_rows*_n_coloumns || destination.get_index() >= _n_rows*_n_coloumns);
-    assert(_path[source.get_index()][destination.get_index()].get_index() == -1);
+    assert(!(source.get_index() >= _n_rows*_n_coloumns || destination.get_index() >= _n_rows*_n_coloumns));
+    assert(!(_path[source.get_index()][destination.get_index()].get_index() == -1));
     std::list<Node> optimal_path;
     optimal_path.push_back(destination);
     while(_path[source.get_index()][destination.get_index()].get_index() != source.get_index())
@@ -72,18 +72,42 @@ City::City(short righe, short colonne, float oneway_fraction):_n_rows(righe), _n
 
     srand(time(NULL));
     
-    for (int i = 0; i < _n_rows*_n_coloumns; i++ ){
+    for (int i = 0; i < _n_rows*_n_coloumns; i++ )
+    {
         _adj_matrix[i][i] = Road(-1);
-        for (int j = i+1; j < _n_rows*_n_coloumns; j++){              
+        for (int j = i+1; j < _n_rows*_n_coloumns; j++)
+        {              
             float r = rand();
-            if ((j == i+1 && j%_n_coloumns != 0) || j == i+_n_coloumns ){
-                _adj_matrix[i][j] = Road(0);
-                if (r/RAND_MAX > oneway_fraction){
-                    _adj_matrix[j][i] = Road(0);
-                } else {
-                    _adj_matrix[j][i] = Road(-1);
+            float rl = rand();
+            if ((j == i+1 && j%_n_coloumns != 0) || j == i+_n_coloumns )
+            {
+                if(rl/RAND_MAX <= 0.5)
+                {
+                    _adj_matrix[i][j] = Road(0);
+                    if (r/RAND_MAX > oneway_fraction)
+                    {
+                        _adj_matrix[j][i] = Road(0);
+                    } 
+                    else 
+                    {
+                        _adj_matrix[j][i] = Road(-1);
+                    }
                 }
-            } else {
+                else
+                {
+                    _adj_matrix[j][i] = Road(0);
+                    if (r/RAND_MAX > oneway_fraction)
+                    {
+                        _adj_matrix[i][j] = Road(0);
+                    } 
+                    else 
+                    {
+                        _adj_matrix[i][j] = Road(-1);
+                    }
+                }
+            } 
+            else 
+            {
                 _adj_matrix[i][j] = Road(-1);
                 _adj_matrix[j][i] = Road(-1);
             }
@@ -91,7 +115,31 @@ City::City(short righe, short colonne, float oneway_fraction):_n_rows(righe), _n
     }
     for(int i=0;i<_n_rows*_n_coloumns;i++)
     {
-        insieme_nodi[i].set_index(i); 
+        _node_set[i].set_index(i); 
     }
     _floyd_warshall();
+}
+Road City::get_road(short i, short j)const
+{
+    return _adj_matrix[i][j];
+}
+short City::get_n_rows()const
+{
+    return _n_rows;
+}
+short City::get_n_coloumns()const
+{
+    return _n_coloumns;
+}
+Node City::get_node(short i)const
+{
+    return _node_set[i];
+}
+Node City::get_path(short i, short j)const
+{
+    return _path[i][j];
+}
+short City::get_distance(short i, short j)const
+{
+    return _distance[i][j];
 }
