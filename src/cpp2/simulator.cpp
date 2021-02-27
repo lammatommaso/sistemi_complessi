@@ -118,6 +118,14 @@ void Simulator::create_path()
     }
 }
 
+short Simulator::get_cars_at_destination() {
+    return _cars_at_destination;
+}
+
+std::vector<Car_Info> Simulator::get_car_vector(){
+    return _car_vector;
+}
+
 float Simulator::traffic()
 {
     int counter = 0;
@@ -129,12 +137,14 @@ float Simulator::traffic()
             if (!(_car_vector[i].car->get_at_destination()) && _car_vector[i].car->get_delay() == 0)
             {
                 _mv_car(i);
+
             }
             else
             {
                 _car_vector[i].car->delay();
             }
         }  
+
         counter++;
     }
     float steps_mean = 0;

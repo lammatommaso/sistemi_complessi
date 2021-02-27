@@ -40,18 +40,29 @@ app.whenReady().then( () => {
     /********************************************************************************************/
 })
 
+const { Worker, workerData, parentPort } = require('worker_threads')
 ipcMain.on("init", (event) => {
-    const addon = require('./build/Release/addon');
-    addon.mymain( () => {
-        grafo = addon.pulisci_archi()
-        
-        event.reply("grafo", grafo)
 
-        /*addon.avvisami_quando_disegnare( (stringa) => {
-            console.log(stringa);
-            event.reply("disegnami", stringa)
-        });*/
-    });    
+    const prom = new Promise((resolve, reject) => {
+        const worker = new Worker('./javascript/service.js', "" );
+        worker.on('message', resolve);
+        worker.on('error', reject);
+        worker.on('exit', (code) => {
+        if (code !== 0)
+            reject(new Error(`Worker stopped with exit code ${code}`));
+        })
+
+        worker.addListener("message", (data)=>{
+            event.reply(data["name"], data["data"])
+        })
+
+    });
+
+    prom.then(() => {
+        console.log("finito")
+    })
+
+
 })
 
 /*ipcMain.on("load_map", (event) => {

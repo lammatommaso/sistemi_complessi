@@ -46,7 +46,7 @@ INCS_Debug := \
 	-I/home/simone/.cache/node-gyp/12.16.2/deps/uv/include \
 	-I/home/simone/.cache/node-gyp/12.16.2/deps/zlib \
 	-I/home/simone/.cache/node-gyp/12.16.2/deps/v8/include \
-	-I$(srcdir)/cpp
+	-I$(srcdir)/cpp2
 
 DEFS_Release := \
 	'-DNODE_GYP_MODULE_NAME=addon' \
@@ -89,14 +89,15 @@ INCS_Release := \
 	-I/home/simone/.cache/node-gyp/12.16.2/deps/uv/include \
 	-I/home/simone/.cache/node-gyp/12.16.2/deps/zlib \
 	-I/home/simone/.cache/node-gyp/12.16.2/deps/v8/include \
-	-I$(srcdir)/cpp
+	-I$(srcdir)/cpp2
 
 OBJS := \
-	$(obj).target/$(TARGET)/cpp/js_interface.o \
-	$(obj).target/$(TARGET)/cpp/Macchina.o \
-	$(obj).target/$(TARGET)/cpp/Citta.o \
-	$(obj).target/$(TARGET)/cpp/Dio.o \
-	$(obj).target/$(TARGET)/cpp/Strada.o
+	$(obj).target/$(TARGET)/cpp2/js_interface.o \
+	$(obj).target/$(TARGET)/cpp2/car.o \
+	$(obj).target/$(TARGET)/cpp2/city.o \
+	$(obj).target/$(TARGET)/cpp2/simulator.o \
+	$(obj).target/$(TARGET)/cpp2/road.o \
+	$(obj).target/$(TARGET)/cpp2/node.o
 
 # Add to the list of files we specially track dependencies for.
 all_deps += $(OBJS)
