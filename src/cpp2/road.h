@@ -3,23 +3,28 @@
 
 #include<random>
 
-#define GAUSSIAN_MEAN 20
-#define GAUSSIAN_SIGMA 10
-#define MIN_ROAD_LENGTH 5
-#define MAX_ROAD_LENGTH 30
-
 class Road 
 {
-    short _car_number; 
-    short _road_length;
+    int _car_number; 
+    int _road_length;
+    static int _gaussian_mean;
+    static int _gaussian_sigma;
+    static int _min_road_length;
+    static int _max_road_length;
   public:
     Road();
-    Road(short car_number);
+    Road(int car_number);
     Road(Road const& Road);
-    short get_car_number()const;
-    short get_road_length();
+    int get_car_number()const;
+    int get_road_length();
+    static void set_statistics(int gaussian_mean, int gaussian_sigma, int min_road_length, int max_road_length);
+    static int get_gaussian_mean();
+    static int get_gaussian_sigma();
+    static int get_min_road_length();
+    static int get_max_road_length();
     void add_car();
     void rm_car();
+    int cars_in_road;
 };
 
 #endif

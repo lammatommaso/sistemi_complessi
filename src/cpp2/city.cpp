@@ -1,5 +1,9 @@
 #include "city.h"
-#include<cassert>
+#include <cassert>
+
+Road** City::get_adj_matrix(){
+    return _adj_matrix;
+}
 
 void City::_floyd_warshall()
 {
@@ -14,7 +18,7 @@ void City::_floyd_warshall()
             } 
             else if (_adj_matrix[i][j].get_car_number() == -1)
             { 
-                _distance[i][j] = _n_rows*_n_coloumns*MAX_ROAD_LENGTH + 1; //infty
+                _distance[i][j] = _n_rows*_n_coloumns*Road::get_max_road_length() + 1; //infty
                 _path[i][j] = Node(-1);
             } 
             else 
@@ -56,24 +60,42 @@ std::list<Node> City::print_path(Node source, Node destination)
 
 City::City() {}
 
-City::City(short righe, short colonne, float oneway_fraction):_n_rows(righe), _n_coloumns(colonne)
+#include <iostream>
+#include <fstream>
+
+City::City(int righe, int colonne, float oneway_fraction, int gaussian_mean, int gaussian_sigma, int min_road_length, int max_road_length):_n_rows(righe), _n_coloumns(colonne)
 { 
+    
+    Road::set_statistics(gaussian_mean, gaussian_sigma, min_road_length, max_road_length);
 
     _adj_matrix = new Road*[_n_rows*_n_coloumns];
     _path = new Node*[_n_rows*_n_coloumns];
-    _distance = new short*[_n_rows*_n_coloumns];
+    _distance = new int*[_n_rows*_n_coloumns];
     _node_set = new Node[_n_rows*_n_coloumns];
+
+    
     for( int i = 0; i < _n_rows*_n_coloumns; i++)
     {
+    
         _adj_matrix[i] = new Road[_n_rows*_n_coloumns];
+        
         _path[i] = new Node[_n_rows*_n_coloumns];
-        _distance[i] = new short[_n_rows*_n_coloumns];
+
+    
+        _distance[i] = new int[_n_rows*_n_coloumns];
+
+        
     }
 
+    
     srand(time(NULL));
+    float local_roads = 0;
+    float local_oneway_roads = 0;
+
     
     for (int i = 0; i < _n_rows*_n_coloumns; i++ )
     {
+
         _adj_matrix[i][i] = Road(-1);
         for (int j = i+1; j < _n_rows*_n_coloumns; j++)
         {              
@@ -87,10 +109,12 @@ City::City(short righe, short colonne, float oneway_fraction):_n_rows(righe), _n
                     if (r/RAND_MAX > oneway_fraction)
                     {
                         _adj_matrix[j][i] = Road(0);
+                        local_roads++;
                     } 
                     else 
                     {
                         _adj_matrix[j][i] = Road(-1);
+                        local_oneway_roads++;
                     }
                 }
                 else
@@ -99,10 +123,12 @@ City::City(short righe, short colonne, float oneway_fraction):_n_rows(righe), _n
                     if (r/RAND_MAX > oneway_fraction)
                     {
                         _adj_matrix[i][j] = Road(0);
+                        local_roads++;
                     } 
                     else 
                     {
                         _adj_matrix[i][j] = Road(-1);
+                        local_oneway_roads++;
                     }
                 }
             } 
@@ -113,33 +139,45 @@ City::City(short righe, short colonne, float oneway_fraction):_n_rows(righe), _n
             }
         }
     }
+    _oneway_fraction = local_oneway_roads/(local_oneway_roads+local_roads);
     for(int i=0;i<_n_rows*_n_coloumns;i++)
     {
         _node_set[i].set_index(i); 
     }
     _floyd_warshall();
 }
-Road City::get_road(short i, short j)const
+Road City::get_road(int i, int j)const
 {
     return _adj_matrix[i][j];
 }
-short City::get_n_rows()const
+
+Road* City::get_road_ptr(int i, int j)const
+{
+    return &(_adj_matrix[i][j]);
+}
+
+int City::get_n_rows()const
 {
     return _n_rows;
 }
-short City::get_n_coloumns()const
+int City::get_n_coloumns()const
 {
     return _n_coloumns;
 }
-Node City::get_node(short i)const
+float City::get_oneway_fraction()const
+{
+    return _oneway_fraction;
+}
+Node City::get_node(int i)const
 {
     return _node_set[i];
 }
-Node City::get_path(short i, short j)const
+Node City::get_path(int i, int j)const
 {
     return _path[i][j];
 }
-short City::get_distance(short i, short j)const
+int City::get_distance(int i, int j)const
 {
     return _distance[i][j];
 }
+

@@ -3,13 +3,13 @@
 
 class Node 
 {
-    short _index;
+    int _index;
   public:
     Node();
-    Node(short index);
+    Node(int index);
     Node(Node const& Node);
-    short  get_index() const;
-    void set_index(short index);
+    int  get_index() const;
+    void set_index(int index);
 };
 
 #endif

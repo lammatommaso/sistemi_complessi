@@ -41,15 +41,33 @@
 
     <script src="../javascript/renderer.js"></script>
 
+    var values = ""
+
     <script>   
-        //ipcRenderer.send("init") 
-        ipcRenderer.on("grafo", (grafo) => {
+        const n_cars = 10
+        ipcRenderer.send("init", 0.9, n_cars, 6, 6, 20, 10, 12, 30);
+        ipcRenderer.on("grafo", (event, grafo) => {
             console.log("ecco il grafo da disegnare")
             console.log(grafo)
+
+            var start = []
+            var end = []
+            for (i=0; i < 6*3-1; i++){
+                start.push(i)
+            }
+            for (i=6*3; i < 6*6-1; i++){
+                end.push(i);
+            }
+
+            ipcRenderer.send("create_path", start, end)
         })
 
-        ipcRenderer.on("disegnami", (roba_da_disegnare) => {
-            console.log("devo disegnare roba: " + roba_da_disegnare)
+        ipcRenderer.on("disegnami", (event, roba_da_disegnare) => {
+            values = JSON.parse(roba_da_disegnare)
+            values["streets"].forEach(element => {
+                if (element.cars > 0)
+                    console.log("Questa strada ha " + element.cars + "/" + element.max + " macchine")
+            });
         })
 
     </script>
@@ -58,22 +76,22 @@
     <script src="../javascript/grafo.js"></script>
     <script src="../javascript/macchine.js"></script>
     <script>
-        var g = new Grafo(6);
-        g.draw();
+        //var g = new Grafo(6);
+        //g.draw();
 
-        var m = new Macchine(1);
+        //var m = new Macchine(1);
         //const coordinate = g.street2coordinates(0, 1)
-        const id = 0
+        //const id = 0
         //m.draw(id, coordinate[0], 2, coordinate[1], coordinate[2], coordinate[3], coordinate[4])
 
-        for (i= 0; i < 36; i++){
+        /*for (i= 0; i < 36; i++){
             for (j = 0; j < 36; j++){
                 const coordinate = g.street2coordinates(i, j)
                 if (coordinate[0]!=0 && coordinate[0] < lato1/2 && coordinate[0] > -lato1/2)
                     m.draw(id, coordinate[0], 0, coordinate[1], coordinate[2], coordinate[3], coordinate[4])
 
             }
-        }
+        }*/
 
     </script>
 

@@ -1,3 +1,4 @@
+const { worker } = require("cluster");
 const { app, BrowserWindow, ipcMain } = require("electron")
 const fs = require('fs');
 const { on } = require("process");
@@ -40,19 +41,27 @@ app.whenReady().then( () => {
     /********************************************************************************************/
 })
 
-const { Worker, workerData, parentPort } = require('worker_threads')
-ipcMain.on("init", (event) => {
 
+const { Worker, workerData, parentPort } = require('worker_threads')
+var w = ""
+ipcMain.on("init", (event, rows, columns, n_cars, increment, gaussian_mean, gaussian_sigma, min_road_l, max_road_l) => {
+    console.log(`min_road_l: ${min_road_l}, max_road_l: ${max_road_l}`)
     const prom = new Promise((resolve, reject) => {
-        const worker = new Worker('./javascript/service.js', "" );
-        worker.on('message', resolve);
-        worker.on('error', reject);
-        worker.on('exit', (code) => {
+        w = new Worker('./javascript/service.js', {workerData: {"rows": rows, "columns": columns, 
+            "n_cars": n_cars, "increment": increment, "gaussian_mean": gaussian_mean, "gaussian_sigma": gaussian_sigma, 
+            "min_road_l": min_road_l, "max_road_l": max_road_l}} );
+        w.on('message', resolve);
+        w.on('error', reject);
+        w.on('exit', (code) => {
         if (code !== 0)
             reject(new Error(`Worker stopped with exit code ${code}`));
         })
-
-        worker.addListener("message", (data)=>{
+        
+        console.log("Thread creato")
+        
+        w.addListener("message", (data)=>{
+            console.log("Ricevuto messaggio da thread simulazione")
+            
             event.reply(data["name"], data["data"])
         })
 
@@ -61,8 +70,16 @@ ipcMain.on("init", (event) => {
     prom.then(() => {
         console.log("finito")
     })
+})
 
+ipcMain.on("create_path", (event, s1, s2) => {
+    //s1 è il primo insieme => insieme dei nodi di partenza
+    //s2 è il secondo insieme => insieme dei nodi di arrivo
+    w.postMessage({"name": "create_path", "data": {"l1": s1.length, "l2": s2.length, "s1": s1, "s2": s2}})
+})
 
+ipcMain.on("start_simulation", (event) => {
+    w.postMessage({"name": "start_simulation"})
 })
 
 /*ipcMain.on("load_map", (event) => {

@@ -1,44 +1,67 @@
-
-
 #ifndef SIMULATOR_H
 #define SIMULATOR_H
 
-#include "car.h"
-#include "city.h"
-#include "node.h"
-#include <list>
-#include <time.h>
-#include <iostream>
+#include"car.h"
+#include"city.h"
+#include"node.h"
+#include<list>
+#include<time.h>
+#include<iostream>
+#include<fstream>
 #include<vector>
 #include<algorithm>
-#include <iterator>
+#include<iterator>
 
-#define N_CARS 100
+#include"numpy_parser.h"
 
 struct Car_Info
 {
     std::list<Node> path;
     Node position;
     Car* car;
-    Car_Info(): path(std::list<Node>()), position(Node()), car(new Car()){}
+    Car_Info();
+};
+
+struct Result
+{
+    float steps_mean;
+    float steps_sigma;
+    float stops_mean;
+    float stops_sigma;
+    Result();
+    friend std::ostream& operator<<(std::ostream& output, const Result& result);
+    friend std::istream& operator>>(std::istream& input, Result& result);
+    
 };
 
 class Simulator
 {
     std::vector<Car_Info> _car_vector;
-    short _cars_at_destination = 0;
+    Result _result;
+    int _cars_at_destination = 0;
     City _city;
+    int _car_number;
     inline Node _find_next(int car_index)const;
     inline Road _find_road(int car_index)const;
+    inline Road* _find_road_ptr(int car_index)const;
+    std::string print_car_data()const;
+    std::string print_adj_matrix()const;
   public:
-    void _mv_car(int car_index); //TODO refractor
-    Simulator();      
-    void create_city(short n_rows, short n_coloumns, float oneway_fraction);
-    void create_path();
-    float traffic();
+    Simulator(int car_number);      
+    void create_city(int n_rows, int n_coloumns, float oneway_fraction, int gaussian_mean, int gaussian_sigma, int min_road_length, int max_road_length);
+    void create_path(int source_l, int dest_l, int source_nodes[], int destination_nodes[]);
+    void simulation();
     City get_city()const;
-    short get_cars_at_destination();
-    std::vector<Car_Info> get_car_vector();
+    Result get_result()const;
+    std::vector<Car_Info> get_car_vector()const;
+    std::string print()const;
+
+    void mv_car(int car_index);
+    int get_cars_at_destination();
+    int get_car_number();
+    Car_Info get_car(int i);
+    Result get_result();
+    void set_result(Result r);
 };
 
 #endif

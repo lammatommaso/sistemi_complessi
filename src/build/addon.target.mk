@@ -97,7 +97,8 @@ OBJS := \
 	$(obj).target/$(TARGET)/cpp2/city.o \
 	$(obj).target/$(TARGET)/cpp2/simulator.o \
 	$(obj).target/$(TARGET)/cpp2/road.o \
-	$(obj).target/$(TARGET)/cpp2/node.o
+	$(obj).target/$(TARGET)/cpp2/node.o \
+	$(obj).target/$(TARGET)/cpp2/numpy_parser.o
 
 # Add to the list of files we specially track dependencies for.
 all_deps += $(OBJS)

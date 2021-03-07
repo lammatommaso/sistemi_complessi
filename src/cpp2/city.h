@@ -6,29 +6,31 @@
 #include "node.h"
 #include <list>
 #include <cmath>
-#include<iterator>
-
-#define MIN_PATH_LENGTH 2*MIN_ROAD_LENGTH
+#include <iterator>
 
 class City 
 {
     Node** _path;
-    short** _distance;
+    int** _distance;
     Node* _node_set;
     void _floyd_warshall();
     Road** _adj_matrix;
-    short _n_rows;
-    short _n_coloumns;
+    int _n_rows;
+    int _n_coloumns;
+    float _oneway_fraction;
   public:
     City();
-    City(short n_rows, short n_coloumns, float oneway_fraction);
+    City(int n_rows, int n_coloumns, float oneway_fraction, int gaussian_mean, int gaussian_sigma, int min_road_length, int max_road_length);
     std::list<Node> print_path(Node source, Node destination);
-    Road get_road(short i, short j)const;
-    short get_n_rows()const;
-    short get_n_coloumns()const;
-    Node get_node(short i)const;
-    Node get_path(short i, short j)const;
-    short get_distance(short i, short j)const;
+    Road get_road(int i, int j)const;
+    Road* get_road_ptr(int i, int j)const;
+    int get_n_rows()const;
+    int get_n_coloumns()const;
+    float get_oneway_fraction()const;
+    Node get_node(int i)const;
+    Node get_path(int i, int j)const;
+    int get_distance(int i, int j)const;
+    Road** get_adj_matrix();
 };
 
 #endif
