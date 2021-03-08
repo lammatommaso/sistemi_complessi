@@ -1,4 +1,4 @@
-const { worker } = require("cluster");
+//const { worker } = require("cluster");
 const { app, BrowserWindow, ipcMain } = require("electron")
 const fs = require('fs');
 const { on } = require("process");
@@ -24,33 +24,36 @@ function createWindow() {
 
 app.whenReady().then( () => {
     createWindow()
-
-    /*********************** TEST addon c++ *****************************************************
-    const addon = require('./build/Release/addon');
-    addon.mymain( () => {
-        console.log("ARCHI DA CANCELLARE:")
-        console.log(addon.pulisci_archi()) 
-        console.log("HO STAMPATO GLI ARCHI")
-        
-
-        addon.avvisami_quando_disegnare( (stringa) => {
-            console.log(stringa);
-        });
-    });
-
-    /********************************************************************************************/
 })
 
 
 const { Worker, workerData, parentPort } = require('worker_threads')
-var w = ""
+
+const w = new Worker("./javascript/service.js");
+
+console.log("thread spawnato")
+
+w.on('message', data => {
+    console.log(data)
+})
+
+  //w.on('message', resolve);
+  //w.on('error', reject);
+ 
 ipcMain.on("init", (event, rows, columns, n_cars, increment, gaussian_mean, gaussian_sigma, min_road_l, max_road_l) => {
-    console.log(`min_road_l: ${min_road_l}, max_road_l: ${max_road_l}`)
+    console.log("hai chiamato init")
+    //new Promise((resolve, reject) => {
+        
+
+     // })
+
+
+    /*
     const prom = new Promise((resolve, reject) => {
         w = new Worker('./javascript/service.js', {workerData: {"rows": rows, "columns": columns, 
             "n_cars": n_cars, "increment": increment, "gaussian_mean": gaussian_mean, "gaussian_sigma": gaussian_sigma, 
             "min_road_l": min_road_l, "max_road_l": max_road_l}} );
-        w.on('message', resolve);
+        //w.on('message', resolve);
         w.on('error', reject);
         w.on('exit', (code) => {
         if (code !== 0)
@@ -70,6 +73,7 @@ ipcMain.on("init", (event, rows, columns, n_cars, increment, gaussian_mean, gaus
     prom.then(() => {
         console.log("finito")
     })
+    */
 })
 
 ipcMain.on("create_path", (event, s1, s2) => {

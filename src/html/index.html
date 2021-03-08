@@ -55,7 +55,7 @@
         array_nody_src = [];
         array_nody_dst = [];
 
-        const n_cars = 100
+        const n_cars = 10
 
         const green  = "#9bee00"
         const orange = "#ffaa00"
@@ -73,7 +73,7 @@
             })
             
         
-        const cols = 20, rows = 8;
+        const cols = 4, rows = 4;
 
         ipcRenderer.send("init", 0.2, n_cars, cols, rows, 20, 10, 12, 30);
         ipcRenderer.on("grafo", (event, grafo) => {
