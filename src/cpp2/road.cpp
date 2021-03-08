@@ -4,7 +4,7 @@ int Road::_gaussian_mean = 0;
 int Road::_gaussian_sigma = 0;
 int Road::_min_road_length = 0;
 int Road::_max_road_length = 0;
-Road::Road() : _car_number(0), cars_in_road(cars_in_road > 0 ? cars_in_road : 0)
+Road::Road() : _car_number(0), cars_in_road(0)
 {
 
     std::random_device generator;
@@ -17,7 +17,7 @@ Road::Road() : _car_number(0), cars_in_road(cars_in_road > 0 ? cars_in_road : 0)
     while(_road_length <= _min_road_length || _road_length > _max_road_length);
 
 }  
-Road::Road(int car_number) : _car_number(car_number), cars_in_road(cars_in_road > 0 ? cars_in_road : 0)
+Road::Road(int car_number) : _car_number(car_number), cars_in_road(0)
 {
 
     std::random_device generator;
@@ -28,7 +28,7 @@ Road::Road(int car_number) : _car_number(car_number), cars_in_road(cars_in_road 
     }
     while(_road_length <= _min_road_length || _road_length > _max_road_length);
 }
-Road::Road(Road const& Road) : _car_number(Road._car_number), _road_length(Road._road_length), cars_in_road(cars_in_road > 0 ? cars_in_road : 0){}
+Road::Road(Road const& Road) : _car_number(Road._car_number), _road_length(Road._road_length), cars_in_road(0){}
 int Road::get_car_number() const { return _car_number; }
 int Road::get_road_length(){return _road_length;}
 void Road::set_statistics(int gaussian_mean, int gaussian_sigma, int min_road_length, int max_road_length)

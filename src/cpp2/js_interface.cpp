@@ -1,5 +1,4 @@
 #include <node_api.h>
-#include "../node_modules/node-addon-api/napi.h"
 
 #include <node.h>
 #include <assert.h>
@@ -19,7 +18,6 @@
 
 
 using namespace std;
-using namespace Napi;
 
 using json = nlohmann::json;
 
