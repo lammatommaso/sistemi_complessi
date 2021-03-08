@@ -58,7 +58,7 @@ napi_value myMain(napi_env env, napi_callback_info info){
     logFile << "fatto\n";
     logFile.flush();
     
-    sim.create_city(rows, columns, 0.5, gaussian_mean, gaussian_sigma, min_road_l, max_road_l);
+    sim.create_city(rows, columns, increment, gaussian_mean, gaussian_sigma, min_road_l, max_road_l);
     
     //gestione callback
     napi_value cb = args[8];
@@ -148,7 +148,7 @@ json get_updates(){
                 int cars = sim.get_city().get_road_ptr(i, j)->cars_in_road;
                 //int cars = sim.get_city().get_road(i, j).get_car_number();
 
-                tmp.push_back({{"street", {"x", i, "y", j}}, {"max", max}, {"cars", cars}});
+                tmp.push_back({{"street", {{"x", i}, {"y", j}}}, {"max", max}, {"cars", cars}});
             }
         }    
     }
