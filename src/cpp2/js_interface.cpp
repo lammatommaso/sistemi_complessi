@@ -155,7 +155,7 @@ json get_updates(){
     logFile.flush();
 
     return {{"streets", tmp}};
-}
+} 
 
 napi_value start_simulation(napi_env env, napi_callback_info info){
     napi_status status;

@@ -12,170 +12,61 @@
                 height: 100%;
                 margin: 0;
                 padding: 0;
+                position: absolute;
             }
         </style>
-        <!-- <link rel="stylesheet" href="../css/index.css"> -->
+        <link rel="stylesheet" href="../css/index.css">
+        
         <script src="../node_modules/sigma/build/sigma.min.js"></script>
-        <!-- <script src="../node_modules/sigma/build/plugins/sigma.renderers.parallelEdges.min.js"></script> -->
-
         <script src="../node_modules/sigma/plugins/sigma.renderers.parallelEdges/utils.js"></script>
         <script src="../node_modules/sigma/plugins/sigma.renderers.parallelEdges/sigma.canvas.edges.curvedArrow.js"></script>
         <script src="../node_modules/sigma/plugins/sigma.renderers.parallelEdges/sigma.canvas.edgehovers.curvedArrow.js"></script>
 
         <script>            
             const { ipcRenderer } = require('electron')
-            //const sigma = require ('sigma')
         </script>
 
         
     </head>
 
     <body>
-        <!--<div id="menu" >
-            <h1>Comandi:</h1> <br/>
-            <h2>
-                <span class="keyboard-key">A</span>: sinistra <br/>
-                <span class="keyboard-key">D</span>: destra <br/>
-                <span class="keyboard-key">W</span>: avanti <br/>
-                <span class="keyboard-key">S</span>: indietro <br/>
-                <span class="keyboard-key">Q</span>: zoom avanti <br/>
-                <span class="keyboard-key">Z</span>: zoom indietro <br/>
-            </h2>
-        </div> -->
-        <div id="main" style="width: 100%; height: 100%; background-color: rgb(34, 33, 33);">
-            <!--<canvas id="render-canvas"></canvas>-->
+    
+        <div id="settings">
+        
+            <label>Percentuale sensi unici (0 = tutti gli archi, 1 = meno archi possibili)</label><input type="number" id="p" required value="0.5"/> <br/>
+            <label>Numero macchine</label><input type="number" id="n_cars" required value="100"/> <br/>
+            <label>Colonne del grafo</label><input type="number" id="cols" required value="8"/> <br/>
+            <label>Righe del grafo</label><input type="number" id="rows" required value="8"/> <br/>
+            <label>Gaussian Mean</label><input type="number" id="mean" required value="10"/> <br/>
+            <label>Gaussian Sigma</label><input type="number" id="sigma" required value="10"/> <br/>
+            <label>Lunghezza minima delle strade</label><input type="number" id="min_l" required value="12"/> <br/>
+            <label>Lunghezza massima delle strade</label><input type="number" id="max_l" required value="30"/> <br/>
+            
+            <button id="next" onclick="init()" style="position: relative; float:right" >
+                NEXT
+            </button>
+            
+            <img id="loading" src="loading.gif">
+        </div>
+
+        <div id="graph">
+            <div id="main">
+                
+            </div>
+            <div>
+                <button id="prev" onclick = "switch_things()" style="position: relative; float:left">
+                    PREV
+                </button>
+
+                <button id="start" onclick="start_simulation()"  style="position: relative; float:right" >
+                    PREV
+                </button>
+            </div>
         </div>
         
     </body>
 
-    <!-- <script src="../javascript/renderer.js"></script> -->
-
-    <script>   
-
-        array_nody_src = [];
-        array_nody_dst = [];
-
-        const n_cars = 10
-
-        const green  = "#9bee00"
-        const orange = "#ffaa00"
-        const red    = "#f00"
-
-        var s = new sigma({
-            renderer:{
-                container: 'main', 
-                type: 'canvas'
-            },
-            settings: {
-                minArrowSize: 8,
-                minEdgeSize: 8
-            }
-            })
-            
-        
-        const cols = 4, rows = 4;
-
-        ipcRenderer.send("init", 0.2, n_cars, cols, rows, 20, 10, 12, 30);
-        ipcRenderer.on("grafo", (event, grafo) => {
-            console.log("ecco il grafo da disegnare")
-            grafo = JSON.parse(grafo)
-            console.log(grafo)
-            
-            var counter = 0;
-            for (i = 0; i < cols; i++){
-                for (j = 0; j < rows; j++){
-
-                    s.graph.addNode({
-                        id: 'n'.concat(counter),
-                        x: i,
-                        y: j,
-                        size: 1,
-                        color: '#ff9000'
-
-                    })
-                    counter += 1
-                }
-            }
-            
-            counter = 0
-            grafo["nodes"].forEach(node => {
-                s.graph.addEdge({
-                    id: 'e'.concat(counter),
-                    source: 'n'.concat(node.x),
-                    target: 'n'.concat(node.y),
-                    type: "curvedArrow",
-                    color: '#fff',
-                    count: 1
-                })
-                counter += 1
-            })
-
-            s.refresh()
-
-        })
-
-        var start = []
-        var end = []
-        for (i=0; i < cols; i++){
-            start.push(i)
-            start.push(i*2)
-        }
-        for (i=(cols*rows) - cols*2; i < cols*rows; i++){
-            end.push(i);
-            //end.push(i/2);
-        }
-
-        //ipcRenderer.send("create_path", start, end)
-
-        values = []
-
-        ipcRenderer.on("disegnami", (event, roba_da_disegnare) => {
-            values = JSON.parse(roba_da_disegnare)
-            values["streets"].forEach(element => {
-                
-                if (element.cars > 0){
-                    for (i=0; i < s.graph.edges().length; i++){
-                        //nota: stiamo confrontando interi e stringhe, ma js è figo e non ha problemi
-                        if (parseInt(s.graph.edges()[i].source.substr(1)) == element.street.x && parseInt(s.graph.edges()[i].target.substr(1)) == element.street.y){
-                            if (element.cars/element.max <= 0.5)
-                                s.graph.edges()[i].color = green;
-                            else if (element.cars/element.max <= 0.75)
-                                s.graph.edges()[i].color = orange;
-                            else
-                                s.graph.edges()[i].color = red;
-                            break;
-                        }
-                    }
-                } 
-
-                //console.log("Questa strada ha " + element.cars + "/" + element.max + " macchine")
-            });
-            s.refresh();
-        })
-
-    </script>
-
-    <!-- <script src="../javascript/GeoJSONparser.js"></script> -->
-    <!-- <script src="../javascript/grafo.js"></script>
-    <script src="../javascript/macchine.js"></script> -->
-    <script>
-        //var g = new Grafo(6);
-        //g.draw();
-
-        //var m = new Macchine(1);
-        //const coordinate = g.street2coordinates(0, 1)
-        //const id = 0
-        //m.draw(id, coordinate[0], 2, coordinate[1], coordinate[2], coordinate[3], coordinate[4])
-
-        /*for (i= 0; i < 36; i++){
-            for (j = 0; j < 36; j++){
-                const coordinate = g.street2coordinates(i, j)
-                if (coordinate[0]!=0 && coordinate[0] < lato1/2 && coordinate[0] > -lato1/2)
-                    m.draw(id, coordinate[0], 0, coordinate[1], coordinate[2], coordinate[3], coordinate[4])
-
-            }
-        }*/
-
-    </script>
+    <script src="../javascript/utils.js"></script>
+    <script src="../javascript/main.js"></script>
 
 </html>

@@ -29,26 +29,9 @@ app.whenReady().then( () => {
 
 const { Worker, workerData, parentPort } = require('worker_threads')
 
-const w = new Worker("./javascript/service.js");
-
-console.log("thread spawnato")
-
-w.on('message', data => {
-    console.log(data)
-})
-
-  //w.on('message', resolve);
-  //w.on('error', reject);
  
 ipcMain.on("init", (event, rows, columns, n_cars, increment, gaussian_mean, gaussian_sigma, min_road_l, max_road_l) => {
-    console.log("hai chiamato init")
-    //new Promise((resolve, reject) => {
-        
-
-     // })
-
-
-    /*
+    
     const prom = new Promise((resolve, reject) => {
         w = new Worker('./javascript/service.js', {workerData: {"rows": rows, "columns": columns, 
             "n_cars": n_cars, "increment": increment, "gaussian_mean": gaussian_mean, "gaussian_sigma": gaussian_sigma, 
@@ -73,7 +56,7 @@ ipcMain.on("init", (event, rows, columns, n_cars, increment, gaussian_mean, gaus
     prom.then(() => {
         console.log("finito")
     })
-    */
+    
 })
 
 ipcMain.on("create_path", (event, s1, s2) => {
@@ -85,17 +68,3 @@ ipcMain.on("create_path", (event, s1, s2) => {
 ipcMain.on("start_simulation", (event) => {
     w.postMessage({"name": "start_simulation"})
 })
-
-/*ipcMain.on("load_map", (event) => {
-    fs.readFile('/home/simone/Scrivania/fisica/test.geojson', 'utf8', function (err,data) {
-        if (err) {
-          return console.log(err);
-        }
-        try {
-            var parsed = JSON.parse(data)
-            event.reply("load_map", parsed)
-        } catch (exc){
-            console.error(exc)
-        }
-      });
-})*/

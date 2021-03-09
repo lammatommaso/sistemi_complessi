@@ -1,32 +1,23 @@
-#menu {
-    float:left; 
-    position: relative; 
-    width: 25%; 
-    background-color: purple; 
+
+#graph {
+    width: 100%; 
     height: 100%; 
-    color: rgba(255, 244, 244, 0.877);
-    /*padding: 1%;*/
+    background-color: rgb(34, 33, 33);
+    display: none;
 }
 
-#main {
-    float:right; 
-    position: relative; 
-    width: 75%; 
-    height: 100%;
+#settings {
+    width: 100%; 
+    height: 100%; 
+    background-color: rgb(209, 128, 189);
 }
 
-.keyboard-key {
-    border: 2px solid grey;
-    background-color: lightblue;
-    color: rgb(104, 102, 102);
-    padding: 1px;
+#loading{
+    position: absolute;
+    top:40%;
+    z-index: 2;
+    left:47%;
+    right:47%;
     width: 6%;
-    text-align: center;
-    display: inline-block;
-}
-
-#render-canvas {
-    width: 100%;
-    height: 100%;
-    touch-action: none;
+    display: none;
 }
