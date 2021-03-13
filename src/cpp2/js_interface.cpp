@@ -67,25 +67,19 @@ napi_value myMain(napi_env env, napi_callback_info info){
     assert(status == napi_ok);
 
     //grafo creato, lo invio alla grafica
-    logFile << "Inizializzo dati callback\n";
-    logFile.flush();
+    
     napi_value argv[1];
     Road** r = sim.get_city().get_adj_matrix();
-    logFile << "Strada scaricata\n";
-    logFile.flush();
+
     json j = {};
-    logFile << "Inizio conversione...\n";
-    logFile.flush();
+
     for (int x = 0; x < sim.get_city().get_n_rows()*sim.get_city().get_n_coloumns(); x++){
         for (int y=0; y < sim.get_city().get_n_rows()*sim.get_city().get_n_coloumns(); y++){
             if (sim.get_city().get_road(x,y).get_car_number() >= 0)
                 j.push_back({{"x", x}, {"y", y}});
-                logFile << "Inserisco strada " << x << ", " << y << "\n";
-                logFile.flush();
+                
         }
     }
-    logFile << "Conversione avvenuta\n";
-    logFile.flush();
 
     json nodes = {{"nodes", j}};
 
@@ -143,7 +137,7 @@ json get_updates(){
     json tmp = {};
     for (int i = 0; i < sim.get_city().get_n_rows()*sim.get_city().get_n_coloumns(); i++){
         for (int j = 0; j < sim.get_city().get_n_rows()*sim.get_city().get_n_coloumns(); j++){
-            if (sim.get_city().get_road(i, j).get_car_number() >= 0){
+            if (sim.get_city().get_road(i, j).get_car_number() >= 0 && sim.get_city().get_road_ptr(i, j)->cars_in_road > 0){
                 int max = sim.get_city().get_road(i, j).get_road_length();
                 int cars = sim.get_city().get_road_ptr(i, j)->cars_in_road;
                 //int cars = sim.get_city().get_road(i, j).get_car_number();
@@ -159,6 +153,8 @@ json get_updates(){
 
 napi_value start_simulation(napi_env env, napi_callback_info info){
     napi_status status;
+
+    logFile << "Simulazione partita\n";
 
     size_t argc = 1;
     napi_value args[1];
@@ -185,26 +181,49 @@ napi_value start_simulation(napi_env env, napi_callback_info info){
         { 
             if (!(sim.get_car(i).car->get_at_destination()) && sim.get_car(i).car->get_delay() == 0)
             {
+                logFile << "Muovo una macchina...\n";
+                logFile.flush();
+                
                 sim.mv_car(i);
+                
+                logFile << "Ho mosso una macchina\n";
+                logFile.flush();
+
             }
             else
             {
+                logFile << "Delay macchina...\n";
+                logFile.flush();
                 sim.get_car(i).car->delay();
+                logFile << "Macchiana delayiata\n";
+                logFile.flush();
             }
         }  
 
         napi_value result;
 
+        logFile << "Prendo updates...\n";
+        logFile.flush();
+
         json j = get_updates();
         status = napi_create_string_latin1(env, j.dump().c_str(), NAPI_AUTO_LENGTH, argv);
-        
-        cout << "chiamo la callback...\n";
+        logFile << "Updates presi\n";
+        logFile.flush();
+
+
+        //chiamo la callback...
+        logFile << "Chiamo la cb...\n";
+        logFile.flush();
         napi_call_function(env, global, cb, 1, argv, &result);
         assert(status == napi_ok);
+        logFile << "Cb chiamata\n";
+        logFile.flush();
 
         counter++;
     }
 
+    logFile << "simulazione terminata\n";
+    logFile.flush();
    
     float steps_mean = 0;
     float steps_squared_mean = 0;

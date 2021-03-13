@@ -24,7 +24,7 @@ class Road
     static int get_max_road_length();
     void add_car();
     void rm_car();
-    int cars_in_road;
+    int cars_in_road = 0;
 };
 
 #endif
