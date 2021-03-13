@@ -7,13 +7,8 @@ DEFS_Debug := \
 	'-DUSING_UV_SHARED=1' \
 	'-DUSING_V8_SHARED=1' \
 	'-DV8_DEPRECATION_WARNINGS=1' \
-	'-DV8_DEPRECATION_WARNINGS' \
-	'-DV8_IMMINENT_DEPRECATION_WARNINGS' \
 	'-D_LARGEFILE_SOURCE' \
 	'-D_FILE_OFFSET_BITS=64' \
-	'-D__STDC_FORMAT_MACROS' \
-	'-DOPENSSL_NO_PINSHARED' \
-	'-DOPENSSL_THREADS' \
 	'-DBUILDING_NODE_EXTENSION' \
 	'-DDEBUG' \
 	'-D_DEBUG' \
@@ -27,6 +22,7 @@ CFLAGS_Debug := \
 	-Wextra \
 	-Wno-unused-parameter \
 	-m64 \
+	-fPIC \
 	-g \
 	-O0
 
@@ -39,13 +35,13 @@ CFLAGS_CC_Debug := \
 	-std=gnu++1y
 
 INCS_Debug := \
-	-I/home/simone/.cache/node-gyp/12.16.2/include/node \
-	-I/home/simone/.cache/node-gyp/12.16.2/src \
-	-I/home/simone/.cache/node-gyp/12.16.2/deps/openssl/config \
-	-I/home/simone/.cache/node-gyp/12.16.2/deps/openssl/openssl/include \
-	-I/home/simone/.cache/node-gyp/12.16.2/deps/uv/include \
-	-I/home/simone/.cache/node-gyp/12.16.2/deps/zlib \
-	-I/home/simone/.cache/node-gyp/12.16.2/deps/v8/include \
+	-I/home/simone/.cache/node-gyp/10.19.0/include/node \
+	-I/home/simone/.cache/node-gyp/10.19.0/src \
+	-I/home/simone/.cache/node-gyp/10.19.0/deps/openssl/config \
+	-I/home/simone/.cache/node-gyp/10.19.0/deps/openssl/openssl/include \
+	-I/home/simone/.cache/node-gyp/10.19.0/deps/uv/include \
+	-I/home/simone/.cache/node-gyp/10.19.0/deps/zlib \
+	-I/home/simone/.cache/node-gyp/10.19.0/deps/v8/include \
 	-I$(srcdir)/cpp2
 
 DEFS_Release := \
@@ -53,13 +49,8 @@ DEFS_Release := \
 	'-DUSING_UV_SHARED=1' \
 	'-DUSING_V8_SHARED=1' \
 	'-DV8_DEPRECATION_WARNINGS=1' \
-	'-DV8_DEPRECATION_WARNINGS' \
-	'-DV8_IMMINENT_DEPRECATION_WARNINGS' \
 	'-D_LARGEFILE_SOURCE' \
 	'-D_FILE_OFFSET_BITS=64' \
-	'-D__STDC_FORMAT_MACROS' \
-	'-DOPENSSL_NO_PINSHARED' \
-	'-DOPENSSL_THREADS' \
 	'-DBUILDING_NODE_EXTENSION'
 
 # Flags passed to all source files.
@@ -70,6 +61,7 @@ CFLAGS_Release := \
 	-Wextra \
 	-Wno-unused-parameter \
 	-m64 \
+	-fPIC \
 	-O3 \
 	-fno-omit-frame-pointer
 
@@ -82,13 +74,13 @@ CFLAGS_CC_Release := \
 	-std=gnu++1y
 
 INCS_Release := \
-	-I/home/simone/.cache/node-gyp/12.16.2/include/node \
-	-I/home/simone/.cache/node-gyp/12.16.2/src \
-	-I/home/simone/.cache/node-gyp/12.16.2/deps/openssl/config \
-	-I/home/simone/.cache/node-gyp/12.16.2/deps/openssl/openssl/include \
-	-I/home/simone/.cache/node-gyp/12.16.2/deps/uv/include \
-	-I/home/simone/.cache/node-gyp/12.16.2/deps/zlib \
-	-I/home/simone/.cache/node-gyp/12.16.2/deps/v8/include \
+	-I/home/simone/.cache/node-gyp/10.19.0/include/node \
+	-I/home/simone/.cache/node-gyp/10.19.0/src \
+	-I/home/simone/.cache/node-gyp/10.19.0/deps/openssl/config \
+	-I/home/simone/.cache/node-gyp/10.19.0/deps/openssl/openssl/include \
+	-I/home/simone/.cache/node-gyp/10.19.0/deps/uv/include \
+	-I/home/simone/.cache/node-gyp/10.19.0/deps/zlib \
+	-I/home/simone/.cache/node-gyp/10.19.0/deps/v8/include \
 	-I$(srcdir)/cpp2
 
 OBJS := \
@@ -98,7 +90,8 @@ OBJS := \
 	$(obj).target/$(TARGET)/cpp2/simulator.o \
 	$(obj).target/$(TARGET)/cpp2/road.o \
 	$(obj).target/$(TARGET)/cpp2/node.o \
-	$(obj).target/$(TARGET)/cpp2/numpy_parser.o
+	$(obj).target/$(TARGET)/cpp2/numpy_parser.o \
+	$(obj).target/$(TARGET)/cpp2/Batch_Simulation.o
 
 # Add to the list of files we specially track dependencies for.
 all_deps += $(OBJS)

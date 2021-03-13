@@ -15,10 +15,9 @@
 #include "road.h"
 #include "car.h"
 
-
+#include "Batch_Simulation.h"
 
 using namespace std;
-
 using json = nlohmann::json;
 
 bool _order(Car_Info i, Car_Info j)
@@ -31,9 +30,66 @@ Simulator sim = NULL;
 std::ofstream logFile("/home/simone/Scrivania/logfile.txt");
 
 
+napi_value batchMain(napi_env env, napi_callback_info info){
+     napi_status status;
+
+    //prendi parametri (callback, variabili...)
+    size_t argc = 14;
+    napi_value args[14];
+    status = napi_get_cb_info(env, info, &argc, args, nullptr, nullptr);
+    assert(status == napi_ok);
+
+    int simulation_type, cols, rows, min_car, max_car, increment, 
+        car_number, gaussian_mean, gaussian_sigma, min_road_length, 
+        max_road_length;
+    double p;
+    char* base_dir;
+
+    status = napi_get_value_double(env, args[0], &p);
+    status = napi_get_value_string_latin1(env, args[1], base_dir, NAPI_AUTO_LENGTH, NULL);
+    status = napi_get_value_int32(env, args[2],  &simulation_type);
+    status = napi_get_value_int32(env, args[3],  &cols);
+    status = napi_get_value_int32(env, args[4],  &rows);
+    status = napi_get_value_int32(env, args[5],  &min_car); 
+    status = napi_get_value_int32(env, args[6],  &max_car); 
+    status = napi_get_value_int32(env, args[7],  &increment); 
+    status = napi_get_value_int32(env, args[8],  &car_number);
+    status = napi_get_value_int32(env, args[9],  &gaussian_mean);
+    status = napi_get_value_int32(env, args[10], &gaussian_sigma);
+    status = napi_get_value_int32(env, args[11], &min_road_length);
+    status = napi_get_value_int32(env, args[12], &max_road_length);
+
+    string base_dir_s = "";
+    base_dir_s.append(base_dir);
+
+    //gestione callback
+    napi_value cb = args[13];
+    napi_value global;
+    status = napi_get_global(env, &global);
+    assert(status == napi_ok);
+
+    //eseguiamo il "main"
+    Batch_Simulation b = Batch_Simulation(base_dir_s, simulation_type, 
+                                    (float)p, cols, rows, min_car, max_car, increment, 
+                                    car_number, gaussian_mean, gaussian_sigma, min_road_length, 
+                                    max_road_length);
+
+    //chiamiamo la callback
+    napi_value argv[1];
+    //json nodes = {{"nodes", j}}; //valore da restituire
+    status = napi_create_string_latin1(env, "ok", NAPI_AUTO_LENGTH, argv);
+    //TODO al momento non restituiamo alcun valore, ma solo un 'ok' per dire che la simulazione è terminata
+    napi_value result;
+    napi_call_function(env, global, cb, 1, argv, &result);
+    assert(status == napi_ok);
+
+    return nullptr;
+}
+
 napi_value myMain(napi_env env, napi_callback_info info){
     napi_status status;
 
+    //esegue una sola volta la car_increment_simulation; viene graficata durante l'esecuzione
 
     //prendi parametri (callback, variabili...)
     size_t argc = 9;
@@ -290,6 +346,14 @@ napi_value init(napi_env env, napi_value exports) {
     if (status != napi_ok) return nullptr;
 
     status = napi_set_named_property(env, exports, "mymain", fn3);
+    if (status != napi_ok) return nullptr;
+
+    napi_value fn4;
+
+    status = napi_create_function(env, nullptr, 0, batchMain, nullptr, &fn4);
+    if (status != napi_ok) return nullptr;
+
+    status = napi_set_named_property(env, exports, "batchmain", fn4);
     if (status != napi_ok) return nullptr;
 
     return exports;

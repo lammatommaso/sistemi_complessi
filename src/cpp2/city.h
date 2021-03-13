@@ -31,6 +31,8 @@ class City
     Node get_path(int i, int j)const;
     int get_distance(int i, int j)const;
     Road** get_adj_matrix();
+
+    City(short n_rows, short n_coloumns, float oneway_fraction);
 };
 
 #endif

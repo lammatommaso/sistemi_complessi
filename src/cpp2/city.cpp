@@ -63,6 +63,78 @@ City::City() {}
 #include <iostream>
 #include <fstream>
 
+City::City(short righe, short colonne, float oneway_fraction):_n_rows(righe), _n_coloumns(colonne)
+{ 
+
+    // Road::set_statistics(0,0,0,0);
+    _adj_matrix = new Road*[_n_rows*_n_coloumns];
+    _path = new Node*[_n_rows*_n_coloumns];
+    _distance = new int*[_n_rows*_n_coloumns];
+    _node_set = new Node[_n_rows*_n_coloumns];
+    for( int i = 0; i < _n_rows*_n_coloumns; i++)
+    {
+        _adj_matrix[i] = new Road[_n_rows*_n_coloumns];
+        _path[i] = new Node[_n_rows*_n_coloumns];
+        _distance[i] = new int[_n_rows*_n_coloumns];
+    }
+
+    srand(time(NULL));
+    float local_roads = 0;
+    float local_oneway_roads = 0;
+    
+    for (int i = 0; i < _n_rows*_n_coloumns; i++ )
+    {
+        _adj_matrix[i][i] = Road(-1);
+        for (int j = i+1; j < _n_rows*_n_coloumns; j++)
+        {              
+            float r = rand();
+            float rl = rand();
+            if ((j == i+1 && j%_n_coloumns != 0) || j == i+_n_coloumns )
+            {
+                if(rl/RAND_MAX <= 0.5)
+                {
+                    _adj_matrix[i][j] = Road(0);
+                    if (r/RAND_MAX > oneway_fraction)
+                    {
+                        _adj_matrix[j][i] = Road(0);
+                        local_roads++;
+                    } 
+                    else 
+                    {
+                        _adj_matrix[j][i] = Road(-1);
+                        local_oneway_roads++;
+                    }
+                }
+                else
+                {
+                    _adj_matrix[j][i] = Road(0);
+                    if (r/RAND_MAX > oneway_fraction)
+                    {
+                        _adj_matrix[i][j] = Road(0);
+                        local_roads++;
+                    } 
+                    else 
+                    {
+                        _adj_matrix[i][j] = Road(-1);
+                        local_oneway_roads++;
+                    }
+                }
+            } 
+            else 
+            {
+                _adj_matrix[i][j] = Road(-1);
+                _adj_matrix[j][i] = Road(-1);
+            }
+        }
+    }
+    _oneway_fraction = local_oneway_roads/(local_oneway_roads+local_roads);
+    for(int i=0;i<_n_rows*_n_coloumns;i++)
+    {
+        _node_set[i].set_index(i); 
+    }
+    _floyd_warshall();
+}
+
 City::City(int righe, int colonne, float oneway_fraction, int gaussian_mean, int gaussian_sigma, int min_road_length, int max_road_length):_n_rows(righe), _n_coloumns(colonne)
 { 
     

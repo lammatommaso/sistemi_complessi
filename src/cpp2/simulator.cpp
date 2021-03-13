@@ -40,6 +40,18 @@ std::istream& operator>>(std::istream& input, Result& result)
     input>>result.steps_mean>>result.steps_sigma>>result.stops_mean>>result.stops_sigma;
     return input;
 }
+
+void Simulator::set_car_number(short car_number)
+{
+    _car_number = car_number;
+    _car_vector.clear();
+    for (int i = 0; i < car_number; i++)
+    {
+        _car_vector.push_back(Car_Info());
+    }
+}
+
+Simulator::Simulator(): _car_number(0){}
     
 Simulator::Simulator(int car_number)
 {
@@ -48,6 +60,49 @@ Simulator::Simulator(int car_number)
     {
         _car_vector.push_back(Car_Info());
     }
+}
+
+void Simulator::create_path()
+{
+    srand(time(NULL)); 
+    for (int i = 0; i < _car_number; i++)
+    {
+        Node source, destination;
+        do
+        {
+            source = _city.get_node(rand()%(_city.get_n_rows()*_city.get_n_coloumns()));
+            destination = _city.get_node(rand()%(_city.get_n_rows()*_city.get_n_coloumns()));
+        }
+        while(source.get_index() == destination.get_index() || _city.get_path(source.get_index(),destination.get_index()).get_index() == -1);
+        //std::cout << source.get_index() << ' ' << destination.get_index() << std::endl;
+        _car_vector[i].position = source;
+        _car_vector[i].path = _city.print_path(source, destination); //nel path manca il nodo sorgente!
+        _car_vector[i].path.push_front(source);
+
+        /*for (auto it=_car_vector[i].path.begin(); it!=_car_vector[i].path.end(); ++it)
+             std::cout << ' ' << (*it).get_index();
+        std::cout << std::endl;*/
+    }
+}
+
+void Simulator::create_city(short n_rows, short n_coloumns, float oneway_fraction)
+{
+    _city = City(n_rows, n_coloumns, oneway_fraction);
+    /*for(int i=0;i<_city.get_n_rows()*_city.get_n_coloumns();i++)
+    {
+        for(int j=0;j<_city.get_n_rows()*_city.get_n_coloumns();j++)
+        {
+            if(_city.get_distance(i,j) < _city.get_n_rows()*_city.get_n_coloumns()*MAX_ROAD_LENGTH)
+            {
+                std::cout<<_city.get_distance(i,j)<<' ';
+            }
+            else
+            {
+                std::cout<<"+inf"<<' ';
+            }
+        }
+        std::cout<<std::endl;
+    }*/
 }
 
 void Simulator::create_city(int n_rows, int n_coloumns, float oneway_fraction, int gaussian_mean, int gaussian_sigma, int min_road_length, int max_road_length)
