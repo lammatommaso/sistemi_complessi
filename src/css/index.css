@@ -21,3 +21,11 @@
     width: 6%;
     display: none;
 }
+
+#main{
+    top:5%;
+    bottom: 5%;
+    right: 5%;
+    left: 5%;
+    position: absolute;
+}

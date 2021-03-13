@@ -30,11 +30,11 @@ app.whenReady().then( () => {
 const { Worker, workerData, parentPort } = require('worker_threads')
 
  
-ipcMain.on("init", (event, rows, columns, n_cars, increment, gaussian_mean, gaussian_sigma, min_road_l, max_road_l) => {
+ipcMain.on("init", (event, increment, n_cars,  rows, columns,   gaussian_mean, gaussian_sigma, min_road_l, max_road_l) => {
     
     const prom = new Promise((resolve, reject) => {
-        w = new Worker('./javascript/service.js', {workerData: {"rows": rows, "columns": columns, 
-            "n_cars": n_cars, "increment": increment, "gaussian_mean": gaussian_mean, "gaussian_sigma": gaussian_sigma, 
+        w = new Worker('./javascript/service.js', {workerData: {"increment": increment, "n_cars": n_cars, "rows": rows, 
+        "columns": columns, "gaussian_mean": gaussian_mean, "gaussian_sigma": gaussian_sigma, 
             "min_road_l": min_road_l, "max_road_l": max_road_l}} );
         //w.on('message', resolve);
         w.on('error', reject);

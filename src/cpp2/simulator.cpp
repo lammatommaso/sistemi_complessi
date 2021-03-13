@@ -99,17 +99,28 @@ Node Simulator::_find_next(int car_index)const
     return next_node;
 }
 
+std::ofstream simulatorLog("/home/simone/Scrivania/simulator.log");
+
 void Simulator::mv_car(int car_index)
 {
 
+    simulatorLog << "Inizio a muovere la macchina\n";
+    simulatorLog.flush();
     Node next_node = _find_next(car_index);
     Road * current_road_ptr = _find_road_ptr(car_index);
+    simulatorLog << "Strada identificata: " << current_road_ptr->cars_in_road << "\n";
+    simulatorLog.flush();
+
+    simulatorLog << _find_road(car_index).cars_in_road << "\n";
+    simulatorLog.flush();
 
     
     //siamo appena entrati nella strada, incrementiamo il numero di macchine nella strada
     if (_car_vector[car_index].car->get_offset() == 0){
         current_road_ptr->cars_in_road += 1; 
-    }
+
+    } 
+
     if(_car_vector[car_index].car->get_offset()<_find_road(car_index).get_road_length())
     {                
         bool can_move = 1;
@@ -124,12 +135,13 @@ void Simulator::mv_car(int car_index)
         }
         if(can_move)
         {
+
             _car_vector[car_index].car->move_forward();
         }
         else
         {   
             //se siamo all'offset 0 e dobbiamo rimanere fermi, non stiamo "occupando" la strada ancora
-            if (false && _car_vector[car_index].car->get_offset() == 0){
+            if (_car_vector[car_index].car->get_offset() == 0){
                 current_road_ptr->cars_in_road = (current_road_ptr->cars_in_road) - 1;  
             }
             _car_vector[car_index].car->halt();
@@ -159,6 +171,17 @@ void Simulator::create_path(int source_l, int dest_l, int source_nodes[], int de
     int source_index, dest_index;
     srand(time(NULL)); 
 
+    simulatorLog << "source path: ";
+    for (int i = 0; i < source_l; i++){
+        simulatorLog << source_nodes[i] << " ";
+    }
+    simulatorLog << "\n";
+    simulatorLog << "dest path: ";
+    for (int i = 0; i < dest_l; i++){
+        simulatorLog << destination_nodes[i] << " ";
+    }
+    simulatorLog << "\n";
+    simulatorLog.flush();
             
     for (int i = 0; i < _car_number; i++)
     {
@@ -168,6 +191,7 @@ void Simulator::create_path(int source_l, int dest_l, int source_nodes[], int de
             /*source = _city.get_node(rand()%(_city.get_n_rows()*_city.get_n_coloumns()));
             destination = _city.get_node(rand()%(_city.get_n_rows()*_city.get_n_coloumns()));*/
             source_index = source_nodes[rand()%source_l];
+
             
             source = _city.get_node(source_index);
 
