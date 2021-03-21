@@ -1,7 +1,14 @@
 //const { worker } = require("cluster");
-const { app, BrowserWindow, ipcMain } = require("electron")
+
+const electron = require("electron");
+const app = electron.app // require('app');
+const BrowserWindow = electron.BrowserWindow // require('browser-window')
+const ipcMain = electron.ipcMain //require("ipcMain")
+
+// const { app, BrowserWindow, ipcMain } = require("electron")
 const fs = require('fs');
 const { on } = require("process");
+
 
 var mainWindow = BrowserWindow
 
@@ -57,6 +64,10 @@ ipcMain.on("init", (event, increment, n_cars,  rows, columns,   gaussian_mean, g
         console.log("finito")
     })
     
+})
+
+ipcMain.on("next", (event) => {
+    w.postMessage({"name": "next"})
 })
 
 ipcMain.on("create_path", (event, s1, s2) => {

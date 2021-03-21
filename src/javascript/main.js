@@ -1,3 +1,5 @@
+// const { ipcRenderer } = require("electron")
+
 const green  = "#9bee00"
 const orange = "#ffaa00"
 const red    = "#f00"
@@ -105,25 +107,139 @@ ipcRenderer.on("grafo", (event, grafo) => {
     s.refresh()
     s.refresh()
 
-    autocomplete_source_dest();
-    create_path(start, end);
-
 })
 
 var start = []
 var end = []
 
-function autocomplete_source_dest(){ //funzione molto basica
-    //Usiamo il 65% dei nodi come nodi di partenza o di arrivo
-    //ovvero il 32.5 come partenza, il 32.5 come arrivo
+function double_left_to_right(){
+    start.splice(0)
+
     var tot_nodi = cols*rows;
     var perc_nodi = parseInt((tot_nodi/100)*65)
-    for (i=0; i < parseInt(perc_nodi/2); i++){
-        start.push(i)
-    }
-    for (i=(cols*rows) - parseInt(perc_nodi/2); i < cols*rows; i++){
-        end.push(i);
-    }
+    
+    s.graph.nodes().forEach( n => {
+        id = parseInt(n.id.substr(1))
+        if (id <= parseInt(perc_nodi/4) || (id >= (cols*rows) - (parseInt(perc_nodi/2)+1) && id < (cols*rows) - (parseInt(perc_nodi/4)+1)) ){
+            start.push(id)
+            n.color = source_node_color
+        }
+        if (id > parseInt(perc_nodi/4) && id <= parseInt(perc_nodi/2) || (id >= (cols*rows) - (parseInt(perc_nodi/4)+1))){
+            n.color = dest_node_color
+            end.push(id);
+        }
+    })
+
+    s.refresh()
+
+    create_path(start, end)
+}
+
+function out_in(){
+    start.splice(0)
+
+    var tot_nodi = cols*rows;
+    var perc_nodi = parseInt((tot_nodi/100)*65)
+    
+    top = rows*2 + 1; //es. in matrice 10x10, top è 0, 10, 20, ...
+    //left = 0; //es. in matrice 10x10, left è 1,2,3,4, ...
+    right = rows*cols - rows; //es. in matrice 10x10, right è 90, 91, 92, ...
+    bottom = rows*3 - 1 //es. in matrice 10x10, bottom è 19, 29, 39...
+
+    /* per il 'centro' supponiamo di dividere il grafo in 9 sottosezioni
+        bisognerà quindi calcolare gli id dei nodi della sezione centrale,
+        che saranno circa l'11% di tutti i nodi
+
+        La sezione centrale è un quadrato il cui primo vertice (alto sx) è a circa 1/3
+        di n_righe, 1/3 di n_colonne e l'ultimo vertice (basso dx) è 2/3 di n_righe, 
+        2/3 di n_colonne. Gli id dei nodi centrali devono essere compresi tra queste 
+        coordinate.
+    */
+    //center = 33, 34, 35, 36, 43, 44, 45, 46, 53, 54, 55, 56, 63, 64, 65, 66
+
+    s.graph.nodes().forEach( n => {
+        id = parseInt(n.id.substr(1))
+        
+        //calcoliamo i nodi di left, che sono le due prime colonne
+        if (id < rows*2){
+            start.push(id)
+            n.color = source_node_color
+        }
+        //calcoliamo i nodi di top, che sono le prime due righe
+        if (id == top && id < rows*cols - 2*rows){
+            top += rows
+            start.push(id)
+            n.color = source_node_color
+        }
+
+        //calcoliamo i nodi di bottom - ultime due righe
+        if (id == bottom && id < rows*cols - 2*rows + (rows-1)){
+            bottom += rows
+            start.push(id)
+            n.color = source_node_color
+        }
+
+        //calcoliamo i nodi right - ultime 2 colonne
+        if (id >= rows*cols - 2*rows){
+            start.push(id)
+            n.color = source_node_color
+        }
+
+        //calcoliamo i nodi center
+        righe = 4
+        ncolonne = 5
+
+    //     for i in range(0,nrighe*ncolonne):
+    //         riga = (i/ncolonne)%nrighe
+    //         colonna = i%ncolonne
+    //         riga = int(riga)
+    //         colonna = int(colonna)
+    //         print(i, riga, colonna)
+
+
+    //     if (id <= parseInt(perc_nodi/4) || (id >= (cols*rows) - (parseInt(perc_nodi/2)+1) && id < (cols*rows) - (parseInt(perc_nodi/4)+1)) ){
+    //         start.push(id)
+    //         n.color = source_node_color
+    //     }
+    //     if (id > parseInt(perc_nodi/4) && id <= parseInt(perc_nodi/2) || (id >= (cols*rows) - (parseInt(perc_nodi/4)+1))){
+    //         n.color = dest_node_color
+    //         end.push(id);
+    //     }
+    })
+
+    // s.refresh()
+
+    // create_path(start, end)
+}
+
+function cross(){
+
+}
+
+function left_to_right(){ //funzione molto basica
+    //Usiamo il 65% dei nodi come nodi di partenza o di arrivo
+    //ovvero il 32.5 come partenza, il 32.5 come arrivo
+
+    start.splice(0)
+
+    var tot_nodi = cols*rows;
+    var perc_nodi = parseInt((tot_nodi/100)*65)
+    
+    s.graph.nodes().forEach( n => {
+        id = parseInt(n.id.substr(1))
+        if (id <= parseInt(perc_nodi/2)){
+            start.push(id)
+            n.color = source_node_color
+        }
+        if (id >= (cols*rows) - (parseInt(perc_nodi/2)+1)){
+            n.color = dest_node_color
+            end.push(id);
+        }
+    })
+
+    s.refresh()
+
+    create_path(start, end)
 }
 
 function create_path(s, d){
@@ -137,6 +253,10 @@ function start_simulation(){
 
 ipcRenderer.on("disegnami", (event, roba_da_disegnare) => {
     values = roba_da_disegnare //JSON.parse(roba_da_disegnare)
+    if (!roba_da_disegnare.streets){
+        console.log("simulazione terminata")
+        return
+    }
     values["streets"].forEach(element => {
         
         if (element.cars > 0){
@@ -156,6 +276,7 @@ ipcRenderer.on("disegnami", (event, roba_da_disegnare) => {
 
     });
     s.refresh();
+    ipcRenderer.send("next")
 })
 
 

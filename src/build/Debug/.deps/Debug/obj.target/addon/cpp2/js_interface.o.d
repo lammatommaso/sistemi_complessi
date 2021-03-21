@@ -9,7 +9,8 @@ Debug/obj.target/addon/cpp2/js_interface.o: ../cpp2/js_interface.cpp \
  /home/simone/.cache/node-gyp/10.19.0/include/node/v8-platform.h \
  /home/simone/.cache/node-gyp/10.19.0/include/node/node_version.h \
  ../cpp2/simulator.h ../cpp2/car.h ../cpp2/city.h ../cpp2/road.h \
- ../cpp2/node.h ../cpp2/numpy_parser.h ../cpp2/Batch_Simulation.h
+ ../cpp2/node.h ../cpp2/numpy_parser.h ../cpp2/numpy_parser.cpp \
+ ../cpp2/Batch_Simulation.h
 ../cpp2/js_interface.cpp:
 /home/simone/.cache/node-gyp/10.19.0/include/node/node_api.h:
 /home/simone/.cache/node-gyp/10.19.0/include/node/node_api_types.h:
@@ -25,4 +26,5 @@ Debug/obj.target/addon/cpp2/js_interface.o: ../cpp2/js_interface.cpp \
 ../cpp2/road.h:
 ../cpp2/node.h:
 ../cpp2/numpy_parser.h:
+../cpp2/numpy_parser.cpp:
 ../cpp2/Batch_Simulation.h:

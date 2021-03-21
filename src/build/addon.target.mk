@@ -16,83 +16,6 @@ DEFS_Debug := \
 
 # Flags passed to all source files.
 CFLAGS_Debug := \
-	-O0 \
-	-gdwarf-2 \
-	-mmacosx-version-min=10.13 \
-	-arch x86_64 \
-	-Wall \
-<<<<<<< HEAD
-	-Wextra \
-	-Wno-unused-parameter \
-	-m64 \
-	-fPIC \
-	-g \
-	-O0
-=======
-	-Wendif-labels \
-	-W \
-	-Wno-unused-parameter
->>>>>>> c0922efc0bdacb40886b3e0e03a04ef19ff0bb5a
-
-# Flags passed to only C files.
-CFLAGS_C_Debug := \
-	-fno-strict-aliasing
-
-# Flags passed to only C++ files.
-CFLAGS_CC_Debug := \
-	-std=gnu++1y \
-	-stdlib=libc++ \
-	-fno-rtti \
-	-fno-strict-aliasing
-
-# Flags passed to only ObjC files.
-CFLAGS_OBJC_Debug :=
-
-# Flags passed to only ObjC++ files.
-CFLAGS_OBJCC_Debug :=
-
-INCS_Debug := \
-<<<<<<< HEAD
-	-I/home/simone/.cache/node-gyp/10.19.0/include/node \
-	-I/home/simone/.cache/node-gyp/10.19.0/src \
-	-I/home/simone/.cache/node-gyp/10.19.0/deps/openssl/config \
-	-I/home/simone/.cache/node-gyp/10.19.0/deps/openssl/openssl/include \
-	-I/home/simone/.cache/node-gyp/10.19.0/deps/uv/include \
-	-I/home/simone/.cache/node-gyp/10.19.0/deps/zlib \
-	-I/home/simone/.cache/node-gyp/10.19.0/deps/v8/include \
-=======
-	-I/Users/gianlucaspiller/Library/Caches/node-gyp/14.16.0/include/node \
-	-I/Users/gianlucaspiller/Library/Caches/node-gyp/14.16.0/src \
-	-I/Users/gianlucaspiller/Library/Caches/node-gyp/14.16.0/deps/openssl/config \
-	-I/Users/gianlucaspiller/Library/Caches/node-gyp/14.16.0/deps/openssl/openssl/include \
-	-I/Users/gianlucaspiller/Library/Caches/node-gyp/14.16.0/deps/uv/include \
-	-I/Users/gianlucaspiller/Library/Caches/node-gyp/14.16.0/deps/zlib \
-	-I/Users/gianlucaspiller/Library/Caches/node-gyp/14.16.0/deps/v8/include \
->>>>>>> c0922efc0bdacb40886b3e0e03a04ef19ff0bb5a
-	-I$(srcdir)/cpp2
-
-DEFS_Release := \
-	'-DNODE_GYP_MODULE_NAME=addon' \
-	'-DUSING_UV_SHARED=1' \
-	'-DUSING_V8_SHARED=1' \
-	'-DV8_DEPRECATION_WARNINGS=1' \
-<<<<<<< HEAD
-	'-D_LARGEFILE_SOURCE' \
-	'-D_FILE_OFFSET_BITS=64' \
-=======
-	'-DV8_DEPRECATION_WARNINGS' \
-	'-DV8_IMMINENT_DEPRECATION_WARNINGS' \
-	'-D_DARWIN_USE_64_BIT_INODE=1' \
-	'-D_LARGEFILE_SOURCE' \
-	'-D_FILE_OFFSET_BITS=64' \
-	'-DOPENSSL_NO_PINSHARED' \
-	'-DOPENSSL_THREADS' \
->>>>>>> c0922efc0bdacb40886b3e0e03a04ef19ff0bb5a
-	'-DBUILDING_NODE_EXTENSION'
-
-# Flags passed to all source files.
-CFLAGS_Release := \
-<<<<<<< HEAD
 	-fPIC \
 	-pthread \
 	-Wall \
@@ -100,36 +23,18 @@ CFLAGS_Release := \
 	-Wno-unused-parameter \
 	-m64 \
 	-fPIC \
-=======
->>>>>>> c0922efc0bdacb40886b3e0e03a04ef19ff0bb5a
-	-O3 \
-	-gdwarf-2 \
-	-mmacosx-version-min=10.13 \
-	-arch x86_64 \
-	-Wall \
-	-Wendif-labels \
-	-W \
-	-Wno-unused-parameter
+	-g \
+	-O0
 
 # Flags passed to only C files.
-CFLAGS_C_Release := \
-	-fno-strict-aliasing
+CFLAGS_C_Debug :=
 
 # Flags passed to only C++ files.
-CFLAGS_CC_Release := \
-	-std=gnu++1y \
-	-stdlib=libc++ \
+CFLAGS_CC_Debug := \
 	-fno-rtti \
-	-fno-strict-aliasing
+	-std=gnu++1y
 
-# Flags passed to only ObjC files.
-CFLAGS_OBJC_Release :=
-
-# Flags passed to only ObjC++ files.
-CFLAGS_OBJCC_Release :=
-
-INCS_Release := \
-<<<<<<< HEAD
+INCS_Debug := \
 	-I/home/simone/.cache/node-gyp/10.19.0/include/node \
 	-I/home/simone/.cache/node-gyp/10.19.0/src \
 	-I/home/simone/.cache/node-gyp/10.19.0/deps/openssl/config \
@@ -137,15 +42,45 @@ INCS_Release := \
 	-I/home/simone/.cache/node-gyp/10.19.0/deps/uv/include \
 	-I/home/simone/.cache/node-gyp/10.19.0/deps/zlib \
 	-I/home/simone/.cache/node-gyp/10.19.0/deps/v8/include \
-=======
-	-I/Users/gianlucaspiller/Library/Caches/node-gyp/14.16.0/include/node \
-	-I/Users/gianlucaspiller/Library/Caches/node-gyp/14.16.0/src \
-	-I/Users/gianlucaspiller/Library/Caches/node-gyp/14.16.0/deps/openssl/config \
-	-I/Users/gianlucaspiller/Library/Caches/node-gyp/14.16.0/deps/openssl/openssl/include \
-	-I/Users/gianlucaspiller/Library/Caches/node-gyp/14.16.0/deps/uv/include \
-	-I/Users/gianlucaspiller/Library/Caches/node-gyp/14.16.0/deps/zlib \
-	-I/Users/gianlucaspiller/Library/Caches/node-gyp/14.16.0/deps/v8/include \
->>>>>>> c0922efc0bdacb40886b3e0e03a04ef19ff0bb5a
+	-I$(srcdir)/cpp2
+
+DEFS_Release := \
+	'-DNODE_GYP_MODULE_NAME=addon' \
+	'-DUSING_UV_SHARED=1' \
+	'-DUSING_V8_SHARED=1' \
+	'-DV8_DEPRECATION_WARNINGS=1' \
+	'-D_LARGEFILE_SOURCE' \
+	'-D_FILE_OFFSET_BITS=64' \
+	'-DBUILDING_NODE_EXTENSION'
+
+# Flags passed to all source files.
+CFLAGS_Release := \
+	-fPIC \
+	-pthread \
+	-Wall \
+	-Wextra \
+	-Wno-unused-parameter \
+	-m64 \
+	-fPIC \
+	-O3 \
+	-fno-omit-frame-pointer
+
+# Flags passed to only C files.
+CFLAGS_C_Release :=
+
+# Flags passed to only C++ files.
+CFLAGS_CC_Release := \
+	-fno-rtti \
+	-std=gnu++1y
+
+INCS_Release := \
+	-I/home/simone/.cache/node-gyp/10.19.0/include/node \
+	-I/home/simone/.cache/node-gyp/10.19.0/src \
+	-I/home/simone/.cache/node-gyp/10.19.0/deps/openssl/config \
+	-I/home/simone/.cache/node-gyp/10.19.0/deps/openssl/openssl/include \
+	-I/home/simone/.cache/node-gyp/10.19.0/deps/uv/include \
+	-I/home/simone/.cache/node-gyp/10.19.0/deps/zlib \
+	-I/home/simone/.cache/node-gyp/10.19.0/deps/v8/include \
 	-I$(srcdir)/cpp2
 
 OBJS := \
@@ -155,7 +90,6 @@ OBJS := \
 	$(obj).target/$(TARGET)/cpp2/simulator.o \
 	$(obj).target/$(TARGET)/cpp2/road.o \
 	$(obj).target/$(TARGET)/cpp2/node.o \
-	$(obj).target/$(TARGET)/cpp2/numpy_parser.o \
 	$(obj).target/$(TARGET)/cpp2/Batch_Simulation.o
 
 # Add to the list of files we specially track dependencies for.
@@ -166,8 +100,6 @@ all_deps += $(OBJS)
 $(OBJS): TOOLSET := $(TOOLSET)
 $(OBJS): GYP_CFLAGS := $(DEFS_$(BUILDTYPE)) $(INCS_$(BUILDTYPE))  $(CFLAGS_$(BUILDTYPE)) $(CFLAGS_C_$(BUILDTYPE))
 $(OBJS): GYP_CXXFLAGS := $(DEFS_$(BUILDTYPE)) $(INCS_$(BUILDTYPE))  $(CFLAGS_$(BUILDTYPE)) $(CFLAGS_CC_$(BUILDTYPE))
-$(OBJS): GYP_OBJCFLAGS := $(DEFS_$(BUILDTYPE)) $(INCS_$(BUILDTYPE))  $(CFLAGS_$(BUILDTYPE)) $(CFLAGS_C_$(BUILDTYPE)) $(CFLAGS_OBJC_$(BUILDTYPE))
-$(OBJS): GYP_OBJCXXFLAGS := $(DEFS_$(BUILDTYPE)) $(INCS_$(BUILDTYPE))  $(CFLAGS_$(BUILDTYPE)) $(CFLAGS_CC_$(BUILDTYPE)) $(CFLAGS_OBJCC_$(BUILDTYPE))
 
 # Suffix rules, putting all outputs into $(obj).
 
@@ -185,50 +117,37 @@ $(obj).$(TOOLSET)/$(TARGET)/%.o: $(obj)/%.cpp FORCE_DO_CMD
 # End of this set of suffix rules
 ### Rules for final target.
 LDFLAGS_Debug := \
-	-undefined dynamic_lookup \
-	-Wl,-no_pie \
-	-Wl,-search_paths_first \
-	-mmacosx-version-min=10.13 \
-	-arch x86_64 \
-	-L$(builddir) \
-	-stdlib=libc++
-
-LIBTOOLFLAGS_Debug := \
-	-undefined dynamic_lookup \
-	-Wl,-no_pie \
-	-Wl,-search_paths_first
+	-pthread \
+	-rdynamic \
+	-m64
 
 LDFLAGS_Release := \
-	-undefined dynamic_lookup \
-	-Wl,-no_pie \
-	-Wl,-search_paths_first \
-	-mmacosx-version-min=10.13 \
-	-arch x86_64 \
-	-L$(builddir) \
-	-stdlib=libc++
-
-LIBTOOLFLAGS_Release := \
-	-undefined dynamic_lookup \
-	-Wl,-no_pie \
-	-Wl,-search_paths_first
+	-pthread \
+	-rdynamic \
+	-m64
 
 LIBS :=
 
-$(builddir)/addon.node: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
-$(builddir)/addon.node: LIBS := $(LIBS)
-$(builddir)/addon.node: GYP_LIBTOOLFLAGS := $(LIBTOOLFLAGS_$(BUILDTYPE))
-$(builddir)/addon.node: TOOLSET := $(TOOLSET)
-$(builddir)/addon.node: $(OBJS) FORCE_DO_CMD
+$(obj).target/addon.node: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+$(obj).target/addon.node: LIBS := $(LIBS)
+$(obj).target/addon.node: TOOLSET := $(TOOLSET)
+$(obj).target/addon.node: $(OBJS) FORCE_DO_CMD
 	$(call do_cmd,solink_module)
 
-all_deps += $(builddir)/addon.node
+all_deps += $(obj).target/addon.node
 # Add target alias
 .PHONY: addon
 addon: $(builddir)/addon.node
 
+# Copy this to the executable output path.
+$(builddir)/addon.node: TOOLSET := $(TOOLSET)
+$(builddir)/addon.node: $(obj).target/addon.node FORCE_DO_CMD
+	$(call do_cmd,copy)
+
+all_deps += $(builddir)/addon.node
 # Short alias for building this executable.
 .PHONY: addon.node
-addon.node: $(builddir)/addon.node
+addon.node: $(obj).target/addon.node $(builddir)/addon.node
 
 # Add executable to "all" target.
 .PHONY: all

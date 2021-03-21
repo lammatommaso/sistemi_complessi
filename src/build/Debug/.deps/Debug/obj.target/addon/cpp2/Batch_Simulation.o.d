@@ -2,7 +2,7 @@ cmd_Debug/obj.target/addon/cpp2/Batch_Simulation.o := g++ -o Debug/obj.target/ad
 Debug/obj.target/addon/cpp2/Batch_Simulation.o: \
  ../cpp2/Batch_Simulation.cpp ../cpp2/Batch_Simulation.h \
  ../cpp2/simulator.h ../cpp2/car.h ../cpp2/city.h ../cpp2/road.h \
- ../cpp2/node.h ../cpp2/numpy_parser.h
+ ../cpp2/node.h ../cpp2/numpy_parser.h ../cpp2/numpy_parser.cpp
 ../cpp2/Batch_Simulation.cpp:
 ../cpp2/Batch_Simulation.h:
 ../cpp2/simulator.h:
@@ -11,3 +11,4 @@ Debug/obj.target/addon/cpp2/Batch_Simulation.o: \
 ../cpp2/road.h:
 ../cpp2/node.h:
 ../cpp2/numpy_parser.h:
+../cpp2/numpy_parser.cpp:

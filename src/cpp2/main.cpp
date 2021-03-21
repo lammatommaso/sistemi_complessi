@@ -3,7 +3,7 @@
 #include<thread>
 #include<string>
 #include<chrono>
-#include"simulator.h"
+#include "simulator.h"
 
 void oneway_increment_simulation(std::string sim_dir, float increment, int car_number, int n_rows, int n_coloumns, int gaussian_mean, int gaussian_sigma, int min_road_length, int max_road_length)
 {
@@ -47,12 +47,13 @@ void oneway_increment_simulation(std::string sim_dir, float increment, int car_n
    simdata.close();
 }
 
-int main()
-{
-   for(int car_number=2000; car_number<=2000; car_number+=200)
-   {
+int main() {
+   std::cout << "Partiamo\n";
+   // for(int car_number=2000; car_number<=2000; car_number+=200)
+   // {
+      int car_number = 5000;
       std::string sim_dir = "../simulation/oneway_increment_simulation/" + std::to_string(car_number);
-      oneway_increment_simulation(sim_dir,0.005, car_number, 10, 10, 20, 10, 5, 30);
-   }
+      oneway_increment_simulation(sim_dir,0.5, car_number, 20, 20, 20, 10, 5, 30);
+   // }
    return 0;
 }

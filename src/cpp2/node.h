@@ -7,7 +7,7 @@ class Node
   public:
     Node();
     Node(int index);
-    Node(Node const& Node);
+    // Node(Node const& Node);
     int  get_index() const;
     void set_index(int index);
 };

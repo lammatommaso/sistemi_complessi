@@ -1,9 +1,13 @@
 #include "simulator.h"
 #include <fstream>
+#include <malloc.h>
 //using namespace Simulator;
 
 bool order(Car_Info i, Car_Info j)
 {
+    
+    malloc_stats();
+    std::cout << "========================\n";
     return (i.car->get_offset() > j.car->get_offset());
 }
 
@@ -163,9 +167,7 @@ void Simulator::mv_car(int car_index)
     simulatorLog.flush();
     Node next_node = _find_next(car_index);
     Road * current_road_ptr = _find_road_ptr(car_index);
-    simulatorLog << "Strada identificata: " << current_road_ptr->cars_in_road << "\n";
-    simulatorLog.flush();
-
+   
     simulatorLog << _find_road(car_index).cars_in_road << "\n";
     simulatorLog.flush();
 
@@ -267,6 +269,7 @@ void Simulator::create_path(int source_l, int dest_l, int source_nodes[], int de
              std::cout << ' ' << (*it).get_index();
         std::cout << std::endl;*/
     }
+    std::cout << "fatto \n";
 }
 
 void Simulator::simulation()

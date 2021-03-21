@@ -20,5 +20,12 @@ parentPort.on("message", (data) => {
             
             
         });
+    } else if (data["name"] == "next") {
+        addon.next_simulation_step((stringa) => {
+        
+            parentPort.postMessage({"name": "disegnami", "data": JSON.parse(stringa)})
+            
+            
+        });
     }
 })

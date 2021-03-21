@@ -11,5 +11,5 @@ namespace Numpy_Parser
     template<class T> std::string print_matrix(std::string varname, std::vector<T> matrix, int n_coloumns);
     template<class T> std::string print_var(std::string varname, T var);
 }
-
+#include"numpy_parser.cpp"
 #endif

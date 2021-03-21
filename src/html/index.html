@@ -7,7 +7,7 @@
         <style>
             html,
             body {
-                overflow: hidden;
+                /*overflow: hidden;*/
                 width: 100%;
                 height: 100%;
                 margin: 0;
@@ -22,48 +22,180 @@
         <script src="../node_modules/sigma/plugins/sigma.renderers.parallelEdges/sigma.canvas.edges.curvedArrow.js"></script>
         <script src="../node_modules/sigma/plugins/sigma.renderers.parallelEdges/sigma.canvas.edgehovers.curvedArrow.js"></script>
 
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!--Import materialize.css-->
+        <link type="text/css" rel="stylesheet" href="css/materialize.css" media="screen,projection" />
+
         <script>            
             const { ipcRenderer } = require('electron')
         </script>
         
     </head>
 
-    <body>
+    <body class="teal lighten-4">
+        <div class="container">
+            <div class="row">
+                <h1>Simulazione Traffico</h1>
+            </div>
+            <div class="row" id="settings">
+                <div class="card-panel hoverable" style="padding: 12px;">
+                    <div>
+                    <!--1-->
+                    <div class="row">
+                        <div class="col s3 ">
+                        <p>Percentuale sensi unici</p>
+                        </div>
+                        <div class="col s9">
+                        <form action="#">
+                            <p class="range-field">
+                            <input type="range" id="p" min="0" max="1" step="0.01" value="0.5" />
+                            </p>
+                        </form>
+                        </div>
+                    </div>
+                    <!--2-->
+                    <div class="row">
+                        <div class="col s3 ">
+                        <p>Numero macchine</p>
+                        </div>
+                        <div class="col s9">
+                        <form action="#">
+                            <p class="range-field">
+                            <input type="range" id="n_cars" min="10" max="5000" value="100"/>
+                            </p>
+                        </form>
+                        </div>
+                    </div>
+                    <!--3-->
+                    <div class="row">
+                        <div class="col s3 ">
+                        <p>Colonne del grafo</p>
+                        </div>
+                        <div class="col s9">
+                        <form action="#">
+                            <p class="range-field">
+                            <input type="range" id="cols" min="0" max="30" value="6" />
+                            </p>
+                        </form>
+                        </div>
+                    </div>
+                    <!--4-->
+                    <div class="row">
+                        <div class="col s3 ">
+                        <p>Righe del grafo</p>
+                        </div>
+                        <div class="col s9">
+                        <form action="#">
+                            <p class="range-field">
+                            <input type="range" id="rows" min="0" max="30" value="6" />
+                            </p>
+                        </form>
+                        </div>
+                    </div>
+                    <!--5-->
+                    <div class="row">
+                        <div class="col s3 ">
+                        <p>Gaussian Mean</p>
+                        </div>
+                        <div class="col s9">
+                        <form action="#">
+                            <p class="range-field">
+                            <input type="range" id="mean" min="0" max="100" value="10" />
+                            </p>
+                        </form>
+                        </div>
+                    </div>
+                    <!--6-->
+                    <div class="row">
+                        <div class="col s3 ">
+                        <p>Gaussian Sigma</p>
+                        </div>
+                        <div class="col s9">
+                        <form action="#">
+                            <p class="range-field">
+                            <input type="range" id="sigma" min="0" max="100" value="10" />
+                            </p>
+                        </form>
+                        </div>
+                    </div>
+                    <!--7-->
+                    <div class="row">
+                        <div class="col s3 ">
+                        <p>Lunghezza minima delle strade</p>
+                        </div>
+                        <div class="col s9">
+                        <form action="#">
+                            <p class="range-field">
+                            <input type="range" id="min_l" min="0" max="100" value="12" />
+                            </p>
+                        </form>
+                        </div>
+                    </div>
+                    <!--8-->
+                    <div class="row">
+                        <div class="col s3 ">
+                        <p>Lunghezza massima delle strade</p>
+                        </div>
+                        <div class="col s9">
+                        <form action="#">
+                            <p class="range-field">
+                            <input type="range" id="max_l" min="0" max="100" value="30" />
+                            </p>
+                        </form>
+                        </div>
+                    </div>
+                    </div>
+                </div>
 
-        <div id="settings">
+                <div class="col s12 right-align">
+                    <button id='submit-btn' class="btn waves-effect waves-light" onclick = "init()">Avanti
+                    <i class="material-icons right">arrow_forward</i>
+                    </button>
+                </div>
+            </div>
         
-            <label>Percentuale sensi unici (0 = tutti gli archi, 1 = meno archi possibili)</label><input type="number" id="p" required value="0.5"/> <br/>
-            <label>Numero macchine</label><input type="number" id="n_cars" required value="100"/> <br/>
-            <label>Colonne del grafo</label><input type="number" id="cols" required value="8"/> <br/>
-            <label>Righe del grafo</label><input type="number" id="rows" required value="8"/> <br/>
-            <label>Gaussian Mean</label><input type="number" id="mean" required value="10"/> <br/>
-            <label>Gaussian Sigma</label><input type="number" id="sigma" required value="10"/> <br/>
-            <label>Lunghezza minima delle strade</label><input type="number" id="min_l" required value="12"/> <br/>
-            <label>Lunghezza massima delle strade</label><input type="number" id="max_l" required value="30"/> <br/>
-            
-            <button id="next" onclick="init()" style="position: relative; float:right" >
-                NEXT
-            </button>
-            
-            <img id="loading" src="loading.gif">
-        </div>
 
-        <div id="graph">
-            <div id="main">
+            <!-- seconda pagina -->
+            <div class="row" id="graph">
+
+                <div class="card-panel hoverable" style="padding: 12px;">
+                    Clicca su un nodo per selezionarlo come sorgente; clicca di nuovo per selezionarlo come destinazione; clicca di nuovo per deselezionarlo. 
+                </div>
+
+                <div class="card-panel hoverable" style="padding: 12px; position: absolute; width: 15%; height: 40%; top: 35%; left: 1%; z-index: 2;">
+                    Seleziona i nodi sorgente e destinazione: <br/> <br/>
+                    <button onclick="left_to_right()">Left to Right</button> <br/>
+                    <button onclick="double_left_to_right()">Double Left to Right</button> <br/>
+                    <button>Selezione 3</button> <br/>
+                    <button>Selezione 4</button> <br/>
+                </div>
                 
-            </div>
-            <div>
-                <button id="prev" onclick = "switch_things()" style="position: relative; float:left">
-                    PREV
-                </button>
+                <!-- Immagine caricamento -->
+                <img id="loading" src="loading.gif">
+                
+                <!--Grafo-->
+                <div>
+                    <div id="main"></div>
 
-                <button id="start" onclick="start_simulation()"  style="position: relative; float:right" >
-                    START
-                </button>
+                    <div style="position: absolute; bottom: 1%; left: 1%; right: 1%;">
+                        <button id="prev" class="btn waves-effect waves-light" onclick = "switch_things()" style="position: relative; float:left">
+                            <i class="material-icons left">arrow_backward</i> Indietro
+                        </button>
+        
+                        <button id="start" class="btn waves-effect waves-light" onclick="start_simulation()"  style="position: relative; float:right" >
+                            <i class="material-icons play_arrow">play_arrow</i> Avvia simulazione
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
         
-    </body>
+          
+      
+        <!--JavaScript at end of body for optimized loading-->
+        <script type="text/javascript" src="js/materialize.js"></script>
+      </body>
 
     <script src="../javascript/utils.js"></script>
     <script src="../javascript/main.js"></script>

@@ -1,7 +1,7 @@
 all: car road node city simulator main
 
 main:
-	g++ -O3 -std=c++17 -pthread -g -o main main.cpp car.o road.o node.o city.o simulator.o 
+	g++ -O3 -std=c++11 -pthread -g -o main main.cpp car.o road.o node.o city.o simulator.o 
 
 car:
 	g++ -O3 -c -g -o car.o car.cpp
