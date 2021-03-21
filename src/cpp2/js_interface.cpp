@@ -5,7 +5,6 @@
 //#include <stsim.h>
 #include <string.h>
 #include <iostream>
-#include <fstream>
 #include <thread>
 #include <list>
 #include <filesystem>
@@ -41,7 +40,6 @@ bool _order(Car_Info i, Car_Info j)
 }
 
 Simulator sim = NULL;
-std::ofstream logFile("/home/simone/Scrivania/logfile.txt");
 int counter;
 
 napi_value batchMain(napi_env env, napi_callback_info info){
@@ -123,10 +121,7 @@ napi_value myMain(napi_env env, napi_callback_info info){
     status = napi_get_value_int32(env, args[6], &min_road_l); 
     status = napi_get_value_int32(env, args[7], &max_road_l);
 
-    logFile << "Instanzio la simulazione\n";
     sim = Simulator(n_cars);
-    logFile << "fatto\n";
-    logFile.flush();
     
     sim.create_city(rows, columns, increment, gaussian_mean, gaussian_sigma, min_road_l, max_road_l);
     
@@ -169,9 +164,6 @@ napi_value myMain(napi_env env, napi_callback_info info){
 napi_value create_path(napi_env env, napi_callback_info info){
     napi_status status;
 
-    logFile << "sono in create_path\n";
-    logFile.flush();
-
     //prendi parametri (callback, variabili...)
     size_t argc = 4;
     napi_value args[4];
@@ -207,7 +199,7 @@ json get_updates(){
     json tmp = {};
     for (int i = 0; i < sim.get_city().get_n_rows()*sim.get_city().get_n_coloumns(); i++){
         for (int j = 0; j < sim.get_city().get_n_rows()*sim.get_city().get_n_coloumns(); j++){
-            if (sim.get_city().get_road(i, j).get_car_number() >= 0 && sim.get_city().get_road_ptr(i, j)->cars_in_road > 0){
+            if (/* sim.get_city().get_road(i, j).get_car_number() > 0 && */ sim.get_city().get_road_ptr(i, j)->cars_in_road > 0){
                 int max = sim.get_city().get_road(i, j).get_road_length();
                 int cars = sim.get_city().get_road_ptr(i, j)->cars_in_road;
                 //int cars = sim.get_city().get_road(i, j).get_car_number();
@@ -216,15 +208,12 @@ json get_updates(){
             }
         }    
     }
-    logFile.flush();
 
-    return {{"streets", tmp}};
+    return {{"cars_at_dest", sim.get_cars_at_destination()}, {"streets", tmp}};
 } 
 
 napi_value start_simulation(napi_env env, napi_callback_info info){
     napi_status status;
-
-    logFile << "Simulazione partita\n";
 
     size_t argc = 1;
     napi_value args[1];
@@ -251,51 +240,28 @@ napi_value start_simulation(napi_env env, napi_callback_info info){
         { 
             if (!(sim.get_car(i).car->get_at_destination()) && sim.get_car(i).car->get_delay() == 0)
             {
-                logFile << "Muovo una macchina...\n";
-                logFile.flush();
-                
-                sim.mv_car(i);
-                
-                logFile << "Ho mosso una macchina\n";
-                logFile.flush();
-
+               sim.mv_car(i);
             }
             else
             {
-                logFile << "Delay macchina...\n";
-                logFile.flush();
                 sim.get_car(i).car->delay();
-                logFile << "Macchiana delayiata\n";
-                logFile.flush();
+                
             }
         }  
 
         napi_value result;
 
-        logFile << "Prendo updates...\n";
-        logFile.flush();
-
         json j = get_updates();
         status = napi_create_string_latin1(env, j.dump().c_str(), NAPI_AUTO_LENGTH, argv);
-        logFile << "Updates presi\n";
-        logFile.flush();
-
-
+        
         //chiamo la callback...
-        logFile << "Chiamo la cb...\n";
-        logFile.flush();
         napi_call_function(env, global, cb, 1, argv, &result);
         assert(status == napi_ok);
-        logFile << "Cb chiamata\n";
-        logFile.flush();
-
+        
         counter++;
         break;
     }
 
-    logFile << "simulazione terminata\n";
-    logFile.flush();
-   
     float steps_mean = 0;
     float steps_squared_mean = 0;
     float stops_mean = 0;
@@ -351,7 +317,7 @@ napi_value next_simulation_step(napi_env env, napi_callback_info info){
     while (sim.get_cars_at_destination() < sim.get_car_number())
     {
         // std::sort(sim.get_car_vector().begin(), sim.get_car_vector().end(), _order);
-        sort(sim.get_car_vector().begin(), sim.get_car_vector().end(), _order);
+        // sort(sim.get_car_vector().begin(), sim.get_car_vector().end(), _order);
 
         // std::vector<Car_Info>::iterator end = sim.get_car_vector().begin();
         // std::advance(end, sim.get_car_vector().size() - 1);

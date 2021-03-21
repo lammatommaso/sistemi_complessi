@@ -3,6 +3,7 @@
 const green  = "#9bee00"
 const orange = "#ffaa00"
 const red    = "#f00"
+const light_blue = "#00bfff"
 
 const source_node_color = "#4dabf7"
 const dest_node_color = "#be4bdb"
@@ -112,8 +113,13 @@ ipcRenderer.on("grafo", (event, grafo) => {
 var start = []
 var end = []
 
-function double_left_to_right(){
+function two_way_hor(){
     start.splice(0)
+    end.splice(0)
+    s.graph.nodes().forEach( n => {
+        n.color = normal_node_color
+    })
+    s.refresh()
 
     var tot_nodi = cols*rows;
     var perc_nodi = parseInt((tot_nodi/100)*65)
@@ -137,11 +143,16 @@ function double_left_to_right(){
 
 function out_in(){
     start.splice(0)
+    end.splice(0)
+    s.graph.nodes().forEach( n => {
+        n.color = normal_node_color
+    })
+    s.refresh()
 
     var tot_nodi = cols*rows;
-    var perc_nodi = parseInt((tot_nodi/100)*65)
+    // perc_nodi = parseInt((tot_nodi/100)*65)
     
-    top = rows*2 + 1; //es. in matrice 10x10, top è 0, 10, 20, ...
+    _top = rows*2 ; //es. in matrice 10x10, top è 0, 10, 20, ...
     //left = 0; //es. in matrice 10x10, left è 1,2,3,4, ...
     right = rows*cols - rows; //es. in matrice 10x10, right è 90, 91, 92, ...
     bottom = rows*3 - 1 //es. in matrice 10x10, bottom è 19, 29, 39...
@@ -166,8 +177,8 @@ function out_in(){
             n.color = source_node_color
         }
         //calcoliamo i nodi di top, che sono le prime due righe
-        if (id == top && id < rows*cols - 2*rows){
-            top += rows
+        if (id == _top && id < rows*cols - 2*rows){
+            _top += rows
             start.push(id)
             n.color = source_node_color
         }
@@ -186,33 +197,82 @@ function out_in(){
         }
 
         //calcoliamo i nodi center
-        righe = 4
-        ncolonne = 5
+        // riga = (nodo/cols)%rows
+        // colonna = nodo%cols
 
-    //     for i in range(0,nrighe*ncolonne):
-    //         riga = (i/ncolonne)%nrighe
-    //         colonna = i%ncolonne
-    //         riga = int(riga)
-    //         colonna = int(colonna)
-    //         print(i, riga, colonna)
-
-
-    //     if (id <= parseInt(perc_nodi/4) || (id >= (cols*rows) - (parseInt(perc_nodi/2)+1) && id < (cols*rows) - (parseInt(perc_nodi/4)+1)) ){
-    //         start.push(id)
-    //         n.color = source_node_color
-    //     }
-    //     if (id > parseInt(perc_nodi/4) && id <= parseInt(perc_nodi/2) || (id >= (cols*rows) - (parseInt(perc_nodi/4)+1))){
-    //         n.color = dest_node_color
-    //         end.push(id);
-    //     }
+        if ((id/cols)%rows >= parseInt(rows/3) && (id/cols)%rows <= 2*(parseInt(rows/3))
+            && (id%cols) >= parseInt(cols/3) && id%cols <= 2*(parseInt(cols/3))){
+            end.push(id);
+            n.color = dest_node_color
+        }
+    
+    
     })
 
-    // s.refresh()
+    s.refresh()
 
-    // create_path(start, end)
+    create_path(start, end)
 }
 
 function cross(){
+
+    end.splice(0)
+    start.splice(0)
+    s.graph.nodes().forEach( n => {
+        n.color = normal_node_color
+    })
+    s.refresh()
+
+    /*
+        Supponiamo di dividere nei soliti 9 quadranti. 
+        Consideriamo il quadrante al centro a sx come partenza,
+        quello al centro sopra come arrivo, 
+        quello al centro a dx come partenza,
+        e quello al centro sotto come arrivo:
+
+        x x x a a a x x x
+        x x x a a a x x x
+        x x x a a a x x x
+        p p p x x x a a a 
+        p p p x x x a a a 
+        p p p x x x a a a 
+        x x x p p p x x x
+        x x x p p p x x x
+        x x x p p p x x x
+    */
+    
+    s.graph.nodes().forEach( n => {
+        id = parseInt(n.id.substr(1))
+        
+        if ((id/cols)%rows-1 >= parseInt(rows/3) && (id/cols)%rows+1 <= 2*(parseInt(rows/3))
+            && (id%cols)+1 <= parseInt(cols/3)){
+            start.push(id);
+            n.color = source_node_color
+        }
+
+        if ((id/cols)%rows-1 >= parseInt(rows/3) && (id/cols)%rows+1 <= 2*(parseInt(rows/3))
+            && (id%cols)-1 >= 2*(parseInt(cols/3))){
+            end.push(id);
+            n.color = dest_node_color
+        }
+
+        if ((id/cols)%rows+1 <= parseInt(rows/3)
+            && (id%cols)-1 >= parseInt(cols/3) && id%cols+1 <= 2*(parseInt(cols/3))){
+            end.push(id);
+            n.color = dest_node_color
+        }
+
+        if ((id/cols)%rows-1 >= 2*(parseInt(rows/3))
+            && (id%cols)-1 >= parseInt(cols/3) && id%cols+1 <= 2*(parseInt(cols/3))){
+            start.push(id);
+            n.color = source_node_color
+        }
+
+    })
+
+    s.refresh()
+
+    create_path(start, end)
 
 }
 
@@ -221,6 +281,11 @@ function left_to_right(){ //funzione molto basica
     //ovvero il 32.5 come partenza, il 32.5 come arrivo
 
     start.splice(0)
+    end.splice(0)
+    s.graph.nodes().forEach( n => {
+        n.color = normal_node_color
+    })
+    s.refresh()
 
     var tot_nodi = cols*rows;
     var perc_nodi = parseInt((tot_nodi/100)*65)
@@ -257,26 +322,35 @@ ipcRenderer.on("disegnami", (event, roba_da_disegnare) => {
         console.log("simulazione terminata")
         return
     }
+    counter = 0
     values["streets"].forEach(element => {
-        
-        if (element.cars > 0){
+        console.log(`esamino strada: ${counter}/${values["streets"].length}`)
+        //if (element.cars > 0){
             for (i=0; i < s.graph.edges().length; i++){
                 //nota: stiamo confrontando interi e stringhe, ma js è figo e non ha problemi
                 if (parseInt(s.graph.edges()[i].source.substr(1)) == element.street.x && parseInt(s.graph.edges()[i].target.substr(1)) == element.street.y){
-                    if (element.cars/element.max <= 0.5)
-                        s.graph.edges()[i].color = green;
-                    else if (element.cars/element.max <= 0.75)
-                        s.graph.edges()[i].color = orange;
-                    else
-                        s.graph.edges()[i].color = red;
-                    break;
+                    console.log(`counter: ${counter}, i: ${i}`)
+                    
+                        if (element.cars == 1){
+                            s.graph.edges()[i].color = light_blue;
+                        }
+                        else if (element.cars/element.max <= 0.5)
+                            s.graph.edges()[i].color = green;
+                        else if (element.cars/element.max <= 0.75)
+                            s.graph.edges()[i].color = orange;
+                        else
+                            s.graph.edges()[i].color = red;
+                        break;
+                    
+                
                 }
-            }
-        } 
+            } 
+        //}
 
     });
     s.refresh();
-    ipcRenderer.send("next")
+    if (values["cars_at_dest"] < n_cars)
+        ipcRenderer.send("next")
 })
 
 
