@@ -4,9 +4,6 @@
 
 bool order(Car_Info i, Car_Info j)
 {
-    
-    malloc_stats();
-    std::cout << "========================\n";
     return (i.car->get_offset() > j.car->get_offset());
 }
 
@@ -256,7 +253,9 @@ void Simulator::simulation()
 {
     int counter = 0;
     while (_cars_at_destination < _car_number)
-    {
+    {   
+        malloc_stats();
+        std::cout << "cars at destination: " << _cars_at_destination << "/" << _car_number << "\n";
         std::sort(_car_vector.begin(), _car_vector.end(), order);
         for (int i = 0; i < _car_number; i++)
         { 
