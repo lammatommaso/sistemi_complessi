@@ -45,21 +45,21 @@ int counter;
 napi_value batchMain(napi_env env, napi_callback_info info){
      napi_status status;
 
+    cout << "Batch iniziato\n";
+
     //prendi parametri (callback, variabili...)
-    size_t argc = 14;
-    napi_value args[14];
+    size_t argc = 15;
+    napi_value args[15];
     status = napi_get_cb_info(env, info, &argc, args, nullptr, nullptr);
     assert(status == napi_ok);
 
     int simulation_type, cols, rows, min_car, max_car, increment, 
         car_number, gaussian_mean, gaussian_sigma, min_road_length, 
-        max_road_length;
+        max_road_length, str_len;
     double p;
-    char* base_dir;
 
-    status = napi_get_value_double(env, args[0], &p);
-    status = napi_get_value_string_latin1(env, args[1], base_dir, NAPI_AUTO_LENGTH, NULL);
-    status = napi_get_value_int32(env, args[2],  &simulation_type);
+    status = napi_get_value_double(env, args[2], &p);    
+    status = napi_get_value_int32(env, args[1],  &simulation_type);
     status = napi_get_value_int32(env, args[3],  &cols);
     status = napi_get_value_int32(env, args[4],  &rows);
     status = napi_get_value_int32(env, args[5],  &min_car); 
@@ -71,14 +71,23 @@ napi_value batchMain(napi_env env, napi_callback_info info){
     status = napi_get_value_int32(env, args[11], &min_road_length);
     status = napi_get_value_int32(env, args[12], &max_road_length);
 
+    status = napi_get_value_int32(env, args[13], &str_len);
+    char base_dir[str_len];
+    status = napi_get_value_string_latin1(env, args[0], base_dir, str_len, NULL);
+
     string base_dir_s = "";
+    std::cout << "base_dir: " << base_dir << "\n";
+    
     base_dir_s.append(base_dir);
 
     //gestione callback
-    napi_value cb = args[13];
+    napi_value cb = args[14];
     napi_value global;
     status = napi_get_global(env, &global);
     assert(status == napi_ok);
+
+    std::cout << "Sto per creare la classe batch...\n";
+
 
     //eseguiamo il "main"
     Batch_Simulation b = Batch_Simulation(base_dir_s, simulation_type, 
@@ -86,6 +95,8 @@ napi_value batchMain(napi_env env, napi_callback_info info){
                                     car_number, gaussian_mean, gaussian_sigma, min_road_length, 
                                     max_road_length);
 
+    cout << "Batch terminato\n";
+    
     //chiamiamo la callback
     napi_value argv[1];
     //json nodes = {{"nodes", j}}; //valore da restituire

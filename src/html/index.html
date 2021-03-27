@@ -200,4 +200,38 @@
     <script src="../javascript/utils.js"></script>
     <script src="../javascript/main.js"></script>
 
+    <script>
+
+        //test simulazione car_increment
+        //TODO prova l'altra tipo di simulazione
+        city_number = 0
+        sim_dir = "/home/simone/Scrivania/test/"
+        min_car_number = 500
+        max_car_number = 600
+        increment = 100
+        oneway_fraction = 0.5
+        n_rows = 10
+        n_coloumns = 10
+
+        simulation_type = 0
+
+        gaussian_mean = 20
+        gaussian_sigma = 10
+        min_road_l = 5
+        max_road_l = 30
+
+        //parametri per l'altra simulazione
+        car_number = 3000
+
+        function testBatch(){
+            ipcRenderer.send("batch_init", sim_dir, simulation_type, oneway_fraction, 
+                            n_coloumns, n_rows, min_car_number, max_car_number, increment,
+                            car_number, gaussian_mean, gaussian_sigma, min_road_l, max_road_l)
+        }
+
+        //testBatch()
+
+        
+    </script>
+
 </html>

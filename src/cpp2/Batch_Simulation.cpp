@@ -40,6 +40,8 @@ void Batch_Simulation::_oneway_increment_simulation(std::string sim_dir,float in
 void Batch_Simulation::_car_increment_simulation(int city_number, std::string sim_dir, short min_car_number, short max_car_number, short increment, float oneway_fraction, short n_rows, short n_coloumns)
 {
    
+   std::cout << "Sono dentro car_increment\n";
+
    std::vector<float> x;
    std::vector<float> mean_steps;
    std::vector<float> sigma_steps;
@@ -89,21 +91,24 @@ Batch_Simulation::Batch_Simulation(std::string base_dir, int simulation_type,
                                     int car_number, int gaussian_mean, int gaussian_sigma, int min_road_length, 
                                     int max_road_length)
 {
+
+   std::cout << "Imposto le statistiche \n";
    Road::set_statistics(gaussian_mean,gaussian_sigma,min_road_length,max_road_length);
    // short car_number = 200;
    // std::string sim_dir = "../oneway_increment_simulation/";
    // oneway_increment_simulation(sim_dir,0.5, car_number, 10, 10);
+   std::cout << "Fatto\n";
 
    switch (simulation_type)
    {
    case CAR_INCREMENT_SIMULATION:
-      for(int i=0;i<30;i++)
+      for(int i=0;i<3;i++)
       {
          _car_increment_simulation(i+1, base_dir, min_car,max_car,increment,p,rows,cols);
       }
       break;
    case ONEWAY_INCREMENT_SIMULATION:
-      for(int i=0;i<30;i++)
+      for(int i=0;i<3;i++)
       {
          _oneway_increment_simulation(base_dir, p, car_number, cols, rows);
       }
