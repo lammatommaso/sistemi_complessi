@@ -9,7 +9,7 @@
 #include <list>
 #include <filesystem>
 #include <nlohmann/json.hpp>
-#include <malloc.h>
+//#include <malloc.h>
 
 #include "simulator.h"
 #include "road.h"
@@ -22,8 +22,8 @@ using json = nlohmann::json;
 
     struct {
         bool operator()(Car_Info a, Car_Info b) const { 
-            malloc_stats();
-            cout << "=================================\n";
+            //malloc_stats();
+            //cout << "=================================\n";
             if (a.car->get_offset() == NULL || b.car->get_offset() == NULL){
                 return false;
             }
@@ -32,7 +32,7 @@ using json = nlohmann::json;
 
 bool _order(Car_Info i, Car_Info j)
 {
-    malloc_stats();
+    //malloc_stats();
     if (i.car->get_offset() == NULL || j.car->get_offset() == NULL){
         return false;
     }

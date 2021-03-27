@@ -1,12 +1,12 @@
 #include "simulator.h"
-#include <malloc.h>
+//#include <malloc.h>
 //using namespace Simulator;
 
 bool order(Car_Info i, Car_Info j)
 {
     
-    malloc_stats();
-    std::cout << "========================\n";
+    //malloc_stats();
+    //std::cout << "========================\n";
     return (i.car->get_offset() > j.car->get_offset());
 }
 
