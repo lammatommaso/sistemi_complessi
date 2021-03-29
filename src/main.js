@@ -15,14 +15,15 @@ var mainWindow = BrowserWindow
 
 function createWindow() {
     mainWindow = new BrowserWindow({
-        height: 600,
-        width: 800,
+        height: 1024,
+        width: 1280,
         webPreferences: {
             nodeIntegration: true
-        }
+        },
+        resizable: false
     })
 
-    mainWindow.loadFile('html/index.html')
+    mainWindow.loadFile('html/start.html')
 
     mainWindow.on('closed', () => {
         app.quit()
