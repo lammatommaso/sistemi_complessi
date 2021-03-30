@@ -5,18 +5,51 @@
   "main": "./main.js",
   "scripts": {
     "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "babylonjs": "^4.2.0",
+    "builder-util": "^22.10.5",
     "jquery": "^3.6.0",
     "node-addon-api": "^3.1.0",
     "node-gyp": "^7.1.2",
     "sigma": "^1.2.1"
   },
   "devDependencies": {
-    "electron": "^10.4.0"
+    "electron": "^10.4.2",
+    "electron-builder": "^22.10.5"
+  },
+  "gypfile": true,
+  "build": {
+    "appId": "uniboh",
+    "mac": {
+      "category": "Productivity"
+    },
+   
+    "files": [
+      "./main.js",
+      "package.json",
+      "node_modules/**/*",
+      "html/**/*",
+      "css/**/*",
+      "javascript/**/*"
+    ],
+    "extraFiles": [
+      "build/Release/addon.node"
+    ],
+    "linux": {
+      "target": [
+        "appimage"
+      ],
+      "category": "Productivity"
+    },
+    "directories": {
+      "buildResources": "build"
+    },
+    "nodeGypRebuild": true
   }
 }

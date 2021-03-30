@@ -219,7 +219,7 @@ json get_updates(){
             }
         }    
     }
-
+    cout << "Macchine a destinazione: " << sim.get_cars_at_destination() << "\n";
     return {{"cars_at_dest", sim.get_cars_at_destination()}, {"streets", tmp}};
 } 
 

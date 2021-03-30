@@ -17,11 +17,6 @@
         </style>
         <link rel="stylesheet" href="../css/index.css">
         
-        <script src="../node_modules/sigma/build/sigma.min.js"></script>
-        <script src="../node_modules/sigma/plugins/sigma.renderers.parallelEdges/utils.js"></script>
-        <script src="../node_modules/sigma/plugins/sigma.renderers.parallelEdges/sigma.canvas.edges.curvedArrow.js"></script>
-        <script src="../node_modules/sigma/plugins/sigma.renderers.parallelEdges/sigma.canvas.edgehovers.curvedArrow.js"></script>
-
         <!--Import Google Icon Font-->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <!--Import materialize.css-->
@@ -33,12 +28,10 @@
         
     </head>
 
-    <!-- <body class="cyan darken-2"> -->
-    <body class="grey darken-3">
-
+    <body class="cyan darken-2">
         <div class="container">
             <!--<div class="row">-->
-                <h4>Simulazione Traffico</h4>
+                <h4>OneWay Increment Simulation</h4>
             <!--</div>-->
             <div class="row" id="settings">
                 <div class="card-panel hoverable" style="padding: 12px;">
@@ -59,7 +52,7 @@
                     <!--2-->
                     <div class="row">
                         <div class="col s3 ">
-                        <p>Numero macchine</p>
+                        <p>Numero delle macchine</p>
                         </div>
                         <div class="col s9">
                         <form action="#">
@@ -69,6 +62,7 @@
                         </form>
                         </div>
                     </div>
+
                     <!--3-->
                     <div class="row">
                         <div class="col s3 ">
@@ -147,6 +141,20 @@
                         </form>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col s3 ">
+                        <p>Cartella dove salvare file di output della simulazione (default: <samp>/tmp</samp>)</p>
+                        </div>
+                        <div class="col s9">
+                        
+                            <p class="range-field">
+                                <button id="folders" class="waves-effect waves-light btn-small" onclick='ipcRenderer.send("select_folder")'>Seleziona cartella</button>
+                                <button id="go_to_results" style="visibility: hidden" class="waves-effect waves-light btn-small green" onclick="ipcRenderer.send('open_folder', this.value)">Apri cartella con output</button>
+                            </p>
+                        
+                        </div>
+                    </div>
                     </div>
                 </div>
 
@@ -157,81 +165,88 @@
                     </div>
 
                     <div class="col s6 right-align">
-                        <a class="btn-floating btn-large waves-effect waves-light red" onclick = "init()"><i class="material-icons">arrow_forward</i></a>
+                        <a class="btn-floating btn-large waves-effect waves-light green" onclick = "init()"><i class="material-icons">play_arrow</i></a>
                     </div>
                 </div>
 
             </div>
-        
-            <!-- Immagine caricamento -->
-            <img id="loading" src="loading.gif">
-
-            <!-- seconda pagina -->
-            <div id="graph">
-
-                <div class="row">
-                    
-                    <div class="col s12 m4 l2">
-                        <div class="row card-panel hoverable center-align">
-                            <div class="row"><p>Seleziona i nodi sorgente e destinazione:</p></div>
-                            <div class="row"><a class="waves-effect waves-light btn-small" onclick="left_to_right()">Left to Right</a></div>
-                            <div class="row"><a class="waves-effect waves-light btn-small" onclick="two_way_hor()">2-Way Horizontal</a></div>
-                            <div class="row"><a class="waves-effect waves-light btn-small" onclick="out_in()">Out In</a></div>
-                            <div class="row"><a class="waves-effect waves-light btn-small" onclick="cross()">Cross</a></div>
-                        </div>
-
-                        <div class="row card-panel hoverable center-align">
-                            <p> Macchine giunte a destinazione: <span id="cars_at_dest">0</span> su <span id="total_cars"></span> </p>
-                        </div>
-
-                    </div>
-                    <div class="col s12 m4 l8"></div>
-                    <div class="col s12 m4 l2">
-                        <div class="card-panel hoverable">
-                            Inserire Legenda qui
-                        </div> 
-                        <div class="card-panel hoverable">
-                            <p>Click singolo: nodo sorgente <br><br>
-                                Due click: nodo destinazione <br><br>
-                                Tre click: deseleziona
-                            </p>
-                        </div> 
-                    </div>
-                    
-                </div>
- 
-                <!--Grafo-->
-                <div >
-                    <div id="main"></div>
-
-                    <div style="position: absolute; bottom: 1%; left: 1%; right: 1%;" >
-                        
-                    </div>
-
-                    <div class="row">
-
-                        <div class="col s12 m4 l2 left-align">
-                            <a class="btn-floating btn-large waves-effect waves-light red" onclick = "switch_things()"><i class="material-icons">arrow_back</i></a>
-                        </div>
-
-                        <div class="col s12 m4 l8"></div>
-
-                        <div class="col s12 m4 l2 right-align">
-                            <a class="btn-floating btn-large waves-effect waves-light green" onclick="start_simulation()"><i class="material-icons">play_arrow</i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
         
-          
-      
+        <div id="waiting_screen" style="visibility: hidden; background-color: rgba(0,0,0,0.75); text-align:center; width: 100%; height: 100%; position: absolute; z-index: 1; top: 0px; bottom: 0px; left: 0px; right: 0px ">
+            <h2 style="color: white">La simulazione è in corso, ma può richiedere diversi minuti. Si prega di attendere</h2>
+            <div class="progress">
+                <div class="indeterminate"></div>
+            </div>
+        </div>
+
         <!--JavaScript at end of body for optimized loading-->
         <script type="text/javascript" src="js/materialize.js"></script>
       </body>
 
     <script src="../javascript/utils.js"></script>
-    <script src="../javascript/main.js"></script>
+    <!-- <script src="../javascript/main.js"></script> -->
 
-  
+    <script>
+
+        //test simulazione car_increment
+
+        city_number = 0
+        sim_dir = "/tmp/"
+        p = 0.5
+        rows = 10
+        cols = 10
+        n_cars = 100
+        
+        simulation_type = 0
+
+        gaussian_mean = 20
+        gaussian_sigma = 10
+        min_l = 5
+        max_l = 30
+
+        //parametri per altra simulazione
+        min_car_number = 500
+        max_car_number = 600
+        increment = 100
+        
+
+        ipcRenderer.on("folder_selected", (event, folder) => {
+            sim_dir = folder[0];
+            document.getElementById("folders").innerHTML = "Selezionato: /" +  sim_dir.split("/").pop()
+            sim_dir += "/"
+        })
+
+        function init(){
+            document.getElementById("go_to_results").style.visibility = "hidden"
+            document.getElementById("go_to_results").value = sim_dir
+
+
+            p              = parseFloat(document.getElementById("p").value)
+
+            n_cars         = parseInt(document.getElementById("n_cars").value)
+            cols           = parseInt(document.getElementById("cols").value)
+            rows           = parseInt(document.getElementById("rows").value)
+                    
+            gaussian_mean  = parseInt(document.getElementById("mean").value)
+            gaussian_sigma = parseInt(document.getElementById("sigma").value)
+            min_l          = parseInt(document.getElementById("min_l").value)
+            max_l          = parseInt(document.getElementById("max_l").value)
+
+            ipcRenderer.send("batch_init", sim_dir, simulation_type, p, 
+                            cols, rows, min_car_number, max_car_number, increment,
+                            n_cars, gaussian_mean, gaussian_sigma, min_l, max_l)
+
+            document.getElementById("waiting_screen").style.visibility = "visible"  
+        }
+
+        ipcRenderer.on("simulation_finished", (event) => {
+            document.getElementById("waiting_screen").style.visibility = "hidden"
+            document.getElementById("go_to_results").style.visibility = "visible"
+        })
+
+
+        
+    </script>
+
 </html>

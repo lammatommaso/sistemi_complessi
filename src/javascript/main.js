@@ -65,6 +65,8 @@ function init(){
     ipcRenderer.send("init", p,  n_cars, rows, cols,  mean, _sigma, min_l, max_l);
 
     loading("block") //mostra gif caricamento
+    document.getElementById("cars_at_dest").innerHTML = 0
+    document.getElementById("total_cars").innerHTML = n_cars
 }
 
 ipcRenderer.on("grafo", (event, grafo) => {
@@ -76,9 +78,8 @@ ipcRenderer.on("grafo", (event, grafo) => {
     grafo = JSON.parse(grafo)
 
     var counter = 0;
-    for (i = 0; i < cols; i++){
-        for (j = 0; j < rows; j++){
-
+    for (j = 0; j < rows; j++){
+        for (i = 0; i < cols; i++){
             s.graph.addNode({
                 id: 'n'.concat(counter),
                 x: i,
@@ -312,7 +313,11 @@ function create_path(s, d){
 }
 
 function start_simulation(){
-    ipcRenderer.send("start_simulation")
+    if (start.length == 0){
+        alert("Nessun insieme di nodi sorgente e destinazione selezionato!")
+    } else 
+
+        ipcRenderer.send("start_simulation")
 }
 
 
@@ -322,14 +327,13 @@ ipcRenderer.on("disegnami", (event, roba_da_disegnare) => {
         console.log("simulazione terminata")
         return
     }
-    counter = 0
     values["streets"].forEach(element => {
-        console.log(`esamino strada: ${counter}/${values["streets"].length}`)
         //if (element.cars > 0){
             for (i=0; i < s.graph.edges().length; i++){
                 //nota: stiamo confrontando interi e stringhe, ma js è figo e non ha problemi
                 if (parseInt(s.graph.edges()[i].source.substr(1)) == element.street.x && parseInt(s.graph.edges()[i].target.substr(1)) == element.street.y){
-                    console.log(`counter: ${counter}, i: ${i}`)
+                    console.log(` macchine a destinazione: ${values["cars_at_dest"]}`)
+                    document.getElementById("cars_at_dest").innerHTML = values["cars_at_dest"] + 1
                     
                         if (element.cars == 1){
                             s.graph.edges()[i].color = light_blue;
@@ -351,6 +355,7 @@ ipcRenderer.on("disegnami", (event, roba_da_disegnare) => {
     s.refresh();
     if (values["cars_at_dest"] < n_cars)
         ipcRenderer.send("next")
+    // else {console.log("simulazione terminata")}
 })
 
 
