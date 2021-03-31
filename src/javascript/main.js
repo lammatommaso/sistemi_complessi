@@ -316,7 +316,12 @@ function start_simulation(){
     if (start.length == 0){
         alert("Nessun insieme di nodi sorgente e destinazione selezionato!")
     } else 
-
+        document.getElementById("play").classList.add('disabled');
+        document.getElementById("graph_back").classList.add('disabled');
+        document.getElementById("l2r").classList.add('disabled');
+        document.getElementById("2wh").classList.add('disabled');
+        document.getElementById("oi").classList.add('disabled');
+        document.getElementById("cr").classList.add('disabled');
         ipcRenderer.send("start_simulation")
 }
 
@@ -355,7 +360,14 @@ ipcRenderer.on("disegnami", (event, roba_da_disegnare) => {
     s.refresh();
     if (values["cars_at_dest"] < n_cars)
         ipcRenderer.send("next")
-    // else {console.log("simulazione terminata")}
+     else {
+        document.getElementById("play").classList.remove('disabled');
+        document.getElementById("graph_back").classList.remove('disabled');
+        document.getElementById("l2r").classList.remove('disabled');
+        document.getElementById("2wh").classList.remove('disabled');
+        document.getElementById("oi").classList.remove('disabled');
+        document.getElementById("cr").classList.remove('disabled');
+     }
 })
 
 

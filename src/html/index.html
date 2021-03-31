@@ -38,7 +38,7 @@
 
         <div class="container">
             <!--<div class="row">-->
-                <h4>Simulazione Traffico</h4>
+                <h4 style="color:white;">Simulazione Traffico</h4>
             <!--</div>-->
             <div class="row" id="settings">
                 <div class="card-panel hoverable" style="padding: 12px;">
@@ -153,11 +153,11 @@
                 <div class="row">
 
                     <div class="col s6 left-align">
-                        <a class="btn-floating btn-large waves-effect waves-light red" href="./start.html"><i class="material-icons">arrow_back</i></a>
+                        <a class="btn-floating btn-large waves-effect waves-light red lighten-2" href="./start.html"><i class="material-icons">arrow_back</i></a>
                     </div>
 
                     <div class="col s6 right-align">
-                        <a class="btn-floating btn-large waves-effect waves-light red" onclick = "init()"><i class="material-icons">arrow_forward</i></a>
+                        <a class="btn-floating btn-large waves-effect waves-light red lighten-2" onclick = "init()"><i class="material-icons">arrow_forward</i></a>
                     </div>
                 </div>
 
@@ -172,12 +172,12 @@
                 <div class="row">
                     
                     <div class="col s12 m4 l2">
-                        <div class="row card-panel hoverable center-align">
+                        <div id="menu" class="row card-panel hoverable center-align">
                             <div class="row"><p>Seleziona i nodi sorgente e destinazione:</p></div>
-                            <div class="row"><a class="waves-effect waves-light btn-small" onclick="left_to_right()">Left to Right</a></div>
-                            <div class="row"><a class="waves-effect waves-light btn-small" onclick="two_way_hor()">2-Way Horizontal</a></div>
-                            <div class="row"><a class="waves-effect waves-light btn-small" onclick="out_in()">Out In</a></div>
-                            <div class="row"><a class="waves-effect waves-light btn-small" onclick="cross()">Cross</a></div>
+                            <div class="row"><a id="l2r" class="waves-effect waves-light btn-small" onclick="left_to_right()">Left to Right</a></div>
+                            <div class="row"><a id="2wh" class="waves-effect waves-light btn-small" onclick="two_way_hor()">2-Way Horizontal</a></div>
+                            <div class="row"><a id="oi" class="waves-effect waves-light btn-small" onclick="out_in()">Out In</a></div>
+                            <div class="row"><a id="cr" class="waves-effect waves-light btn-small" onclick="cross()">Cross</a></div>
                         </div>
 
                         <div class="row card-panel hoverable center-align">
@@ -211,13 +211,13 @@
                     <div class="row">
 
                         <div class="col s12 m4 l2 left-align">
-                            <a class="btn-floating btn-large waves-effect waves-light red" onclick = "switch_things()"><i class="material-icons">arrow_back</i></a>
+                            <a id="graph_back" class="btn-floating btn-large waves-effect waves-light red lighten-2" onclick = "switch_things()"><i class="material-icons">arrow_back</i></a>
                         </div>
 
                         <div class="col s12 m4 l8"></div>
 
                         <div class="col s12 m4 l2 right-align">
-                            <a class="btn-floating btn-large waves-effect waves-light green" onclick="start_simulation()"><i class="material-icons">play_arrow</i></a>
+                            <a id="play" class="btn-floating btn-large waves-effect waves-light green" onclick="play()"><i class="material-icons">play_arrow</i></a>
                         </div>
                     </div>
                 </div>
@@ -230,8 +230,18 @@
         <script type="text/javascript" src="js/materialize.js"></script>
       </body>
 
-    <script src="../javascript/utils.js"></script>
-    <script src="../javascript/main.js"></script>
+      <script>
+
+          function play(){
+            
+
+            start_simulation();
+          }
+          
+      </script>
+      
+      <script src="../javascript/utils.js"></script>
+      <script src="../javascript/main.js"></script>
 
   
 </html>

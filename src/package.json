@@ -29,7 +29,6 @@
     "mac": {
       "category": "Productivity"
     },
-   
     "files": [
       "./main.js",
       "package.json",

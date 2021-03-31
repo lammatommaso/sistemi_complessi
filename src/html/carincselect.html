@@ -28,10 +28,10 @@
         
     </head>
 
-    <body class="cyan darken-2">
+    <body class="grey darken-3">
         <div class="container">
             <!--<div class="row">-->
-                <h4>Car Increment Simulation</h4>
+                <h4 style="color:white;">Car Increment Simulation</h4>
             <!--</div>-->
             <div class="row" id="settings">
                 <div class="card-panel hoverable" style="padding: 12px;">
@@ -175,7 +175,7 @@
                         <div class="col s9">
                         
                             <p class="range-field">
-                                <button id="folders" class="waves-effect waves-light btn-small" onclick='ipcRenderer.send("select_folder")'>Seleziona cartella</button>
+                                <button id="folders" class="waves-effect waves-light btn-small red lighten-2" onclick='ipcRenderer.send("select_folder")'>Seleziona cartella</button>
                                 <button id="go_to_results" style="visibility: hidden" class="waves-effect waves-light btn-small green" onclick="ipcRenderer.send('open_folder', this.value)">Apri cartella con output</button>
                             </p>
                         
@@ -187,11 +187,11 @@
                 <div class="row">
 
                     <div class="col s6 left-align">
-                        <a class="btn-floating btn-large waves-effect waves-light red" href="./start.html"><i class="material-icons">arrow_back</i></a>
+                        <a class="btn-floating btn-large waves-effect waves-light red lighten-2" href="./start.html"><i class="material-icons">arrow_back</i></a>
                     </div>
 
                     <div class="col s6 right-align">
-                        <a class="btn-floating btn-large waves-effect waves-light green" onclick = "init()"><i class="material-icons">play_arrow</i></a>
+                        <a class="btn-floating btn-large waves-effect waves-light green" onclick = "window.scrollTo(0, 0); init()"><i class="material-icons">play_arrow</i></a>
                     </div>
                 </div>
 
@@ -242,9 +242,25 @@
             sim_dir += "/"
         })
 
+        function disableScroll() {
+            // Get the current page scroll position
+            scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+        
+                // if any scroll is attempted, set this to the previous value
+                window.onscroll = function() {
+                    window.scrollTo(scrollLeft, scrollTop);
+                };
+        }
+        
+        function enableScroll() {
+            window.onscroll = function() {};
+        }
+
         function init(){
             document.getElementById("go_to_results").style.visibility = "hidden"
             document.getElementById("go_to_results").value = sim_dir
+            disableScroll();
 
             p              = parseFloat(document.getElementById("p").value)
 
@@ -270,6 +286,7 @@
         ipcRenderer.on("simulation_finished", (event) => {
             document.getElementById("waiting_screen").style.visibility = "hidden"
             document.getElementById("go_to_results").style.visibility = "visible"
+            enableScroll();
         })
 
         
