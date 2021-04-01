@@ -5,6 +5,10 @@ function switch_things(){
     } else { //settings non è visibile
         document.getElementById("graph").style.display = "none"; 
         document.getElementById("settings").style.display = "block";
+
+        document.getElementById("back2home").classList.remove("disabled")
+        document.getElementById("fwd2sim").classList.remove("disabled")
+    
     }
 }
 

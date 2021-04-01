@@ -7,6 +7,7 @@
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "pack": "electron-builder --dir",
+    "distall": "electron-builder -m -l -w",
     "dist": "electron-builder"
   },
   "author": "",
@@ -32,11 +33,12 @@
     "files": [
       "./main.js",
       "package.json",
-      "node_modules/**/*",
+      "node_modules/sigma/**/*",
       "html/**/*",
-      "css/**/*",
-      "javascript/**/*"
+      "javascript/**/*",
+      "build/Release/addon.node"
     ],
+    "asar": false,
     "extraFiles": [
       "build/Release/addon.node"
     ],
@@ -45,6 +47,11 @@
         "appimage"
       ],
       "category": "Productivity"
+    },
+    "win":{
+      "target":[
+        "portable"
+      ]
     },
     "directories": {
       "buildResources": "build"

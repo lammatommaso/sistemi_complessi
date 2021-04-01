@@ -7,11 +7,42 @@ const app = electron.app // require('app');
 const BrowserWindow = electron.BrowserWindow // require('browser-window')
 const ipcMain = electron.ipcMain //require("ipcMain")
 const { shell, dialog } = require("electron")
+var path = require('path');
+
+// module.paths.push(path.resolve('node_modules'));
+// module.paths.push(path.resolve(__dirname, 'javascript'));
+// module.paths.push(path.resolve('javascript'));
+// module.paths.push(path.resolve(__dirname, '..', '..', 'electron', 'node_modules'));
+// module.paths.push(path.resolve(__dirname, '..', '..', 'electron.asar', 'node_modules'));
+// module.paths.push(path.resolve(__dirname, '..', '..', 'app', 'node_modules'));
+// module.paths.push(path.resolve(__dirname, '..', 'app.asar', 'javascript'));
 
 // const { app, BrowserWindow, ipcMain } = require("electron")
 const fs = require('fs');
 const { on } = require("process");
 
+// fs.readdir(__dirname, (err, files) => {
+//     files.forEach(file => {
+//       console.log(file);
+//       fs.readdir(path.join(__dirname, file), (err, files) => {
+//         files.forEach(file => {
+//           console.log("|--- " + file);
+//         });
+//       });
+//     });
+//   });
+console.log(app.getAppPath())
+
+fs.readdirSync(__dirname).forEach(file => {
+    console.log(file);
+    try {
+        fs.readdirSync(path.join(__dirname, file)).forEach(file => {
+            console.log("|---" + file)
+        })
+    } catch (e){
+        console.log("")
+    }
+});
 
 var mainWindow = BrowserWindow
 var v = ""
@@ -58,11 +89,16 @@ ipcMain.on("batch_init", (event, base_dir_s, simulation_type,
         max_road_length) => {
     if (batch_init){
         const prom = new Promise((resolve, reject) => {
-            v = new Worker('./javascript/serviceBatch.js', {workerData: {"base_dir": base_dir_s, "simulation_type": simulation_type, 
+            console.log("Attivo serviceBatch")
+
+
+            v = new Worker(path.join(__dirname, "javascript", "serviceBatch.js"), {workerData: {"base_dir": base_dir_s, "simulation_type": simulation_type, 
             "p": p, "cols": cols, "rows": rows, "min_car": min_car, "max_car": max_car, "increment": increment, 
             "n_cars": car_number, "gaussian_mean": gaussian_mean, "gaussian_sigma": gaussian_sigma, "min_road_l": min_road_length, 
             "max_road_l": max_road_length, "str_len": base_dir_s.length + 1}} );
-            //w.on('message', resolve);
+            
+            console.log("Worker serviceBatch triggerato")
+
             v.on('error', reject);
             v.on('exit', (code) => {
             if (code !== 0)
@@ -98,7 +134,7 @@ ipcMain.on("batch_init", (event, base_dir_s, simulation_type,
 ipcMain.on("init", (event, increment, n_cars,  rows, columns,   gaussian_mean, gaussian_sigma, min_road_l, max_road_l) => {
     
     const prom = new Promise((resolve, reject) => {
-        w = new Worker('./javascript/service.js', {workerData: {"increment": increment, "n_cars": n_cars, "rows": rows, 
+        w = new Worker(path.join(__dirname, 'javascript', 'service.js'), {workerData: {"increment": increment, "n_cars": n_cars, "rows": rows, 
         "columns": columns, "gaussian_mean": gaussian_mean, "gaussian_sigma": gaussian_sigma, 
             "min_road_l": min_road_l, "max_road_l": max_road_l}} );
         //w.on('message', resolve);

@@ -325,7 +325,7 @@ napi_value next_simulation_step(napi_env env, napi_callback_info info){
     assert(status == napi_ok);
     napi_value argv[1];
 
-    while (sim.get_cars_at_destination() < sim.get_car_number())
+    if (sim.get_cars_at_destination() < sim.get_car_number())
     {
         // std::sort(sim.get_car_vector().begin(), sim.get_car_vector().end(), _order);
         // sort(sim.get_car_vector().begin(), sim.get_car_vector().end(), _order);
@@ -356,8 +356,18 @@ napi_value next_simulation_step(napi_env env, napi_callback_info info){
         assert(status == napi_ok);
         
         counter++;
-        break;
     }
+    // else {
+    
+    //     napi_value result;
+
+    //     json j = get_updates();
+    //     status = napi_create_string_latin1(env, j.dump().c_str(), NAPI_AUTO_LENGTH, argv);
+        
+    //     //chiamo la callback...
+    //     napi_call_function(env, global, cb, 1, argv, &result);
+    //     assert(status == napi_ok);
+    // }
     return nullptr;
 }
 

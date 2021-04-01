@@ -53,6 +53,9 @@ var min_l  = 0;
 var max_l  = 0;
 
 function init(){
+    start.splice(0)
+    end.splice(0)
+
     p      = parseFloat(document.getElementById("p").value)
     n_cars = parseInt(document.getElementById("n_cars").value)
     cols   = parseInt(document.getElementById("cols").value)
@@ -67,6 +70,16 @@ function init(){
     loading("block") //mostra gif caricamento
     document.getElementById("cars_at_dest").innerHTML = 0
     document.getElementById("total_cars").innerHTML = n_cars
+
+    document.getElementById("back2home").classList.add("disabled")
+    document.getElementById("fwd2sim").classList.add("disabled")
+
+    document.getElementById("play").classList.remove('disabled');
+    document.getElementById("graph_back").classList.remove('disabled');
+    document.getElementById("l2r").classList.remove('disabled');
+    document.getElementById("2wh").classList.remove('disabled');
+    document.getElementById("oi").classList.remove('disabled');
+    document.getElementById("cr").classList.remove('disabled');
 }
 
 ipcRenderer.on("grafo", (event, grafo) => {
@@ -315,7 +328,7 @@ function create_path(s, d){
 function start_simulation(){
     if (start.length == 0){
         alert("Nessun insieme di nodi sorgente e destinazione selezionato!")
-    } else 
+    } else {
         document.getElementById("play").classList.add('disabled');
         document.getElementById("graph_back").classList.add('disabled');
         document.getElementById("l2r").classList.add('disabled');
@@ -323,6 +336,7 @@ function start_simulation(){
         document.getElementById("oi").classList.add('disabled');
         document.getElementById("cr").classList.add('disabled');
         ipcRenderer.send("start_simulation")
+    }
 }
 
 
@@ -358,15 +372,12 @@ ipcRenderer.on("disegnami", (event, roba_da_disegnare) => {
 
     });
     s.refresh();
-    if (values["cars_at_dest"] < n_cars)
+    if (values["cars_at_dest"] + 1 < n_cars)
         ipcRenderer.send("next")
      else {
-        document.getElementById("play").classList.remove('disabled');
+        
         document.getElementById("graph_back").classList.remove('disabled');
-        document.getElementById("l2r").classList.remove('disabled');
-        document.getElementById("2wh").classList.remove('disabled');
-        document.getElementById("oi").classList.remove('disabled');
-        document.getElementById("cr").classList.remove('disabled');
+        
      }
 })
 

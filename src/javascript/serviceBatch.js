@@ -1,7 +1,9 @@
 const { workerData, parentPort } = require('worker_threads')
 const path = require('path');
 
-const addon = require(path.join(__dirname, '../build/Release/addon'));
+console.log("Worker serviceBatch triggerato")
+
+const addon = require(path.join(__dirname, '..', '..', '..', 'build', 'Release/addon'));
 
 // ONEWAY_INCREMENT_SIMULATION 0
 // CAR_INCREMENT_SIMULATION 1
