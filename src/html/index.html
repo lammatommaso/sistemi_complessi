@@ -182,7 +182,7 @@
                             <p>Seleziona i nodi sorgente e destinazione:</p>
                         </div>
                         <div class="row"><a id="l2r" class="waves-effect waves-light btn-small"
-                                onclick="left_to_right()">Left to Right</a></div>
+                                onclick="left_to_right()">Top to Bottom</a></div>
                         <div class="row"><a id="2wh" class="waves-effect waves-light btn-small"
                                 onclick="two_way_hor()">2-Way Horizontal</a></div>
                         <div class="row"><a id="oi" class="waves-effect waves-light btn-small" onclick="out_in()">Out
@@ -198,14 +198,21 @@
 
                 </div>
                 <div class="col s12 m4 l8"></div>
-                <div class="col s12 m4 l2">
+                <div class="col s8 m4 l2">
                     <div class="card-panel hoverable">
-                        Inserire Legenda qui
+                        <b>n</b>: numero macchine nella strada <br/>
+                        <b>c</b>: capacità della strada <br/> <br/>
+
+                        <b>Arco <span style="color:#00bfff">blu</span></b>: 0/1 macchine <br/>
+                        <b>Arco <span style="color:#9bee00">verde</span></b>: 1 < n  < 50% c <br/>
+                        <b>Arco <span style="color:#ffaa00">arancione</span></b>: 50% < n < 75% c <br/>
+                        <b>Arco <span style="color:#f00">rosso</span></b>: > 75% macchine
+
                     </div>
                     <div class="card-panel hoverable">
-                        <p>Click singolo: nodo sorgente <br><br>
-                            Due click: nodo destinazione <br><br>
-                            Tre click: deseleziona
+                        <p>Click singolo: <b style="color:#4dabf7">nodo sorgente</b> <br><br>
+                            Due click:    <b style="color:#be4bdb">nodo destinazione</b> <br><br>
+                            Tre click:    <b style="color:#ffaa00">deseleziona</b>
                         </p>
                     </div>
                 </div>

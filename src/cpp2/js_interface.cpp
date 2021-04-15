@@ -241,11 +241,15 @@ napi_value start_simulation(napi_env env, napi_callback_info info){
     counter = 0;
     while (sim.get_cars_at_destination() < sim.get_car_number())
     {
-        //std::sort(_car_vector.begin(), _car_vector.end(), order);
+
+        std::vector<Car_Info> car_vector = sim.get_car_vector();
+
+        //std::sort(sim.get_car_vector().begin(), sim.get_car_vector().end(), _order);
+        std::sort(car_vector.begin(), car_vector.end(), _order);
 
         // std::vector<Car_Info>::iterator end = sim.get_car_vector().begin();
         // std::advance(end, sim.get_car_vector().size() - 1);
-        // sort(sim.get_car_vector().begin(), end, _order);
+        // std::sort(sim.get_car_vector().begin(), end, _order);
 
         for (int i = 0; i < sim.get_car_number(); i++)
         { 

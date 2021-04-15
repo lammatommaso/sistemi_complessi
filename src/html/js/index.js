@@ -1,5 +1,6 @@
 // const { ipcRenderer } = require("electron")
 
+
 const green  = "#9bee00"
 const orange = "#ffaa00"
 const red    = "#f00"
@@ -27,11 +28,15 @@ s.bind('clickNode', function(e) {
     switch(node_color){
         case normal_node_color:
             e.data.node.color = source_node_color
+            start.push(parseInt(nodeId.substr(1)))
             break;
         case source_node_color:
+            start.splice(start.indexOf(parseInt(nodeId.substr(1))),1)
+            end.push(parseInt(nodeId.substr(1)))
             e.data.node.color = dest_node_color;
             break;
         case dest_node_color:
+            end.splice(end.indexOf(parseInt(nodeId.substr(1))),1)
             e.data.node.color = normal_node_color;
             break;
         default:
@@ -321,14 +326,20 @@ function left_to_right(){ //funzione molto basica
     create_path(start, end)
 }
 
+
+
 function create_path(s, d){
     ipcRenderer.send("create_path", s, d)
 }
 
 function start_simulation(){
-    if (start.length == 0){
-        alert("Nessun insieme di nodi sorgente e destinazione selezionato!")
+    if (start.length == 0 || end.length == 0){
+        alert("Nessun insieme di nodi sorgente o destinazione selezionato!")
     } else {
+        create_path(start, end) //TODO in realtà lo facciamo già nelle funzioni che creano i percorsi
+        //ma se clicchiamo i nodi a mano non viene mai chiamata
+        //bisognerebbe correggere questa cosa
+
         document.getElementById("play").classList.add('disabled');
         document.getElementById("graph_back").classList.add('disabled');
         document.getElementById("l2r").classList.add('disabled');
@@ -344,6 +355,7 @@ ipcRenderer.on("disegnami", (event, roba_da_disegnare) => {
     values = roba_da_disegnare //JSON.parse(roba_da_disegnare)
     if (!roba_da_disegnare.streets){
         console.log("simulazione terminata")
+        document.getElementById("graph_back").classList.remove('disabled');
         return
     }
     values["streets"].forEach(element => {
