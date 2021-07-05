@@ -2,12 +2,12 @@ const { workerData, parentPort } = require('worker_threads')
 const path = require('path');
 
 //const addon = require(path.join(__dirname, '..', '..', '..', 'build', 'Release/addon'));
-const addon = require(path.join(__dirname, '..', 'build', 'Release/addon'));
+const addon = require(path.join(__dirname, '..', 'build', 'Debug/addon'));
 
 
 addon.mymain(workerData["increment"], workerData["n_cars"],  workerData["rows"], workerData["columns"], workerData["gaussian_mean"], 
-    workerData["gaussian_sigma"], workerData["min_road_l"], workerData["max_road_l"], (grafo) => {
-      parentPort.postMessage({"name": "grafo", "data": grafo})
+    workerData["gaussian_sigma"], workerData["min_road_l"], workerData["max_road_l"], workerData["lanes"], (grafo) => {
+        parentPort.postMessage({"name": "grafo", "data": grafo})
     
 });
 

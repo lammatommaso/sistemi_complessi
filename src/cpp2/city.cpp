@@ -1,6 +1,8 @@
 #include "city.h"
 #include <cassert>
 
+int City::_oneway_width;
+
 Road** City::get_adj_matrix(){
     return _adj_matrix;
 }
@@ -58,16 +60,19 @@ std::list<Node> City::print_path(Node source, Node destination)
     return optimal_path;
 }
 
-City::City() {}
+City::City() {
+    _oneway_width = 0; 
+}
 
 #include <iostream>
 #include <fstream>
 
 City::City(short righe, short colonne, float oneway_fraction):_n_rows(righe), _n_coloumns(colonne)
 { 
-
+    _oneway_width = 0; 
     // Road::set_statistics(0,0,0,0);
     _adj_matrix = new Road*[_n_rows*_n_coloumns];
+
     _path = new Node*[_n_rows*_n_coloumns];
     _distance = new int*[_n_rows*_n_coloumns];
     _node_set = new Node[_n_rows*_n_coloumns];
@@ -84,19 +89,29 @@ City::City(short righe, short colonne, float oneway_fraction):_n_rows(righe), _n
     
     for (int i = 0; i < _n_rows*_n_coloumns; i++ )
     {
+        
         _adj_matrix[i][i] = Road(-1);
+
         for (int j = i+1; j < _n_rows*_n_coloumns; j++)
         {              
+            std::cout << "Sono nel for maledetto\n";
             float r = rand();
             float rl = rand();
             if ((j == i+1 && j%_n_coloumns != 0) || j == i+_n_coloumns )
             {
+                std::cout << "Entro nell'if maledetto\n";
+
                 if(rl/RAND_MAX <= 0.5)
                 {
                     _adj_matrix[i][j] = Road(0);
                     if (r/RAND_MAX > oneway_fraction)
                     {
                         _adj_matrix[j][i] = Road(0);
+                        std::cout << "Chiamo set_width (1) \n";
+                        std::cout << "indirizzo _ad_matrix[i][j]:" << (&(_adj_matrix[i][j])) << "\n" ;
+                        std::cout << "indirizzo City::_oneway_width:" << (&(City::_oneway_width)) << "\n";
+                        _adj_matrix[j][i].set_width(City::_oneway_width);
+                        std::cout << "Ho chiamato set_width (1) \n";
                         local_roads++;
                     } 
                     else 
@@ -105,7 +120,7 @@ City::City(short righe, short colonne, float oneway_fraction):_n_rows(righe), _n
                         local_oneway_roads++;
                     }
                 }
-                else
+                else     
                 {
                     _adj_matrix[j][i] = Road(0);
                     if (r/RAND_MAX > oneway_fraction)
@@ -116,28 +131,55 @@ City::City(short righe, short colonne, float oneway_fraction):_n_rows(righe), _n
                     else 
                     {
                         _adj_matrix[i][j] = Road(-1);
+                        std::cout << "Chiamo set_width (2)\n";
+                        std::cout << "indirizzo _ad_matrix[i][j]:" << (&(_adj_matrix[i][j])) << "\n";
+                        std::cout << "indirizzo City::_oneway_width:" << (&(City::_oneway_width)) << "\n";
+                        _adj_matrix[i][j].set_width(City::_oneway_width);   
+                        std::cout << "Ho chiamato set_width (2) \n";
+
                         local_oneway_roads++;
                     }
                 }
+                std::cout << "Esco dall'if maledetto\n";
+
             } 
             else 
             {
+                std::cout << "Entro nell'else maledetto\n";
+
                 _adj_matrix[i][j] = Road(-1);
+                std::cout << "Chiamo set_width (3)\n";
+                std::cout << "indirizzo _ad_matrix[i][j]:" << (&(_adj_matrix[i][j])) << "\n";
+                std::cout << "indirizzo City::_oneway_width:" << (&(City::_oneway_width)) << "\n";
+                _adj_matrix[i][j].set_width(City::_oneway_width);
+                std::cout << "Ho chiamato set_width (3)\n";
                 _adj_matrix[j][i] = Road(-1);
+                std::cout << "Chiamo set_width (4)\n";
+                std::cout << "indirizzo _ad_matrix[i][j]:" << (&(_adj_matrix[i][j])) << "\n";
+                std::cout << "indirizzo City::_oneway_width:" << (&(City::_oneway_width)) << "\n";
+                _adj_matrix[j][i].set_width(City::_oneway_width);
+                std::cout << "Ho chiamato set_width (4)\n";
+                std::cout << "Esco dall'else maledetto\n";
+
             }
         }
     }
+    std::cout << "_oneway_fraction\n";
     _oneway_fraction = local_oneway_roads/(local_oneway_roads+local_roads);
     for(int i=0;i<_n_rows*_n_coloumns;i++)
     {
         _node_set[i].set_index(i); 
     }
+    std::cout << "Sto per chiamare floyd_warshall()\n";
     _floyd_warshall();
+    std::cout << "Ho chiamato floyd_warshall()\n";
+
 }
 
 City::City(int righe, int colonne, float oneway_fraction, int gaussian_mean, int gaussian_sigma, int min_road_length, int max_road_length):_n_rows(righe), _n_coloumns(colonne)
 { 
     
+    _oneway_width = 0; 
     Road::set_statistics(gaussian_mean, gaussian_sigma, min_road_length, max_road_length);
 
     _adj_matrix = new Road*[_n_rows*_n_coloumns];
@@ -253,3 +295,7 @@ int City::get_distance(int i, int j)const
     return _distance[i][j];
 }
 
+void City::set_oneway_width(int oneway_width)
+{
+    _oneway_width = oneway_width;
+}

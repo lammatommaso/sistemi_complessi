@@ -47,6 +47,7 @@ class Simulator
     std::string print_car_data()const;
     std::string print_adj_matrix()const;
   public:
+
     Simulator(int car_number);  
     Simulator();    
     void create_city(int n_rows, int n_coloumns, float oneway_fraction, int gaussian_mean, int gaussian_sigma, int min_road_length, int max_road_length);
@@ -65,8 +66,8 @@ class Simulator
     Result get_result();
     void set_result(Result r);
 
-    void set_car_number(short car_number);
-    void create_city(short n_rows, short n_coloumns, float oneway_fraction);
+    void set_car_number(int car_number);
+    void create_city(int n_rows, int n_coloumns, float oneway_fraction);
 
 };
 

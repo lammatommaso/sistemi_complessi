@@ -19,6 +19,9 @@ class City
     int _n_coloumns;
     float _oneway_fraction;
   public:
+
+    static int _oneway_width;
+
     City();
     City(int n_rows, int n_coloumns, float oneway_fraction, int gaussian_mean, int gaussian_sigma, int min_road_length, int max_road_length);
     std::list<Node> print_path(Node source, Node destination);
@@ -33,6 +36,9 @@ class City
     Road** get_adj_matrix();
 
     City(short n_rows, short n_coloumns, float oneway_fraction);
+
+    static void set_oneway_width(int oneway_width);
+
 };
 
 #endif

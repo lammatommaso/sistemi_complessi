@@ -150,6 +150,19 @@
                             </form>
                         </div>
                     </div>
+                    <!-- 9 -->
+                    <div class="row">
+                        <div class="col s3 ">
+                            <p>Numero di corsie</p>
+                        </div>
+                        <div class="col s9">
+                            <form action="#">
+                                <p class="range-field">
+                                    <input type="range" id="corsie" min="1" max="10" value="1" />
+                                </p>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -181,7 +194,7 @@
                         <div class="row">
                             <p>Seleziona i nodi sorgente e destinazione:</p>
                         </div>
-                        <div class="row"><a id="l2r" class="waves-effect waves-light btn-small"
+                        <div style="visibility: hidden;" class="row"><a id="l2r" class="waves-effect waves-light btn-small"
                                 onclick="left_to_right()">Top to Bottom</a></div>
                         <div class="row"><a id="2wh" class="waves-effect waves-light btn-small"
                                 onclick="two_way_hor()">2-Way Horizontal</a></div>
@@ -210,9 +223,9 @@
 
                     </div>
                     <div class="card-panel hoverable">
-                        <p>Click singolo: <b style="color:#4dabf7">nodo sorgente</b> <br><br>
-                            Due click:    <b style="color:#be4bdb">nodo destinazione</b> <br><br>
-                            Tre click:    <b style="color:#ffaa00">deseleziona</b>
+                        <p>Click: <b style="color:#4dabf7">nodo sorgente/ <br/> destinazione</b> <br><br>
+                            <!-- Due click:    <b style="color:#be4bdb">nodo destinazione</b> <br><br> -->
+                            Due click:    <b style="color:#ffaa00">deseleziona</b>
                         </p>
                     </div>
                 </div>

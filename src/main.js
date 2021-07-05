@@ -110,7 +110,7 @@ ipcMain.on("batch_init", (event, base_dir_s, simulation_type,
             v.addListener("message", (data)=>{
                 console.log("Ricevuto messaggio da thread simulazione")
                 console.log(data)
-                event.reply("simulation_finished")
+                event.reply("sim_update", data)
                 //event.reply(data["name"], data["data"])
             })
             
@@ -131,12 +131,12 @@ ipcMain.on("batch_init", (event, base_dir_s, simulation_type,
 
 })
  
-ipcMain.on("init", (event, increment, n_cars,  rows, columns,   gaussian_mean, gaussian_sigma, min_road_l, max_road_l) => {
+ipcMain.on("init", (event, increment, n_cars,  rows, columns, gaussian_mean, gaussian_sigma, min_road_l, max_road_l, lanes) => {
     
     const prom = new Promise((resolve, reject) => {
         w = new Worker(path.join(__dirname, 'javascript', 'service.js'), {workerData: {"increment": increment, "n_cars": n_cars, "rows": rows, 
         "columns": columns, "gaussian_mean": gaussian_mean, "gaussian_sigma": gaussian_sigma, 
-            "min_road_l": min_road_l, "max_road_l": max_road_l}} );
+            "min_road_l": min_road_l, "max_road_l": max_road_l, "lanes": lanes}} );
         //w.on('message', resolve);
         w.on('error', reject);
         w.on('exit', (code) => {

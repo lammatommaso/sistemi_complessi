@@ -44,7 +44,7 @@ std::istream& operator>>(std::istream& input, Result& result)
     return input;
 }
 
-void Simulator::set_car_number(short car_number)
+void Simulator::set_car_number(int car_number)
 {
     _car_number = car_number;
     _car_vector.clear();
@@ -54,7 +54,7 @@ void Simulator::set_car_number(short car_number)
     }
 }
 
-Simulator::Simulator(): _car_number(0){}
+Simulator::Simulator(): _car_number(0), _cars_at_destination(0){}
     
 Simulator::Simulator(int car_number)
 {
@@ -88,9 +88,10 @@ void Simulator::create_path()
     }
 }
 
-void Simulator::create_city(short n_rows, short n_coloumns, float oneway_fraction)
+void Simulator::create_city(int n_rows, int n_coloumns, float oneway_fraction)
 {
     _city = City(n_rows, n_coloumns, oneway_fraction);
+
     /*for(int i=0;i<_city.get_n_rows()*_city.get_n_coloumns();i++)
     {
         for(int j=0;j<_city.get_n_rows()*_city.get_n_coloumns();j++)
@@ -135,7 +136,13 @@ Road Simulator::_find_road(int car_index)const
 
 Road * Simulator::_find_road_ptr(int car_index)const
 {     
-    return _city.get_road_ptr(_car_vector[car_index].position.get_index(),_find_next(car_index).get_index());
+    int i = _car_vector[car_index].position.get_index(); 
+    int j = _find_next(car_index).get_index();
+    if (i >= 0 && j >= 0){
+        return _city.get_road_ptr(i,j);
+    } else 
+        return NULL;
+    
 }
 
 Node Simulator::_find_next(int car_index)const
@@ -159,6 +166,64 @@ Node Simulator::_find_next(int car_index)const
 
 void Simulator::mv_car(int car_index)
 {
+    Node next_node = _find_next(car_index);
+
+    //modifiche per grafica
+    Road * current_road_ptr = _find_road_ptr(car_index);    
+    //siamo appena entrati nella strada, incrementiamo il numero di macchine nella strada
+    if (_car_vector[car_index].car->get_offset() == 0){
+
+        current_road_ptr->cars_in_road += 1; //TODO Stop reason: signal SIGSEGV: invalid address (fault address: 0xfffffffffffffffc)
+
+    } 
+
+    if(_car_vector[car_index].car->get_offset()<_find_road(car_index).get_road_length())
+    {                
+        int car_in_front = 0;
+        short width = _find_road(car_index).get_width();
+        for(int i=0;i<_car_number;i++)
+        {
+            if(_car_vector[car_index].position.get_index() == _car_vector[i].position.get_index() &&  _find_next(car_index).get_index() == _find_next(i).get_index())
+            {
+                if(_car_vector[car_index].car->get_offset() == _car_vector[i].car->get_offset() - 1)
+                {
+                    car_in_front++;
+                }
+                if(car_in_front > width) break;
+            }
+        }
+        if(car_in_front <= width)
+        {
+            _car_vector[car_index].car->move_forward();
+        }
+        else
+        {
+            //se siamo all'offset 0 e dobbiamo rimanere fermi, non stiamo "occupando" la strada ancora
+            if (_car_vector[car_index].car->get_offset() == 0){
+                current_road_ptr->cars_in_road = (current_road_ptr->cars_in_road) - 1;  
+            }
+            _car_vector[car_index].car->halt();
+        }
+    }
+    else
+    {            
+        //usciamo dalla strada, decrementiamo il numero di macchine nella strada
+        current_road_ptr->cars_in_road = (current_road_ptr->cars_in_road) - 1; 
+
+        _car_vector[car_index].position = next_node;
+        _car_vector[car_index].car->move_forward();
+        _car_vector[car_index].car->reset_offset();
+    }
+    if (_car_vector[car_index].position.get_index() ==  _car_vector[car_index].path.back().get_index())
+    {
+        _cars_at_destination++;
+        _car_vector[car_index].car->set_at_destination(true);
+    }
+}
+
+/*
+void Simulator::mv_car(int car_index)
+{
 
     Node next_node = _find_next(car_index);
     Road * current_road_ptr = _find_road_ptr(car_index);
@@ -172,6 +237,9 @@ void Simulator::mv_car(int car_index)
 
     if(_car_vector[car_index].car->get_offset()<_find_road(car_index).get_road_length())
     {                
+
+
+
         bool can_move = 1;
         for(int i=0;i<_car_number;i++)
         {
@@ -213,7 +281,7 @@ void Simulator::mv_car(int car_index)
         _car_vector[car_index].car->set_at_destination(true);
     }
 }
-
+*/
 void Simulator::create_path(int source_l, int dest_l, int source_nodes[], int destination_nodes[])
 {
 
@@ -239,7 +307,8 @@ void Simulator::create_path(int source_l, int dest_l, int source_nodes[], int de
             //TODO cosa succede se tra i nodi di input e output non esiste alcun percorso? loop all'infinito
             //POSSIBILE SOLUZIONE: controlla nella grafica quando l'utente seleziona i nodi e avvisalo subito
         }
-        while(source.get_index() == destination.get_index() || _city.get_path(source.get_index(),destination.get_index()).get_index() == -1);
+        while(source.get_index() == destination.get_index() || _city.get_path(source.get_index(),destination.get_index()).get_index() == -1 || _city.get_path(source.get_index(),destination.get_index()).get_index() < _city.get_n_rows()/2 );
+        //NOTA: controlliamo anche che la lunghezza sia almeno metà lunghezza della città 
         //std::cout << source.get_index() << ' ' << destination.get_index() << std::endl;
         _car_vector[i].position = source;
         _car_vector[i].path = _city.print_path(source, destination); //nel path manca il nodo sorgente!
@@ -255,23 +324,29 @@ void Simulator::create_path(int source_l, int dest_l, int source_nodes[], int de
 void Simulator::simulation()
 {
     int counter = 0;
-    while (_cars_at_destination < _car_number)
+    while (_cars_at_destination < _car_number) 
     {
+        
         std::sort(_car_vector.begin(), _car_vector.end(), order);
         for (int i = 0; i < _car_number; i++)
         { 
             if (!(_car_vector[i].car->get_at_destination()) && _car_vector[i].car->get_delay() == 0)
             {
+        
                 mv_car(i);
             }
             else
-            {
-                _car_vector[i].car->delay();
+            {   
+        
+                _car_vector[i].car->delay();    
             }
         }  
         counter++;
+        
     }
-    float steps_mean = 0;
+    
+
+    float steps_mean = 0; 
     float steps_squared_mean = 0;
     float stops_mean = 0;
     float stops_squared_mean = 0;

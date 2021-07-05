@@ -1,4 +1,4 @@
-#include <node_api.h>
+#include <node/node_api.h>
 
 #include <node.h>
 #include <assert.h>
@@ -48,28 +48,29 @@ napi_value batchMain(napi_env env, napi_callback_info info){
     cout << "Batch iniziato\n";
 
     //prendi parametri (callback, variabili...)
-    size_t argc = 15;
-    napi_value args[15];
+    size_t argc = 16;
+    napi_value args[16];
     status = napi_get_cb_info(env, info, &argc, args, nullptr, nullptr);
     assert(status == napi_ok);
 
     int simulation_type, cols, rows, min_car, max_car, increment, 
         car_number, gaussian_mean, gaussian_sigma, min_road_length, 
-        max_road_length, str_len;
+        max_road_length, str_len, lanes;
     double p;
 
-    status = napi_get_value_double(env, args[2], &p);    
-    status = napi_get_value_int32(env, args[1],  &simulation_type);
-    status = napi_get_value_int32(env, args[3],  &cols);
-    status = napi_get_value_int32(env, args[4],  &rows);
-    status = napi_get_value_int32(env, args[5],  &min_car); 
-    status = napi_get_value_int32(env, args[6],  &max_car); 
-    status = napi_get_value_int32(env, args[7],  &increment); 
-    status = napi_get_value_int32(env, args[8],  &car_number);
-    status = napi_get_value_int32(env, args[9],  &gaussian_mean);
-    status = napi_get_value_int32(env, args[10], &gaussian_sigma);
-    status = napi_get_value_int32(env, args[11], &min_road_length);
-    status = napi_get_value_int32(env, args[12], &max_road_length);
+    status = napi_get_value_double(env, args[2],  &p);    
+    status = napi_get_value_int32(env,  args[1],  &simulation_type);
+    status = napi_get_value_int32(env,  args[3],  &cols);
+    status = napi_get_value_int32(env,  args[4],  &rows);
+    status = napi_get_value_int32(env,  args[5],  &min_car); 
+    status = napi_get_value_int32(env,  args[6],  &max_car); 
+    status = napi_get_value_int32(env,  args[7],  &increment); 
+    status = napi_get_value_int32(env,  args[8],  &car_number);
+    status = napi_get_value_int32(env,  args[9],  &gaussian_mean);
+    status = napi_get_value_int32(env,  args[10], &gaussian_sigma);
+    status = napi_get_value_int32(env,  args[11], &min_road_length);
+    status = napi_get_value_int32(env,  args[12], &max_road_length);
+    status = napi_get_value_int32(env,  args[14], &lanes);
 
     status = napi_get_value_int32(env, args[13], &str_len);
     char base_dir[str_len];
@@ -81,7 +82,7 @@ napi_value batchMain(napi_env env, napi_callback_info info){
     base_dir_s.append(base_dir);
 
     //gestione callback
-    napi_value cb = args[14];
+    napi_value cb = args[15];
     napi_value global;
     status = napi_get_global(env, &global);
     assert(status == napi_ok);
@@ -89,11 +90,28 @@ napi_value batchMain(napi_env env, napi_callback_info info){
     std::cout << "Sto per creare la classe batch...\n";
 
 
-    //eseguiamo il "main"
+    //Inizializziamo il "main"
     Batch_Simulation b = Batch_Simulation(base_dir_s, simulation_type, 
                                     (float)p, cols, rows, min_car, max_car, increment, 
                                     car_number, gaussian_mean, gaussian_sigma, min_road_length, 
-                                    max_road_length);
+                                    max_road_length, lanes);
+
+    int perc_progress = 0;
+    do {
+        perc_progress = b.execute_step();
+        //chiamiamo la callback
+        napi_value argv[1];
+        //json nodes = {{"nodes", j}}; //valore da restituire
+        status = napi_create_string_latin1(env, std::to_string(perc_progress).c_str() , NAPI_AUTO_LENGTH, argv);
+        napi_value result;
+        napi_call_function(env, global, cb, 1, argv, &result);
+        assert(status == napi_ok);
+
+        cout << "la percentuale dei progressi è " << perc_progress << "\n" ;
+    } while(
+
+        b.perc_progress() < 100 //progressi in percentuale
+    );
 
     cout << "Batch terminato\n";
     
@@ -112,15 +130,17 @@ napi_value batchMain(napi_env env, napi_callback_info info){
 napi_value myMain(napi_env env, napi_callback_info info){
     napi_status status;
 
+    cout << "js_interface.cpp: myMain\n" ;
+
     //esegue una sola volta la car_increment_simulation; viene graficata durante l'esecuzione
 
     //prendi parametri (callback, variabili...)
-    size_t argc = 9;
-    napi_value args[9];
+    size_t argc = 10;
+    napi_value args[10];
     status = napi_get_cb_info(env, info, &argc, args, nullptr, nullptr);
     assert(status == napi_ok);
 
-    int n_cars, rows, columns, gaussian_mean, gaussian_sigma, min_road_l, max_road_l ;
+    int n_cars, rows, columns, gaussian_mean, gaussian_sigma, min_road_l, max_road_l, lanes ;
     double increment;
 
     status = napi_get_value_double(env, args[0], &increment);
@@ -131,13 +151,18 @@ napi_value myMain(napi_env env, napi_callback_info info){
     status = napi_get_value_int32(env, args[5], &gaussian_sigma); 
     status = napi_get_value_int32(env, args[6], &min_road_l); 
     status = napi_get_value_int32(env, args[7], &max_road_l);
+    status = napi_get_value_int32(env, args[8], &lanes);
 
     sim = Simulator(n_cars);
     
+    City::set_oneway_width(lanes);
+
     sim.create_city(rows, columns, increment, gaussian_mean, gaussian_sigma, min_road_l, max_road_l);
+
+    //sim.get_city().set_oneway_width(width);
     
     //gestione callback
-    napi_value cb = args[8];
+    napi_value cb = args[9];
     napi_value global;
     status = napi_get_global(env, &global);
     assert(status == napi_ok);
@@ -193,13 +218,16 @@ napi_value create_path(napi_env env, napi_callback_info info){
         status = napi_get_element(env, args[2], i, &e);
         status = napi_get_value_int32(env, e, &v);
         source_nodes[i] = v;
+
     }
 
     for (int i=0; i < end_lenght; i++){
         status = napi_get_element(env, args[3], i, &e);
         status = napi_get_value_int32(env, e, &v);
         dest_nodes[i] = v;
+
     }
+
 
     sim.create_path(start_lenght, end_lenght, source_nodes, dest_nodes);
 
@@ -207,10 +235,12 @@ napi_value create_path(napi_env env, napi_callback_info info){
 }
 
 json get_updates(){
+    
     json tmp = {};
+
     for (int i = 0; i < sim.get_city().get_n_rows()*sim.get_city().get_n_coloumns(); i++){
         for (int j = 0; j < sim.get_city().get_n_rows()*sim.get_city().get_n_coloumns(); j++){
-            if (/* sim.get_city().get_road(i, j).get_car_number() > 0 && */ sim.get_city().get_road_ptr(i, j)->cars_in_road > 0){
+            if (/*sim.get_city().get_road(i, j).get_car_number() > 0 */ sim.get_city().get_road_ptr(i, j)->cars_in_road > 0 ){
                 int max = sim.get_city().get_road(i, j).get_road_length();
                 int cars = sim.get_city().get_road_ptr(i, j)->cars_in_road;
                 //int cars = sim.get_city().get_road(i, j).get_car_number();

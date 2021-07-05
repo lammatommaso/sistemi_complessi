@@ -7,7 +7,8 @@ const red    = "#f00"
 const light_blue = "#00bfff"
 
 const source_node_color = "#4dabf7"
-const dest_node_color = "#be4bdb"
+//const dest_node_color = "#be4bdb"
+const dest_node_color = source_node_color
 const normal_node_color = "#ff9000"
 
 var s = new sigma({
@@ -30,13 +31,9 @@ s.bind('clickNode', function(e) {
             e.data.node.color = source_node_color
             start.push(parseInt(nodeId.substr(1)))
             break;
+        
         case source_node_color:
-            start.splice(start.indexOf(parseInt(nodeId.substr(1))),1)
-            end.push(parseInt(nodeId.substr(1)))
-            e.data.node.color = dest_node_color;
-            break;
-        case dest_node_color:
-            end.splice(end.indexOf(parseInt(nodeId.substr(1))),1)
+            start.splice(end.indexOf(parseInt(nodeId.substr(1))),1)
             e.data.node.color = normal_node_color;
             break;
         default:
@@ -56,6 +53,7 @@ var mean   = 0;
 var _sigma = 0;
 var min_l  = 0;
 var max_l  = 0;
+var corsie = 0;
 
 function init(){
     start.splice(0)
@@ -69,8 +67,9 @@ function init(){
     _sigma = parseInt(document.getElementById("sigma").value)
     min_l  = parseInt(document.getElementById("min_l").value)
     max_l  = parseInt(document.getElementById("max_l").value)
+    corsie  = parseInt(document.getElementById("corsie").value)
 
-    ipcRenderer.send("init", p,  n_cars, rows, cols,  mean, _sigma, min_l, max_l);
+    ipcRenderer.send("init", p,  n_cars, rows, cols,  mean, _sigma, min_l, max_l, corsie);
 
     loading("block") //mostra gif caricamento
     document.getElementById("cars_at_dest").innerHTML = 0
@@ -151,13 +150,13 @@ function two_way_hor(){
         }
         if (id > parseInt(perc_nodi/4) && id <= parseInt(perc_nodi/2) || (id >= (cols*rows) - (parseInt(perc_nodi/4)+1))){
             n.color = dest_node_color
-            end.push(id);
+            start.push(id);
         }
     })
 
     s.refresh()
 
-    create_path(start, end)
+    create_path(start, start)
 }
 
 function out_in(){
@@ -221,7 +220,7 @@ function out_in(){
 
         if ((id/cols)%rows >= parseInt(rows/3) && (id/cols)%rows <= 2*(parseInt(rows/3))
             && (id%cols) >= parseInt(cols/3) && id%cols <= 2*(parseInt(cols/3))){
-            end.push(id);
+            start.push(id);
             n.color = dest_node_color
         }
     
@@ -230,7 +229,7 @@ function out_in(){
 
     s.refresh()
 
-    create_path(start, end)
+    create_path(start, start)
 }
 
 function cross(){
@@ -271,13 +270,13 @@ function cross(){
 
         if ((id/cols)%rows-1 >= parseInt(rows/3) && (id/cols)%rows+1 <= 2*(parseInt(rows/3))
             && (id%cols)-1 >= 2*(parseInt(cols/3))){
-            end.push(id);
+            start.push(id);
             n.color = dest_node_color
         }
 
         if ((id/cols)%rows+1 <= parseInt(rows/3)
             && (id%cols)-1 >= parseInt(cols/3) && id%cols+1 <= 2*(parseInt(cols/3))){
-            end.push(id);
+            start.push(id);
             n.color = dest_node_color
         }
 
@@ -291,7 +290,7 @@ function cross(){
 
     s.refresh()
 
-    create_path(start, end)
+    create_path(start, start)
 
 }
 
@@ -317,13 +316,13 @@ function left_to_right(){ //funzione molto basica
         }
         if (id >= (cols*rows) - (parseInt(perc_nodi/2)+1)){
             n.color = dest_node_color
-            end.push(id);
+            start.push(id);
         }
     })
 
     s.refresh()
 
-    create_path(start, end)
+    create_path(start, start)
 }
 
 
@@ -333,10 +332,10 @@ function create_path(s, d){
 }
 
 function start_simulation(){
-    if (start.length == 0 || end.length == 0){
+    if (start.length == 0 ){ //|| end.length == 0){
         alert("Nessun insieme di nodi sorgente o destinazione selezionato!")
     } else {
-        create_path(start, end) //TODO in realtà lo facciamo già nelle funzioni che creano i percorsi
+        create_path(start, start) //TODO in realtà lo facciamo già nelle funzioni che creano i percorsi
         //ma se clicchiamo i nodi a mano non viene mai chiamata
         //bisognerebbe correggere questa cosa
 
@@ -350,41 +349,71 @@ function start_simulation(){
     }
 }
 
+var used_streets = []
 
 ipcRenderer.on("disegnami", (event, roba_da_disegnare) => {
     values = roba_da_disegnare //JSON.parse(roba_da_disegnare)
     if (!roba_da_disegnare.streets){
         console.log("simulazione terminata")
+
+        used_streets.forEach(element => {
+
+            element = JSON.parse(element)
+        
+            for (i=0; i < s.graph.edges().length; i++){
+                //nota: stiamo confrontando interi e stringhe, ma js è figo e non ha problemi
+                if (parseInt(s.graph.edges()[i].source.substr(1)) == element.x && parseInt(s.graph.edges()[i].target.substr(1)) == element.y){
+                    //console.log(` macchine a destinazione: ${values["cars_at_dest"]}`)
+                    //document.getElementById("cars_at_dest").innerHTML = values["cars_at_dest"] + 1
+                    console.log("coloro la strada di blu ")
+                    console.log(element)
+                    s.graph.edges()[i].color = light_blue;
+                    s.refresh();
+
+                    break;
+                
+                }
+            }
+
+            //used_streets.splice(used_streets.indexOf(element), 1) //rimuove la strada dalla lista used_streets
+
+        });
+
         document.getElementById("graph_back").classList.remove('disabled');
         return
     }
+        
     values["streets"].forEach(element => {
-        //if (element.cars > 0){
-            for (i=0; i < s.graph.edges().length; i++){
-                //nota: stiamo confrontando interi e stringhe, ma js è figo e non ha problemi
-                if (parseInt(s.graph.edges()[i].source.substr(1)) == element.street.x && parseInt(s.graph.edges()[i].target.substr(1)) == element.street.y){
-                    console.log(` macchine a destinazione: ${values["cars_at_dest"]}`)
-                    document.getElementById("cars_at_dest").innerHTML = values["cars_at_dest"] + 1
-                    
-                        if (element.cars == 1){
-                            s.graph.edges()[i].color = light_blue;
-                        }
-                        else if (element.cars/element.max <= 0.5)
-                            s.graph.edges()[i].color = green;
-                        else if (element.cars/element.max <= 0.75)
-                            s.graph.edges()[i].color = orange;
-                        else
-                            s.graph.edges()[i].color = red;
-                        break;
-                    
+        if (used_streets.indexOf(JSON.stringify(element.street)) == -1){
+            used_streets.push(JSON.stringify(element.street))
+        }
+       
+        for (i=0; i < s.graph.edges().length; i++){
+            //nota: stiamo confrontando interi e stringhe, ma js è figo e non ha problemi
+            if (parseInt(s.graph.edges()[i].source.substr(1)) == element.street.x && parseInt(s.graph.edges()[i].target.substr(1)) == element.street.y){
+                //console.log(` macchine a destinazione: ${values["cars_at_dest"]}`)
+                document.getElementById("cars_at_dest").innerHTML = values["cars_at_dest"] + 1
                 
-                }
-            } 
-        //}
-
+                    if (element.cars == 1){
+                        s.graph.edges()[i].color = light_blue;
+                        used_streets.splice(used_streets.indexOf(JSON.stringify(element.street)), 1) //rimuove la strada dalla lista used_streets
+                    }
+                    else if (element.cars/element.max <= 0.5)
+                        s.graph.edges()[i].color = green;
+                    else if (element.cars/element.max <= 0.75)
+                        s.graph.edges()[i].color = orange;
+                    else
+                        s.graph.edges()[i].color = red;
+                    break;
+                
+            
+            }
+        }
     });
+
+
     s.refresh();
-    if (values["cars_at_dest"] + 1 < n_cars)
+    if (values["cars_at_dest"] < n_cars + 2)
         ipcRenderer.send("next")
      else {
         

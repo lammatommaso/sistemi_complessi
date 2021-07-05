@@ -141,6 +141,19 @@
                         </form>
                         </div>
                     </div>
+                    <!-- 9 -->
+                    <div class="row">
+                        <div class="col s3 ">
+                            <p>Numero di corsie</p>
+                        </div>
+                        <div class="col s9">
+                            <form action="#">
+                                <p class="range-field">
+                                    <input type="range" id="corsie" min="1" max="10" value="1" />
+                                </p>
+                            </form>
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col s3 ">
@@ -176,7 +189,7 @@
         <div id="waiting_screen" style="visibility: hidden; background-color: rgba(0,0,0,0.75); text-align:center; width: 100%; height: 100%; position: absolute; z-index: 1; top: 0px; bottom: 0px; left: 0px; right: 0px ">
             <h2 style="color: white">La simulazione è in corso, ma può richiedere diversi minuti. Si prega di attendere</h2>
             <div class="progress">
-                <div class="indeterminate"></div>
+                <div class="determinate" style="width: 0%"></div>
             </div>
         </div>
 
@@ -204,6 +217,8 @@
         gaussian_sigma = 10
         min_l = 5
         max_l = 30
+
+        corsie = 0
 
         //parametri per altra simulazione
         min_car_number = 500
@@ -248,18 +263,26 @@
             gaussian_sigma = parseInt(document.getElementById("sigma").value)
             min_l          = parseInt(document.getElementById("min_l").value)
             max_l          = parseInt(document.getElementById("max_l").value)
+            corsie         = parseInt(document.getElementById("corsie").value)
 
             ipcRenderer.send("batch_init", sim_dir, simulation_type, p, 
                             cols, rows, min_car_number, max_car_number, increment,
-                            n_cars, gaussian_mean, gaussian_sigma, min_l, max_l)
+                            n_cars, gaussian_mean, gaussian_sigma, min_l, max_l, corsie)
 
             document.getElementById("waiting_screen").style.visibility = "visible"  
         }
 
-        ipcRenderer.on("simulation_finished", (event) => {
-            document.getElementById("waiting_screen").style.visibility = "hidden"
-            document.getElementById("go_to_results").style.visibility = "visible"
-            enableScroll();
+        ipcRenderer.on("sim_update", (event, data) => {
+            if (data["data"] == "ok"){
+                document.getElementById("waiting_screen").style.visibility = "hidden"
+                document.getElementById("go_to_results").style.visibility = "visible"
+                enableScroll();
+            } else {
+                w = parseInt(data["data"])
+                console.log(w)
+                document.getElementsByClassName("progress")[0].setAttribute("style", `width: ${w}%`)
+
+            }
         })
 
 

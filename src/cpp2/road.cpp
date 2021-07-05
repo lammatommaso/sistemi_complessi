@@ -1,4 +1,5 @@
 #include"road.h"
+#include <iostream>
 
 int Road::_gaussian_mean = 0;
 int Road::_gaussian_sigma = 0;
@@ -24,9 +25,12 @@ Road::Road(int car_number) : _car_number(car_number), cars_in_road(0)
     std::normal_distribution<double> gaussian(_gaussian_mean,_gaussian_sigma);
     do
     {
+        std::cout << "genero _road_length\n";
         _road_length = (int)gaussian(generator);
+        std::cout << "_road_length generato \n";
     }
     while(_road_length <= _min_road_length || _road_length > _max_road_length);
+    std::cout << "ho generato tutte le lunghezze delle strade\n";
 }
 Road::Road(Road const& Road) : _car_number(Road._car_number), _road_length(Road._road_length), cars_in_road(0){}
 int Road::get_car_number() const { return _car_number; }
@@ -56,3 +60,17 @@ int Road::get_max_road_length()
 }
 void Road::add_car() { _car_number++; }
 void Road::rm_car() { _car_number--; }
+
+int Road::get_width()const
+{
+    return width;
+}
+int Road::set_width(int w)
+{
+    std::cout << "Sono in set_width \n";
+    std::cout << "Indirizzo di width: " << (&width) << "\n";
+    std::cout << "Indirizzo di w: " << (&w) << "\n";
+    std::cout << "w: " << w << "\n";
+    width = w;
+    std::cout << "Sto per uscire da set_width\n";
+}

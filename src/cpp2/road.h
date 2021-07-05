@@ -11,6 +11,7 @@ class Road
     static int _gaussian_sigma;
     static int _min_road_length;
     static int _max_road_length;
+    int width;
   public:
     Road();
     Road(int car_number);
@@ -25,6 +26,8 @@ class Road
     void add_car();
     void rm_car();
     int cars_in_road = 0;
+    int get_width()const;
+    int set_width(int width);
 };
 
 #endif
